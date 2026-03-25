@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${site-title}</title>
+  <!--link rel="stylesheet" href="/assets/katex/katex.min.css">
+  <link rel="stylesheet" href="/assets/fonts/fonts.css">
+  <link rel="stylesheet" href="/assets/style.css"-->
+  <style>
+    ${index.css()}
+  </style>
+</head>
+<body>
+
+  <header class="topheader">
+    <nav>
+      <a href="/">${site-title}</a>
+      <div>
+        <a href="/about.html">About</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="home">
+
+    <section class="intro">
+      <h1>${site-title}</h1>
+      <p>${description}</p>
+    </section>
+
+    <section class="posts">
+      <ul>
+        ${for(posts)}
+        <li>
+          <time datetime="${posts.date}">${posts.date}</time>
+          <a href="${posts.url}">${posts.title}</a>
+          ${if(posts.description)}
+          <p>${posts.description}</p>
+          ${endif}
+        </li>
+        ${endfor}
+      </ul>
+    </section>
+
+  </main>
+
+</body>
+</html>

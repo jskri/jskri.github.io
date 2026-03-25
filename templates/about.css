@@ -1,0 +1,259 @@
+/* roboto-300 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src: url('assets/fonts/roboto-v51-latin-300.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* roboto-500 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  src: url('assets/fonts/roboto-v51-latin-500.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+:root {
+  /*
+  --main-font: ${if(mainfont)} ${mainfont} ${else} "system-ui" ${endif};
+  --font-size: ${if(fontsize)} ${fontsize} ${else} 12px ${endif};
+  --header-height: ${if(header-height)} ${header-height} ${else} 3rem ${endif};
+
+  fontcolor, background-color, maxwidth, margin-left, margin-right, margin-top, margin-bottom, linkcolor
+  */
+  --max-width: ${if(maxwidth)} ${maxwidth} ${else} 36em ${endif};
+}
+
+/* ---- Reset ---- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ---- Layout ---- */
+html {
+${if(mainfont)}
+  font-family: ${mainfont};
+${endif}
+${if(fontsize)}
+  font-size: ${fontsize};
+${endif}
+${if(fontweight)}
+  font-weight: ${fontweight};
+${endif}
+${if(linestretch)}
+  line-height: ${linestretch};
+${endif}
+  color: ${if(fontcolor)} ${fontcolor} ${else} #1a1a1a ${endif};
+  background-color: ${if(backgroundcolor)} ${backgroundcolor} ${else} #fdfdfd ${endif};
+}
+
+body {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
+  margin: 0 auto;
+  max-width: var(--max-width);
+  padding-left: ${if(margin-left)} ${margin-left} ${else} 50px ${endif};
+  padding-right: ${if(margin-right)} ${margin-right} ${else} 50px ${endif};
+  padding-top: ${if(margin-top)} ${margin-top} ${else} 50px ${endif};
+  padding-bottom: ${if(margin-bottom)} ${margin-bottom} ${else} 50px ${endif};
+  hyphens: auto;
+  overflow-wrap: break-word;
+  text-rendering: optimizeLegibility;
+  font-kerning: normal;
+}
+
+header.topheader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3rem;
+  background: white;
+  opacity: .94;
+  z-index: 100;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+header nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: 4rem;
+  gap: 2rem;
+}
+
+header nav div {
+  display: flex;
+  gap: 2rem;
+}
+
+header nav a {
+  text-decoration: none;
+  color: inherit;
+}
+
+main {
+  /*
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  */
+  /*margin-top: 3rem;*/       /* clear the fixed header */
+  max-width: 1200px;
+  width: 100%;
+  margin-inline: auto;    /* center on wide screens */
+}
+
+/* ---- Table of contents ---- */
+aside {
+  padding: 2rem 1rem 2rem 2rem;
+}
+
+/* ---- Article ---- */
+
+p {
+  margin: 1em 0;
+}
+
+.intro p {
+  text-align: center;
+}
+
+main {
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
+}
+
+.about {
+  grid-column: 2;
+}
+
+.about {
+  margin-top: 2rem;
+  /*max-width: 66%;*/
+}
+
+/*
+.posts ul {
+  max-width: 60ch;
+}
+*/
+
+a {
+  color: $if(linkcolor)$$linkcolor$$else$#1a1a1a$endif$;
+}
+
+a:visited {
+  color: $if(linkcolor)$$linkcolor$$else$#1a1a1a$endif$;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-align: center;
+${if(fontweight)}
+  font-weight: ${fontweight};
+${endif}
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.75rem;
+}
+
+h5, h6 {
+  font-size: 1em;
+  font-style: italic;
+}
+
+h6 {
+  font-weight: normal;
+}
+
+ol, ul {
+  padding-left: 1.7em;
+  margin-top: 1em;
+}
+
+li > ol, li > ul {
+  margin-top: 0;
+}
+
+header {
+  margin-bottom: 4em;
+  text-align: center;
+}
+
+code {
+  font-family: ${if(monofont)} ${monofont} ${else} Menlo, Monaco, Consolas, 'Lucida Console', monospace ${endif};
+${if(monocolor)}
+  color: ${monocolor};
+${endif}
+${if(monobackgroundcolor)}
+  background-color: ${monobackgroundcolor};
+  padding: .2em .4em;
+${endif}
+  font-size: 85%;
+  margin: 0;
+  hyphens: manual;
+  border-radius: 3px;
+  word-wrap: break-word;
+}
+
+pre {
+  margin: 1em 0;
+$if(monobackgroundcolor)$
+  background-color: $monobackgroundcolor$;
+  padding: 0.5em;
+$endif$
+  overflow: auto;
+  border-radius: 5px;
+}
+
+pre code {
+  padding: 0;
+  overflow: visible;
+  overflow-wrap: normal;
+}
+
+.sourceCode {
+ background-color: transparent;
+ overflow: visible;
+}
+
+.date {
+  color: #828282;
+  font-size: .875rem;
+  text-align: left;
+  /*margin-bottom: 0;*/
+}
+
+.abstract {
+  text-align: left;
+}
+
+.abstract-title {
+  text-align: center;
+}
+
+.filetree {
+  line-height: 1;
+}
+
+${if(highlighting-css)}
+/* CSS for syntax highlighting */
+${highlighting-css}
+${endif}
