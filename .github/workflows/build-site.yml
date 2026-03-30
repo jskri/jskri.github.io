@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-24.04
 
     container:
-      image: ghcr.io/jskri/blog-builder@sha256:6b88a04cd650db00084df5c2a7410efccf0697080fe00b1394e9115292f1a1b7 # v1.0.1
+      image: ghcr.io/jskri/blog-builder@sha256:0ad8626045bdd0a08988b2640f061c73ea72813c3c78c0c494d18a62d457f10d # v1.0.2
 
     permissions:
       contents: write
