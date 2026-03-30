@@ -10,9 +10,6 @@ jobs:
 
     container:
       image: ghcr.io/jskri/blog-builder@sha256:43afe4c7797c1fd784acf44686440c4786c362e098f010713d28da6dfc335ea6 # v1.0.0
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
 
     permissions:
       contents: write
