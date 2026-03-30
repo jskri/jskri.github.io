@@ -19,6 +19,7 @@ FROM ubuntu:24.04
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     make \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /usr/local/bin/pandoc /usr/local/bin/pandoc
