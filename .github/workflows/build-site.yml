@@ -3,6 +3,9 @@ jobs:
     runs-on: ubuntu-24.04
     container:
       image: ghcr.io/jskri/blog-builder@sha256:43afe4c7797c1fd784acf44686440c4786c362e098f010713d28da6dfc335ea6
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
