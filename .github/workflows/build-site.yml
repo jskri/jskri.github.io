@@ -10,10 +10,13 @@ jobs:
 
     container:
       image: ghcr.io/jskri/blog-builder@sha256:43afe4c7797c1fd784acf44686440c4786c362e098f010713d28da6dfc335ea6 # v1.0.0
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
     permissions:
-      contents: read
-      packages: write
+      contents: write
+      packages: read
 
     steps:
       - name: Checkout
@@ -21,13 +24,6 @@ jobs:
 
       - name: Build site
         run: make all
-
-      - name: Login ghcr.io
-        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish site
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4.0.0
