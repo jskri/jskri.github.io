@@ -1,3 +1,29 @@
+# Image to generate the blog and publish it.
+#
+# Generation
+# ==========
+#
+# To generate the blog, type at the root:
+#
+# ```
+# docker build -t blog-builder:latest .
+# docker run --rm --user=$(id -u) -v $(pwd):/workspace -w /workspace blog-builder:latest make all
+# ```
+#
+# The site is generated in `dist/`. To serve it locally:
+#
+# ```
+# cd dist/
+# python3 -m http 8000
+# ```
+#
+# Publication
+# ===========
+#
+# Publication is done in the CI by the github action peaceiris/actions-gh-pages,
+# that requires git and ca-certificates are (see
+# .github/workflows/build-site.yml).
+
 FROM debian:bookworm-slim@sha256:f06537653ac770703bc45b4b113475bd402f451e85223f0f2837acbf89ab020a
 
 ARG PANDOC_VERSION=3.8.3
