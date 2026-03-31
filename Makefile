@@ -15,7 +15,7 @@ all: $(POSTS) dist/index.html dist/about.html $(ASSETS)
 dist/posts/%.html: src/posts/%.md $(TEMPLATE_POST) $(METADATA_SITE) $(SCRIPT_FIGURE) $(SCRIPT_EQUATION)
 	mkdir -p dist/posts
 	pandoc $< \
-		--toc --toc-depth=3 --standalone --katex --template=$(TEMPLATE_POST) \
+		--toc --toc-depth=2 --standalone --katex --template=$(TEMPLATE_POST) \
 		--metadata-file $(METADATA_SITE) \
 		--lua-filter=$(SCRIPT_FIGURE) \
 		--lua-filter=$(SCRIPT_EQUATION) \

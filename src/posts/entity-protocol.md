@@ -422,11 +422,11 @@ If we consider that each state is observable, this can pose a problem because
 the alteration is not atomic. Moreover, deletion removes the triples whose
 object is the entity while creation only add triples whose subject is the
 entity, so a deletion followed by a creation may lose information. Concretely,
-`DELETE /bob` wipes `(bank-accounts/1, owner, bob)` but a subsequent `CREATE
-/bob {age: 23}` does not restore it. We therefore provide a definition for
-alteration that is not simply in terms of creation and deletion:
+`DELETE /Bob` wipes `(bank-accounts/1, owner, Bob)` but a subsequent `CREATE
+/Bob {age: 23}` does not restore it. We therefore provide:
 
-- $alter$, a function for alteration not in terms of creation and deletion:
+- $alter$, a function for alteration defined not in terms of creation and
+  deletion:
 
   ```equation
   alter : State × E × Subset(E × E) → State
@@ -434,7 +434,7 @@ alteration that is not simply in terms of creation and deletion:
     (state ∖ { (entity, p, o) ∈ state | p ∈ predicates(relations) }) ∪ { (entity, p, o) | (p, o) ∈ relations }
   ```
 
-  where
+  where:
 
     + $predicates(relations) = { p | (p, _) ∈ relations }$
 
@@ -449,7 +449,7 @@ that is external to $M₁$, provides an identity by allowing to relate the
 potentially different entities that live at the same path in different states.
 In this sense, a path plays the role of a variable.
 
-$M₁$ does have a notion of execution. An execution is a sequence of commands
+However, $M₁$ has a notion of execution. An execution is a sequence of commands
 $c₀$, $c₁$, ... The state then evolves inductively:
 
 - $state₀ = {}$  -- the empty set
@@ -464,11 +464,12 @@ path. By an abuse of language, we will say equivalently that we watch an entity.
 Watching an entity means getting the relations of which it is the subject, from
 its creation to its deletion.
 
-To this end, we define the history $H$ of an execution. H is a sequence of (state,
-command) pairs, defined by:
+To this end, we define the history $H$ of an execution. $H$ is a sequence of
+(state, command) pairs, defined by:
 
-- $H: History$ where $History = ℕ → State × Command$, and
-    $Command = { CREATE p {...}, ALTER p {...}, DELETE p }$
+- $H: History$ where:
+    + $History = ℕ → State × Command$
+    + $Command = { CREATE p {...}, ALTER p {...}, DELETE p }$
 
 - $H(0) = ({}, ⊥)$ where $⊥$ denotes the lack of command leading to the initial
   state
@@ -476,16 +477,16 @@ command) pairs, defined by:
 - $H(n+1) = (m(commandₙ, H(n).state), commandₙ)$
 
 $H$ is not an independent object — it is uniquely determined by the command
-sequence. $M₂$ does not add new data, it adds a new perspective on what $M₁$ already
-produces.
+sequence. $M₂$ does not add new data, it adds a new perspective on what $M₁$
+already produces.
 
 Note that $H$ is the complete history, including past and future.
 
 We want to watch an entity until it is deleted. We introduce the `WATCH` command
-which returns a sequence of relations where the entity at path is the subject.
-The complete version watches an entity over at most the interval from stateₙ to
-stateₘ, with $n ≤ m$. This is a maximal interval since it is bounded by the
-lifetime of the entity at p, i.e. from its creation to its destruction.
+which returns a sequence of relations where the entity at `path` is the subject.
+The command watches an entity over at most the interval from $stateₙ$ to
+$stateₘ$, with $n ≤ m$. This is a maximal interval since it is bounded by the
+lifetime of the entity at `path`, i.e. from its creation to its destruction.
 
 - `WATCH path { from: n, to: m }`
 
@@ -497,39 +498,27 @@ This command covers at least two different use-cases:
 
 To define its semantics, we first define the $watch$ function:
 
-<!--
-- ```equation
-  watch : Path × ℕ × ℕ × History → Seq(Subset(E × E))
-  watch(path, n, m, H) = (k ∈ 0..(m'-n'-1) ↦ local(path, n'+k, H)) where
+- $watch : Path × ℕ × ℕ × History → Seq(Subset(E × E × E))$
+  $watch(path, n, m, H) = (k ∈ 0..(m'-n'-1) ↦ local(path, n'+k, H))$ where:
 
-    n' = min({ k ∈ n..m | m(path, H(k).state) ≠ {} } ∪ { m }) -- first state in the interval with non-empty path
-
-    m' = min({ k ∈ n'..m | m(path, H(k).state) = {} } ∪ { m })
-
-    local(p, k, H) = { (predicate, object) | s ∈ m(p, H(k).state) ∧ (s, predicate, object) ∈ H(k).state }
-
-    Seq(A) = ⋃ { 0..(len-1) → A | len ∈ ℕ }
-  ```
--->
-
-- $watch : Path × ℕ × ℕ × History → Seq(Subset(E × E))$
-  $watch(path, n, m, H) = (k ∈ 0..(m'-n'-1) ↦ local(path, n'+k, H))$ where
+    + $Seq(A) = ⋃ { 0..(len-1) → A | len ∈ ℕ }$ -- the A-valued sequences of any
+      length
 
     + $n' = min({ k ∈ n..m | m(path, H(k).state) ≠ {} } ∪ { m })$ -- first state in the interval with non-empty path
 
     + $m' = min({ k ∈ n'..m | m(path, H(k).state) = {} } ∪ { m })$
 
-    + $local(p, k, H) = { (predicate, object) | s ∈ m(p, H(k).state) ∧ (s, predicate, object) ∈ H(k).state }$
+    + $local(p, k, H) = { (s, predicate, object) | s ∈ m(p, H(k).state) ∧ (s, predicate, object) ∈ H(k).state }$
+      -- all relations in state k where an entity at p is the subject
 
-    + $Seq(A) = ⋃ { 0..(len-1) → A | len ∈ ℕ }$
+Note that $Seq(A)$ includes the empty sequence ($len = 0$), because $0..(0-1)$
+is empty.
 
-$Seq(A)$ includes the empty sequence ($len = 0$), because $0..(0-1)$ is empty.
+Note that if $path$ is empty throughout $n..m$, then $n' = m$, $m' = m$ and the
+range becomes $0..-1$. Therefore, $watch$ returns an empty sequence as expected.
 
-Note that if the path is empty throughout $n..m$, then $n' = m$, $m' = m$ and the range
-becomes $0..-1$. Therefore, watch returns an empty sequence as expected.
-
-Also note that when path designates a set of entities, watching stops when the set
-becomes empty. This can happen in two cases:
+Also note that when $path$ designates a set of entities, watching stops when the
+set becomes empty. This can happen in two cases:
 
 1. when the set is deleted (e.g. `DELETE /bank-accounts`)
 
@@ -538,45 +527,45 @@ becomes empty. This can happen in two cases:
 
 The model does not attempt to distinguish these two cases.
 
-We define a new semantic function w that takes the history as input, instead of
-a mere state as is the case for m:
+We define a new semantic function $w$ that takes the history as input, instead
+of a mere state as is the case for $m$:
 
-- $w: Command × History → Seq(Subset(E × E))$
+- $w: Command × History → Seq(Subset(E × E × E))$
   $w(WATCH path { from: n, to: m }, H) = watch(path, n, m, H)$
 
 ### Variants
 
-From the complete form, we define several variants.
+From the complete form, we define several variants of `WATCH`:
 
 - $w(WATCH path { to: m }, H) = w(WATCH path { from: 0, to: m }, H)$
 
 It is also possible to watch from a specific point. We assume the entity at path
 is eventually created and eventually deleted:
 
-- $w(WATCH path { from: n }, H) = (k ∈ 0..(m'-n'-1) ↦ local(path, n'+k, H))$ where
-  - $n' = min({ k ∈ ℕ | k ≥ n ∧ m(path, H(k).state) ≠ {} })$
+- $w(WATCH path { from: n }, H) = (k ∈ 0..(m'-n'-1) ↦ local(path, n'+k, H))$ where:
+  - $n' = min({ k ∈ ℕ | k ≥ n ∧ m(path, H(k).state) ≠ {} })$ -- first state after n where some entities exist at path
 
-  - $m' = min({ k ∈ ℕ | k ≥ n' ∧ m(path, H(k).state) = {} })$
+  - $m' = min({ k ∈ ℕ | k ≥ n' ∧ m(path, H(k).state) = {} })$ -- first state after n' where there is no entity at path
 
 When $n$ corresponds to now, this models subscription.
 
 ## Model $M₃$: Real-world time
 
-In practice, we'd also like to use `WATCH` with dates. This requires enriching the
-definition of $H$ to add timestamps. Timestamps do not come from the model, they
-come from the outside world. The only assumptions on them are that they are
-totally ordered and they can be subtracted yielding a real or natural number.
-Since the model cannot derive them inductively from previous states, we define a
+In practice, we'd also like to use `WATCH` with dates. This requires enriching
+the definition of $H$ to add timestamps. Timestamps do not come from the model,
+they come from the outside world. The only assumptions on them are that they are
+totally ordered and can be subtracted yielding a real or natural number. Since
+the model cannot derive them inductively from previous states, we define a
 timestamping function:
 
 - $τ: ℕ → Timestamp$
 
-$τ(n)$ is the timestamp assigned to the n-th command. This function is external to
-the model — it is provided by the environment. There is a single precondition on
-$τ$, namely that it should be non-decreasing: $τ(n) ≤ τ(n+1)$ for all n since time
-does not go backwards.
+$τ(n)$ is the timestamp assigned to the n-th command. This function is external
+to the model — it is provided by the environment. There is a single precondition
+on $τ$, namely that it should be non-decreasing: $τ(n) ≤ τ(n+1)$ for all $n$
+since time does not go backwards.
 
-Then $H$ and index are redefined as follows:
+Then $H$ is redefined as follows:
 
 - $H: ℕ → State × Command × Timestamp$
 
@@ -584,23 +573,28 @@ Then $H$ and index are redefined as follows:
 
 - $H(n+1) = (m(commandₙ, H(n).state), commandₙ, τ(n+1))$
 
-- $index: Timestamp → Subset(ℕ) with index(t) = { k | τ(k) = t' }$ where
-  - $t' = min { τ(k) | abs(t - τ(k)) = d }$ -- if no command bears exactly timestamp $t$, we snap to the nearest one
+We also define a function that gives all command indices at a given timestamp:
 
-  - $d = min { abs(t - τ(k)) | k ∈ ℕ }$
+- $index: Timestamp → Subset(ℕ)$
 
-Note that d exists since the set of distances is non-empty and bounded below by 0.
+  $index(t) = { k | τ(k) = t' }$ where:
+
+  + $t' = min({ τ(k) | abs(t - τ(k)) = d })$ -- if no command bears exactly timestamp t, we snap to the nearest one
+
+  + $d = min({ abs(t - τ(k)) | k ∈ ℕ })$
+
+Note that $d$ exists since the set of distances is non-empty and bounded below by 0.
 
 Note: Contrary to $M₂$, $H$ depends not only on the command sequence but also on the
 external function $τ$.
 
-The semantics of the timestamped `WATCH` is then simply:
+The semantics of the timestamped `WATCH` becomes then simply:
 
 - $w(WATCH path { from: t0, to: t1 }, H) = watch(path, min(index(t0)), max(index(t1)), H)$
 
 We can also define a version where the range is left implicit:
 
-- $w(WATCH path, H) = w(WATCH path { from: now }, H)$ where
+- $w(WATCH path, H) = w(WATCH path { from: now }, H)$ where:
   - $now ∈ Timestamp$ and is provided by the environment (it is external to the
     model)
 
@@ -609,7 +603,7 @@ We can also define a version where the range is left implicit:
 A `READ` command can be added for convenience. It adds no new expressive power,
 only notation:
 
-- $w(READ path, H) = w(WATCH path { from: now, to: now }, H)$ where
+- $w(READ path, H) = w(WATCH path { from: now, to: now }, H)$ where:
   - $now ∈ Timestamp$ and is provided by the environment
 
 This definition therefore depends on the timestamped version of `WATCH` defined in
@@ -617,11 +611,19 @@ $M₃$.
 
 # Toy implementation
 
-We now present a toy implementation of the final model ($M₄$).
+We now present a toy implementation of the final model $M₄$. After the modeling
+work has been done, we must still make explicit implementation choices. Once
+these are made, the model and the implementation document together define a
+precise scope for code generation: we used an LLM to generate most of the code,
+and the precision of the input material gave us a high degree of confidence in
+the result. Without the prior modeling work, the same LLM would have been left
+to make its own design decisions — with much less predictable outcomes. This does
+not mean that a thorough human code review becomes optional.
 
-We create a server listening to requests on a TCP port, connected to a separate
-database, notifying watchers on changes. The server handles one persistent
-connection per client. Each line received is parsed as a request.
+Technically, the implementation consists in creating a server listening to
+requests on a TCP port, connected to a separate database, notifying watchers on
+changes. The server handles one persistent connection per client. Each line
+received is parsed as a request.
 
 The server is written in Python 3.14 with asyncio. It records data (`CREATE`,
 `ALTER`, `DELETE`) in a database known by its URL passed by env var.
@@ -634,18 +636,19 @@ The data is stored in a PostgreSQL 16 database. The tables are:
 
 - `BankAccounts {id, owner, balance}`
 
-- `Events { id, timestamp, command, path, body }`
+- `Events {id, timestamp, command, path, body}`
 
 `Users.name` is the primary key, mapping directly to `/users/<Name>`.
 `BankAccounts.id` is the primary key, mapping directly to `/bank-accounts/<id>`.
 `BankAccounts.owner` is a foreign key to `Users` with `ON DELETE CASCADE`
 constraint.
 
-`Events` is an append-only table. Every `CREATE`, `ALTER`, `DELETE` writes to `Events`
-in the same transaction. This is what backs timestamped `WATCH` bursts and defines
-"too far in the past" for 416 (the error returned when the requested timestamp
-predates retained history). History is unbounded (a configurable retention
-window would be a possible extension).
+`Events` is an append-only table. Every `CREATE`, `ALTER`, `DELETE` writes to
+`Events` in the same transaction. This is what backs timestamped `WATCH` bursts
+(all states in the past are sent at once, see below) and defines the "too far in
+the past" error returned when the requested timestamp predates retained history.
+History is unbounded (a configurable retention window would be a possible
+extension).
 
 ## Server in-memory state
 
@@ -688,11 +691,182 @@ Answer     := StatusCode Body
 StatusCode := [1-9][0-9][0-9]
 ```
 
-Note: Status codes follow HTTP.
+## Answers
+
+### Standard answers
+
+Status codes follow HTTP.
+
+1. If a request is malformed, the answer is:
+
+`400 { command: <Command>, path: <Path> }` where `<Command>` and `<Path>` are
+from the malformed request.
+
+2. If a request fails because an entity does not exist at the given path, the
+   answer is:
+
+`404 { path: <Path> }`
+
+3. If the server encountered an internal problem, the answer is:
+
+`500 { path: <Path>, reason: <Text> }` with
+
+### Create
+
+1. If a `CREATE` succeeds, the answer is:
+
+    `201 { path: <Path> }` where `<Path>` is from the request.
+
+2. If a `CREATE` fails because an entity already exists at the given path, the
+   answer is:
+
+    `409 { path: <Path> }`
+
+The server must handle the following create requests:
+
+1. `CREATE /users/<Name> { age: <Number> }` with
+
+    ```
+    Name   := [a-zA-Z][a-zA-Z0-9_-]+
+    Number := 0 | [1-9][0-9]*
+    ```
+
+2. `CREATE /bank-accounts/<Number> { owner: /users/<Name>, balance: <Number> }`
+
+    If there is no entity at `/users/<Name>`, a 404 answer is sent with this
+    path.
+
+### Alter
+
+When an `ALTER` succeeds, the following answer is sent:
+
+`200 { path: <Path> }`
+
+Any key present in a `CREATE` can be altered. For instance:
+
+1. `ALTER /users/<Name> { age: <Number> }`
+
+2. `ALTER /bank-accounts/<Number> { owner: /users/<Name> }`
+
+3. `ALTER /bank-accounts/<Number> { balance: <Number> }`
+
+4. `ALTER /bank-accounts/<Number> { owner: /users/<Name>, balance: <Number> }`
+
+### Delete
+
+When a `DELETE` succeeds, the following answer is sent:
+
+`200 { path: <Path> }`
+
+Any entity can be deleted. The body must be empty. For instance:
+
+1. `DELETE /users/<Name>`
+
+2. `DELETE /bank-accounts/<Number>`
+
+As indicated by the model, `DELETE` removes all triples where the deleted entity
+appears as subject or object, a cascading effect.
+
+Sets of entities can also be deleted:
+
+3. `DELETE /users`
+
+4. `DELETE /bank-accounts`
+
+### WATCH
+
+When a WATCH succeeds, the following answer is sent:
+
+`200 { path: <Path> }`
+
+- An entity can be watched from now on:
+
+1. `WATCH /users/<Name>`
+
+2. `WATCH /bank-accounts/<Number>`
+
+The server sends at each alteration all of the entity properties:
+
+`200 { command: WATCH, path: <Path>, <key1>: <value1>... }`
+
+Note: For efficiency purpose, we could send delta only. If we would choose so,
+we would have to either update the model or note here the deviation.
+
+The watch stops when the entity is deleted. The server sends then:
+
+`410 { command: WATCH, path: <Path> }`
+
+- A set of entities can also be watched. For instance:
+
+3. `WATCH /users`
+
+4. `WATCH /bank-accounts`
+
+The answers are the same as before (the path is that of the specific entity that
+changed):
+
+`200 { command: WATCH, path: <Path>, <key1>: <value1>... }`
+
+The watch stops when the set is explicitly deleted, or when it becomes empty
+because all its entities have been deleted. Watching a set is similar to
+watching each of its entities, plus watching any entities that may be created in
+the set at a later point.
+
+- The watch can be bounded by timestamps:
+
+5. `WATCH /users/<Name> { from: <Timestamp>, to: <Timestamp> }`
+
+If the `from` is too far is the past, the server answers:
+
+`416 { path: <Path>, from: <Timestamp> }`
+
+If `from` is after `to`, the following answer is returned:
+
+`422 { path: <Path>, from: <Timestamp>, to: <Timestamp> }`
+
+The changes in the past are sent as a burst.
+
+The same applies to bank-accounts and set of entities.
+
+Note: A possible extension not handled for now could be to stop a watch with:
+
+5. `WATCH <Path> { stop: true }`
+
+- Variants:
+
+6. `WATCH /users/<Name> { from: <Timestamp> }`
+
+7. `WATCH /users/<Name> { to: <Timestamp> }` (implicitly "from now", so `to`
+   must be in the future)
+
+### READ
+
+1. `READ <Path>`
+
+`Path` is an entity or a set of entities.
+
+Examples:
+
+- `READ /users/bob`
+
+Answer:
+
+`200 { path: /users/bob, age: 23 }`
+
+- `READ /users`
+
+Answers:
+
+```
+200 { path: /users/bob, age: 23 }
+200 { path: /users/bill, age: 42 }
+...
+```
+
 
 ## Code organisation
 
-Here is a file tree:
+The files are organized in the following way:
 
 ```{.filetree}
 .
@@ -740,13 +914,13 @@ optional `to` timestamp bound. After every committed mutation, the relevant
 handler calls `notify_change`, `notify_deleted`, or `terminate_prefix_watchers`,
 which write directly to matching client writers.
 
-We also use `uv` to manage the project and set up a CI via GitHub Actions with
+Note: We use `uv` to manage the project and set up a CI via GitHub Actions with
 three jobs (lint with `ruff`, typecheck with `mypy`, test with `pytest` against
 a real `Postgres` service).
 
 ## Tests
 
-Tests require Docker to be running.
+Tests require Docker to be running and can be launched with:
 
 ```
 make test
@@ -754,17 +928,17 @@ make test
 
 This starts a dedicated test database container on port 5433, runs the full
 pytest suite against it, then tears the container down. Tests cover the parser,
-all five commands, and WATCH notifications including cascades.
+all five commands, and `WATCH` notifications including cascades.
 
 ## Running the Server
 
-Start the server and its database:
+The server and its database can be started with:
 
 ```
 make up
 ```
 
-Stop them:
+And stopped with:
 
 ```
 make down
@@ -775,7 +949,7 @@ variables can be overridden in `docker-compose.yml`.
 
 ## Sending Commands
 
-Connect with `nc`:
+Connection can be done with `nc`:
 
 ```
 nc 0.0.0.0 8888
@@ -822,7 +996,7 @@ DELETE /bank-accounts
 200 { path: /bank-accounts }
 ```
 
-Deleting a user cascades to their bank accounts.
+Deleting a user cascades to its bank accounts.
 
 ### READ
 
@@ -840,14 +1014,14 @@ READ /bank-accounts/1
 
 ### WATCH
 
-Open a first connection and register a watch:
+We first open a connection and register a watch:
 
 ```
 WATCH /users/bob
 200 { path: /users/bob }
 ```
 
-From a second connection, alter the entity:
+From a second connection, we alter the entity:
 
 ```
 ALTER /users/bob { age: 99 }
@@ -865,7 +1039,7 @@ When the entity is deleted, the first connection receives:
 410 { command: WATCH, path: /users/bob }
 ```
 
-Subgroup watches are also supported:
+Set watches are also supported:
 
 ```
 WATCH /users
@@ -880,9 +1054,11 @@ Bounded watches replay past events as a burst then stream live updates:
 WATCH /users/bob { from: 2024-01-01T00:00:00Z, to: 2024-01-01T00:01:00Z }
 ```
 
-## Repo
+## Repository
 
-A repo with the implementation can be found here:
+A repository with the implementation can be found here:
+<https://github.com/jskri/entity-protocol>
+
 
 # Conclusion
 

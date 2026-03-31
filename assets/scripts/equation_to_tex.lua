@@ -35,14 +35,23 @@ local function format_inline_math(s)
   s, _ = string.gsub(s, "%-%-(.*)", [[~~—\text{%1}]])
   s, _ = string.gsub(s, [[(CREATE[^{]+){([^}]*)}]], [[\texttt{%1{%2}}]])
   s, _ = string.gsub(s, [[(ALTER[^{]+){([^}]*)}]], [[\texttt{%1{%2}}]])
-  s, _ = string.gsub(s, [[DELETE[^,]+]], [[\texttt{%0}]])
-  s, _ = string.gsub(s, [[(WATCH[^{]+){([^}]*)}]], [[\texttt{%1{%2}}]])
-  s, _ = string.gsub(s, [[WATCH[^,]+]], [[\texttt{%0}]])
+  s, _ = string.gsub(s, [[DELETE [a-zA-Z0-9]+]], [[\texttt{%0}]])
+  s, _ = string.gsub(s, [[WATCH path,]], [[\texttt{WATCH path},]])
+  s, _ = string.gsub(s, [[WATCH path \{([^}]+)}]], [[\texttt{WATCH path \{%1}}]])
+  -- s, _ = string.gsub(s, [[WATCH[^,]+]], [[\texttt{%0}]])
   s, _ = string.gsub(s, [[READ[^,]+]], [[\texttt{%0}]])
   s, _ = string.gsub(s, "where", [[\text{where}]])
   s, _ = string.gsub(s, "m%(key1,", [[m(\texttt{key1},]])
   s, _ = string.gsub(s, "m%(value1,", [[m(\texttt{value1},]])
-  s, _ = string.gsub(s, "m%(path,", [[m(\texttt{path},]])
+  s, _ = string.gsub(s, "m%(path,~ state%)", [[m(\texttt{path},~ state)]])
+  s, _ = string.gsub(s, "local%(path,~ n'%+k,~ H%)", [[local(\texttt{path},~ n'+k,~ H)]])
+  s, _ = string.gsub(s, "k ≥ n ∧ m%(path,~ H%(k%).state%)", [[k ≥ \texttt{n} ∧ m(\texttt{path}, H(k).state)]])
+  s, _ = string.gsub(s, "k ≥ n' ∧ m%(path,~ H%(k%).state%)", [[k ≥ n' ∧ m(\texttt{path}, H(k).state)]])
+  -- s, _ = string.gsub(s, "local%(path,", [[local(\texttt{path},]])
+  s, _ = string.gsub(s, "= watch%(path,~ n,~ m", [[= watch(\texttt{path},~\texttt{n},~\texttt{m}]])
+  s, _ = string.gsub(s, "= watch%(path,~ min%(index%(t0%)%),~ max%(index%(t1%)%)", [[= watch(\texttt{path},~ min(index(\texttt{t0})),~ min(index(\texttt{t1}))]])
+  s, _ = string.gsub(s, "now ∈ Timestamp", [[\texttt{now} ∈ Timestamp]])
+                        -- watch%(path,~ min(index(t0)),~ max(index(t1))
   s, _ = string.gsub(s, "ₙ₊₁", [[_{n+1}]])
   s, _ = string.gsub(s, "₀", [[_{0}]])
   s, _ = string.gsub(s, "₁", [[_{1}]])
@@ -50,8 +59,13 @@ local function format_inline_math(s)
   s, _ = string.gsub(s, "₃", [[_{3}]])
   s, _ = string.gsub(s, "₄", [[_{4}]])
   s, _ = string.gsub(s, "ₙ", [[_{n}]])
+  -- s, _ = string.gsub(s, "∃ ", [[∃~]])
   return s
 end
+
+-- local function startswith(s, start)
+--   return s:sub(1, #start) == start
+-- end
 
 local function format_display_math(s)
   local res = ""
@@ -70,7 +84,11 @@ local function format_display_math(s)
     res = res .. line
     first = false
   end
+  -- if startswith(s, "index: Timestamp → Subset(ℕ)") then
+  --   res = [[\begin{flalign}]] .. "\n" .. res .. "\n" .. [[\end{flalign}]]
+  -- else
   res = [[\begin{equation*}\begin{aligned}]] .. "\n" .. res .. "\n" .. [[\end{aligned}\end{equation*}]]
+  -- end
   return res
 end
 
