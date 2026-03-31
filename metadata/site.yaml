@@ -4,7 +4,7 @@ posts:
   - title: "REST's semantics are informal. Here is a formal alternative."
     url: "posts/entity-protocol.html"
     date: "2026-03-25"
-    description: "Starting from Docker, we develop a formal model for distributed state."
+    description: "Starting from REST, we develop a formal model for distributed state from mathematical definition to working implementation."
 mainfont: "'Roboto', sans-serif"
 fontsize: "1rem"
 fontweight: "300"
