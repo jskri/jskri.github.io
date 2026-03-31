@@ -17,14 +17,14 @@
 }
 
 :root {
-  /*
-  --main-font: ${if(mainfont)} ${mainfont} ${else} "system-ui" ${endif};
-  --font-size: ${if(fontsize)} ${fontsize} ${else} 12px ${endif};
-  --header-height: ${if(header-height)} ${header-height} ${else} 3rem ${endif};
-
-  fontcolor, background-color, maxwidth, margin-left, margin-right, margin-top, margin-bottom, linkcolor
-  */
   --max-width: ${if(maxwidth)} ${maxwidth} ${else} 36em ${endif};
+  --font-color: ${if(fontcolor)} ${fontcolor} ${else} #1a1a1a ${endif};
+  --background-color: ${if(backgroundcolor)} ${backgroundcolor} ${else} #fdfdfd ${endif};
+  --padding-left: ${if(margin-left)} ${margin-left} ${else} 50px ${endif};
+  --padding-right: ${if(margin-right)} ${margin-right} ${else} 50px ${endif};
+  --padding-top: ${if(margin-top)} ${margin-top} ${else} 50px ${endif};
+  --padding-bottom: ${if(margin-bottom)} ${margin-bottom} ${else} 50px ${endif};
+  --link-color: ${if(linkcolor)} ${linkcolor} ${else} #1a1a1a ${endif};
 }
 
 /* ---- Reset ---- */
@@ -48,8 +48,8 @@ ${endif}
 ${if(linestretch)}
   line-height: ${linestretch};
 ${endif}
-  color: ${if(fontcolor)} ${fontcolor} ${else} #1a1a1a ${endif};
-  background-color: ${if(backgroundcolor)} ${backgroundcolor} ${else} #fdfdfd ${endif};
+  color: var(--font-color);
+  background-color: var(--background-color);
 }
 
 body {
@@ -58,10 +58,10 @@ body {
   min-height: 100vh;
   margin: 0 auto;
   max-width: var(--max-width);
-  padding-left: ${if(margin-left)} ${margin-left} ${else} 50px ${endif};
-  padding-right: ${if(margin-right)} ${margin-right} ${else} 50px ${endif};
-  padding-top: ${if(margin-top)} ${margin-top} ${else} 50px ${endif};
-  padding-bottom: ${if(margin-bottom)} ${margin-bottom} ${else} 50px ${endif};
+  padding-left: var(--padding-left);
+  padding-right: var(--padding-right);
+  padding-top: var(--padding-top);
+  padding-bottom: var(--padding-bottom);
   hyphens: auto;
   overflow-wrap: break-word;
   text-rendering: optimizeLegibility;
@@ -102,22 +102,10 @@ header nav a {
 }
 
 main {
-  /*
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  */
-  /*margin-top: 3rem;*/       /* clear the fixed header */
   max-width: 1200px;
   width: 100%;
   margin-inline: auto;    /* center on wide screens */
 }
-
-/* ---- Table of contents ---- */
-aside {
-  padding: 2rem 1rem 2rem 2rem;
-}
-
-/* ---- Article ---- */
 
 p {
   margin: 1em 0;
@@ -138,21 +126,14 @@ main {
 
 .about {
   margin-top: 2rem;
-  /*max-width: 66%;*/
 }
-
-/*
-.posts ul {
-  max-width: 60ch;
-}
-*/
 
 a {
-  color: $if(linkcolor)$$linkcolor$$else$#1a1a1a$endif$;
+  color: var(--link-color);
 }
 
 a:visited {
-  color: $if(linkcolor)$$linkcolor$$else$#1a1a1a$endif$;
+  color: var(--link-color);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -170,90 +151,7 @@ h2 {
   font-size: 2rem;
 }
 
-h3 {
-  font-size: 1.75rem;
-}
-
-h5, h6 {
-  font-size: 1em;
-  font-style: italic;
-}
-
-h6 {
-  font-weight: normal;
-}
-
-ol, ul {
-  padding-left: 1.7em;
-  margin-top: 1em;
-}
-
-li > ol, li > ul {
-  margin-top: 0;
-}
-
 header {
   margin-bottom: 4em;
   text-align: center;
 }
-
-code {
-  font-family: ${if(monofont)} ${monofont} ${else} Menlo, Monaco, Consolas, 'Lucida Console', monospace ${endif};
-${if(monocolor)}
-  color: ${monocolor};
-${endif}
-${if(monobackgroundcolor)}
-  background-color: ${monobackgroundcolor};
-  padding: .2em .4em;
-${endif}
-  font-size: 85%;
-  margin: 0;
-  hyphens: manual;
-  border-radius: 3px;
-  word-wrap: break-word;
-}
-
-pre {
-  margin: 1em 0;
-$if(monobackgroundcolor)$
-  background-color: $monobackgroundcolor$;
-  padding: 0.5em;
-$endif$
-  overflow: auto;
-  border-radius: 5px;
-}
-
-pre code {
-  padding: 0;
-  overflow: visible;
-  overflow-wrap: normal;
-}
-
-.sourceCode {
- background-color: transparent;
- overflow: visible;
-}
-
-.date {
-  color: #828282;
-  font-size: .875rem;
-  text-align: left;
-  /*margin-bottom: 0;*/
-}
-
-.abstract {
-  text-align: left;
-}
-
-.abstract-title {
-  text-align: center;
-}
-
-.filetree {
-  line-height: 1;
-}
-
-${if(highlighting-css)}
-/* CSS for syntax highlighting */
-${highlighting-css}
-${endif}
