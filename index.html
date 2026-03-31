@@ -4,9 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Specifiable</title>
-  <!--link rel="stylesheet" href="/assets/katex/katex.min.css">
-  <link rel="stylesheet" href="/assets/fonts/fonts.css">
-  <link rel="stylesheet" href="/assets/style.css"-->
+  <!--link rel="stylesheet" href="/assets/katex/katex.min.css"-->
   <style>
     /* roboto-300 - latin */
     @font-face {
@@ -27,14 +25,14 @@
     }
 
     :root {
-      /*
-      --main-font:  ‘Roboto’, sans-serif ;
-      --font-size:  1rem ;
-      --header-height:  3rem ;
-
-      fontcolor, background-color, maxwidth, margin-left, margin-right, margin-top, margin-bottom, linkcolor
-      */
       --max-width:  1050px ;
+      --font-color:  #1a1a1a ;
+      --background-color:  #fdfdfd ;
+      --padding-left:  50px ;
+      --padding-right:  50px ;
+      --padding-top:  50px ;
+      --padding-bottom:  50px ;
+      --link-color:  #1a1a1a ;
     }
 
     /* ---- Reset ---- */
@@ -50,8 +48,8 @@
       font-size: 1rem;
       font-weight: 300;
       line-height: 1.5;
-      color:  #1a1a1a ;
-      background-color:  #fdfdfd ;
+      color: var(--font-color);
+      background-color: var(--background-color);
     }
 
     body {
@@ -60,10 +58,10 @@
       min-height: 100vh;
       margin: 0 auto;
       max-width: var(--max-width);
-      padding-left:  50px ;
-      padding-right:  50px ;
-      padding-top:  50px ;
-      padding-bottom:  50px ;
+      padding-left: var(--padding-left);
+      padding-right: var(--padding-right);
+      padding-top: var(--padding-top);
+      padding-bottom: var(--padding-bottom);
       hyphens: auto;
       overflow-wrap: break-word;
       text-rendering: optimizeLegibility;
@@ -104,51 +102,10 @@
     }
 
     main {
-      /*
-      display: grid;
-      grid-template-columns: 1fr 3fr;
-      */
       margin-top: 3rem;       /* clear the fixed header */
       max-width: 1200px;
       width: 100%;
       margin-inline: auto;    /* center on wide screens */
-    }
-
-    /* ---- Table of contents ---- */
-    aside {
-      padding: 2rem 1rem 2rem 2rem;
-    }
-
-    #toc {
-      position: sticky;
-      top: 4rem;              /* header height + small gap */
-      font-size: .75rem;
-      font-weight: 500;
-      line-height: 1.7;
-      z-index: 1;
-    }
-    #toc li {
-      list-style: none;
-    }
-    #toc ul {
-      padding-left: 1.3em;
-    }
-    #toc > ul {
-      padding-left: 0;
-    }
-    #toc a:not(:hover) {
-      text-decoration: none;
-    }
-    #toc a:hover {
-      text-decoration: none;
-      color: #2698ba;
-      transition: all 0.2s ease-in-out;
-    }
-
-    /* ---- Article ---- */
-    article {
-      padding: 2rem 2rem 2rem 1rem;
-      min-width: 0;           /* prevents grid blowout with long content */
     }
 
     p {
@@ -170,21 +127,14 @@
 
     .posts {
       margin-top: 5rem;
-      /*max-width: 66%;*/
     }
-
-    /*
-    .posts ul {
-      max-width: 60ch;
-    }
-    */
 
     a {
-      color: #1a1a1a;
+      color: var(--link-color);
     }
 
     a:visited {
-      color: #1a1a1a;
+      color: var(--link-color);
     }
 
     h1, h2, h3, h4, h5, h6 {
@@ -232,7 +182,7 @@
     code {
       font-family:  Menlo, Monaco, Consolas, 'Lucida Console', monospace ;
       color: #2698ba;
-      background-color: #2c3237;
+      background-color: #c8c9ca;
       padding: .2em .4em;
       font-size: 85%;
       margin: 0;
@@ -243,7 +193,7 @@
 
     pre {
       margin: 1em 0;
-      background-color: #2c3237;
+      background-color: #c8c9ca;
       padding: 0.5em;
       overflow: auto;
       border-radius: 5px;
@@ -305,8 +255,9 @@ software.</p>
           <time datetime="2026-03-25">2026-03-25</time>
           <a href="posts/entity-protocol.html">REST’s semantics are
 informal. Here is a formal alternative.</a>
-                    <p>Starting from Docker, we develop a formal model
-for distributed state.</p>
+                    <p>Starting from REST, we develop a formal model for
+distributed state from mathematical definition to working
+implementation.</p>
                   </li>
               </ul>
     </section>

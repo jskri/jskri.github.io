@@ -4,9 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Specifiable</title>
-  <!--link rel="stylesheet" href="/assets/katex/katex.min.css">
-  <link rel="stylesheet" href="/assets/fonts/fonts.css">
-  <link rel="stylesheet" href="/assets/style.css"-->
+  <!--link rel="stylesheet" href="/assets/katex/katex.min.css"-->
   <style>
     /* roboto-300 - latin */
     @font-face {
@@ -27,14 +25,14 @@
     }
 
     :root {
-      /*
-      --main-font:  ‘Roboto’, sans-serif ;
-      --font-size:  1rem ;
-      --header-height:  3rem ;
-
-      fontcolor, background-color, maxwidth, margin-left, margin-right, margin-top, margin-bottom, linkcolor
-      */
       --max-width:  1050px ;
+      --font-color:  #1a1a1a ;
+      --background-color:  #fdfdfd ;
+      --padding-left:  50px ;
+      --padding-right:  50px ;
+      --padding-top:  50px ;
+      --padding-bottom:  50px ;
+      --link-color:  #1a1a1a ;
     }
 
     /* ---- Reset ---- */
@@ -50,8 +48,8 @@
       font-size: 1rem;
       font-weight: 300;
       line-height: 1.5;
-      color:  #1a1a1a ;
-      background-color:  #fdfdfd ;
+      color: var(--font-color);
+      background-color: var(--background-color);
     }
 
     body {
@@ -60,10 +58,10 @@
       min-height: 100vh;
       margin: 0 auto;
       max-width: var(--max-width);
-      padding-left:  50px ;
-      padding-right:  50px ;
-      padding-top:  50px ;
-      padding-bottom:  50px ;
+      padding-left: var(--padding-left);
+      padding-right: var(--padding-right);
+      padding-top: var(--padding-top);
+      padding-bottom: var(--padding-bottom);
       hyphens: auto;
       overflow-wrap: break-word;
       text-rendering: optimizeLegibility;
@@ -104,22 +102,10 @@
     }
 
     main {
-      /*
-      display: grid;
-      grid-template-columns: 1fr 3fr;
-      */
-      /*margin-top: 3rem;*/       /* clear the fixed header */
       max-width: 1200px;
       width: 100%;
       margin-inline: auto;    /* center on wide screens */
     }
-
-    /* ---- Table of contents ---- */
-    aside {
-      padding: 2rem 1rem 2rem 2rem;
-    }
-
-    /* ---- Article ---- */
 
     p {
       margin: 1em 0;
@@ -140,21 +126,14 @@
 
     .about {
       margin-top: 2rem;
-      /*max-width: 66%;*/
     }
-
-    /*
-    .posts ul {
-      max-width: 60ch;
-    }
-    */
 
     a {
-      color: #1a1a1a;
+      color: var(--link-color);
     }
 
     a:visited {
-      color: #1a1a1a;
+      color: var(--link-color);
     }
 
     h1, h2, h3, h4, h5, h6 {
@@ -170,83 +149,10 @@
       font-size: 2rem;
     }
 
-    h3 {
-      font-size: 1.75rem;
-    }
-
-    h5, h6 {
-      font-size: 1em;
-      font-style: italic;
-    }
-
-    h6 {
-      font-weight: normal;
-    }
-
-    ol, ul {
-      padding-left: 1.7em;
-      margin-top: 1em;
-    }
-
-    li > ol, li > ul {
-      margin-top: 0;
-    }
-
     header {
       margin-bottom: 4em;
       text-align: center;
-    }
-
-    code {
-      font-family:  Menlo, Monaco, Consolas, 'Lucida Console', monospace ;
-      color: #2698ba;
-      background-color: #2c3237;
-      padding: .2em .4em;
-      font-size: 85%;
-      margin: 0;
-      hyphens: manual;
-      border-radius: 3px;
-      word-wrap: break-word;
-    }
-
-    pre {
-      margin: 1em 0;
-      background-color: #2c3237;
-      padding: 0.5em;
-      overflow: auto;
-      border-radius: 5px;
-    }
-
-    pre code {
-      padding: 0;
-      overflow: visible;
-      overflow-wrap: normal;
-    }
-
-    .sourceCode {
-     background-color: transparent;
-     overflow: visible;
-    }
-
-    .date {
-      color: #828282;
-      font-size: .875rem;
-      text-align: left;
-      /*margin-bottom: 0;*/
-    }
-
-    .abstract {
-      text-align: left;
-    }
-
-    .abstract-title {
-      text-align: center;
-    }
-
-    .filetree {
-      line-height: 1;
-    }
-  </style>
+    }  </style>
 </head>
 <body>
 
@@ -285,6 +191,9 @@
       Elliott</a> inspiring, with its emphasis on simplicity and
       composability.</p></li>
       </ul>
+      <h1 id="repositories">Repositories</h1>
+      <p>Github: <a
+      href="https://github.com/jskri">github.com/jskri</a></p>
       <h1 id="contact">Contact</h1>
       <p>You can reach me at <a
       href="mailto:dvnh87@protonmail.com">dvnh87@protonmail.com</a>.</p>
