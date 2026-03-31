@@ -376,18 +376,12 @@ alternative.</title>
         class="math inline">M_{0}</span></a></li>
         <li><a href="#implementation-of-m₀"
         id="toc-implementation-of-m₀">Implementation of <span
-        class="math inline">M_{0}</span></a>
-        <ul>
-        <li><a href="#example-1" id="toc-example-1">Example</a></li>
-        </ul></li>
+        class="math inline">M_{0}</span></a></li>
         <li><a href="#model-m₁-alteration"
         id="toc-model-m₁-alteration">Model <span
         class="math inline">M_{1}</span>: Alteration</a></li>
         <li><a href="#model-m₂-history" id="toc-model-m₂-history">Model
-        <span class="math inline">M_{2}</span>: History</a>
-        <ul>
-        <li><a href="#variants" id="toc-variants">Variants</a></li>
-        </ul></li>
+        <span class="math inline">M_{2}</span>: History</a></li>
         <li><a href="#model-m₃-real-world-time"
         id="toc-model-m₃-real-world-time">Model <span
         class="math inline">M_{3}</span>: Real-world time</a></li>
@@ -403,21 +397,16 @@ alternative.</title>
         <li><a href="#request-and-answer-grammars"
         id="toc-request-and-answer-grammars">Request and answer
         grammars</a></li>
+        <li><a href="#answers" id="toc-answers">Answers</a></li>
         <li><a href="#code-organisation" id="toc-code-organisation">Code
         organisation</a></li>
         <li><a href="#tests" id="toc-tests">Tests</a></li>
         <li><a href="#running-the-server"
         id="toc-running-the-server">Running the Server</a></li>
         <li><a href="#sending-commands"
-        id="toc-sending-commands">Sending Commands</a>
-        <ul>
-        <li><a href="#create" id="toc-create">CREATE</a></li>
-        <li><a href="#alter" id="toc-alter">ALTER</a></li>
-        <li><a href="#delete" id="toc-delete">DELETE</a></li>
-        <li><a href="#read" id="toc-read">READ</a></li>
-        <li><a href="#watch" id="toc-watch">WATCH</a></li>
-        </ul></li>
-        <li><a href="#repo" id="toc-repo">Repo</a></li>
+        id="toc-sending-commands">Sending Commands</a></li>
+        <li><a href="#repository"
+        id="toc-repository">Repository</a></li>
         </ul></li>
         <li><a href="#conclusion"
         id="toc-conclusion">Conclusion</a></li>
@@ -860,14 +849,13 @@ formal alternative.</h1>
       the triples whose object is the entity while creation only add
       triples whose subject is the entity, so a deletion followed by a
       creation may lose information. Concretely,
-      <code>DELETE /bob</code> wipes
-      <code>(bank-accounts/1, owner, bob)</code> but a subsequent
-      <code>CREATE /bob {age: 23}</code> does not restore it. We
-      therefore provide a definition for alteration that is not simply
-      in terms of creation and deletion:</p>
+      <code>DELETE /Bob</code> wipes
+      <code>(bank-accounts/1, owner, Bob)</code> but a subsequent
+      <code>CREATE /Bob {age: 23}</code> does not restore it. We
+      therefore provide:</p>
       <ul>
       <li><p><span class="math inline">alter</span>, a function for
-      alteration not in terms of creation and deletion:</p>
+      alteration defined not in terms of creation and deletion:</p>
       <span class="math display">\begin{equation*}\begin{aligned}
       &amp;alter : State × E × Subset(E × E) → State\\
       &amp;alter(state,~ entity,~ relations) =\\
@@ -875,7 +863,7 @@ formal alternative.</h1>
       predicates(relations) \}) ∪ \{ (entity,~ p,~ o) ~|~ (p,~ o) ∈
       relations \}
       \end{aligned}\end{equation*}</span>
-      <p>where</p>
+      <p>where:</p>
       <ul>
       <li><span class="math inline">predicates(relations) = \{ p ~|~
       (p,~ \_) ∈ relations \}</span></li>
@@ -896,7 +884,7 @@ formal alternative.</h1>
       provides an identity by allowing to relate the potentially
       different entities that live at the same path in different states.
       In this sense, a path plays the role of a variable.</p>
-      <p><span class="math inline">M_{1}</span> does have a notion of
+      <p>However, <span class="math inline">M_{1}</span> has a notion of
       execution. An execution is a sequence of commands <span
       class="math inline">c_{0}</span>, <span
       class="math inline">c_{1}</span>, … The state then evolves
@@ -915,13 +903,18 @@ formal alternative.</h1>
       getting the relations of which it is the subject, from its
       creation to its deletion.</p>
       <p>To this end, we define the history <span
-      class="math inline">H</span> of an execution. H is a sequence of
-      (state, command) pairs, defined by:</p>
+      class="math inline">H</span> of an execution. <span
+      class="math inline">H</span> is a sequence of (state, command)
+      pairs, defined by:</p>
       <ul>
-      <li><p><span class="math inline">H: History</span> where <span
-      class="math inline">History = ℕ → State × Command</span>, and
-      <span class="math inline">Command = \{ \texttt{CREATE p \{...\}},~
-      \texttt{ALTER p \{...\}},~ \texttt{DELETE p \}}</span></p></li>
+      <li><p><span class="math inline">H: History</span> where:</p>
+      <ul>
+      <li><span class="math inline">History = ℕ → State ×
+      Command</span></li>
+      <li><span class="math inline">Command = \{ \texttt{CREATE p
+      \{...\}},~ \texttt{ALTER p \{...\}},~ \texttt{DELETE p}
+      \}</span></li>
+      </ul></li>
       <li><p><span class="math inline">H(0) = (\{\},~ ⊥)</span> where
       <span class="math inline">⊥</span> denotes the lack of command
       leading to the initial state</p></li>
@@ -937,11 +930,13 @@ formal alternative.</h1>
       history, including past and future.</p>
       <p>We want to watch an entity until it is deleted. We introduce
       the <code>WATCH</code> command which returns a sequence of
-      relations where the entity at path is the subject. The complete
-      version watches an entity over at most the interval from stateₙ to
-      stateₘ, with <span class="math inline">n ≤ m</span>. This is a
-      maximal interval since it is bounded by the lifetime of the entity
-      at p, i.e. from its creation to its destruction.</p>
+      relations where the entity at <code>path</code> is the subject.
+      The command watches an entity over at most the interval from <span
+      class="math inline">state_{n}</span> to <span
+      class="math inline">stateₘ</span>, with <span
+      class="math inline">n ≤ m</span>. This is a maximal interval since
+      it is bounded by the lifetime of the entity at <code>path</code>,
+      i.e. from its creation to its destruction.</p>
       <ul>
       <li><code>WATCH path { from: n, to: m }</code></li>
       </ul>
@@ -954,50 +949,39 @@ formal alternative.</h1>
       </ol>
       <p>To define its semantics, we first define the <span
       class="math inline">watch</span> function:</p>
-      <!--
-      - ```equation
-        watch : Path × ℕ × ℕ × History → Seq(Subset(E × E))
-        watch(path, n, m, H) = (k ∈ 0..(m'-n'-1) ↦ local(path, n'+k, H)) where
-
-          n' = min({ k ∈ n..m | m(path, H(k).state) ≠ {} } ∪ { m }) -- first state in the interval with non-empty path
-
-          m' = min({ k ∈ n'..m | m(path, H(k).state) = {} } ∪ { m })
-
-          local(p, k, H) = { (predicate, object) | s ∈ m(p, H(k).state) ∧ (s, predicate, object) ∈ H(k).state }
-
-          Seq(A) = ⋃ { 0..(len-1) → A | len ∈ ℕ }
-        ```
-      -->
       <ul>
       <li><p><span class="math inline">watch : Path × ℕ × ℕ × History →
-      Seq(Subset(E × E))</span> <span class="math inline">watch(path,~
-      n,~ m,~ H) = (k ∈ 0..(m&#39;-n&#39;-1) ↦ local(path,~ n&#39;+k,~
-      H))</span> where</p>
+      Seq(Subset(E × E × E))</span> <span
+      class="math inline">watch(path,~ n,~ m,~ H) = (k ∈
+      0..(m&#39;-n&#39;-1) ↦ local(\texttt{path},~ n&#39;+k,~ H))</span>
+      where:</p>
       <ul>
-      <li><p><span class="math inline">n&#39; = min(\{ k ∈ n..m ~|~
-      m(\texttt{path},~ H(k).state) ≠ \{\} \} ∪ \{ m \})</span> – first
-      state in the interval with non-empty path</p></li>
-      <li><p><span class="math inline">m&#39; = min(\{ k ∈ n&#39;..m ~|~
-      m(\texttt{path},~ H(k).state) = \{\} \} ∪ \{ m \})</span></p></li>
-      <li><p><span class="math inline">local(p,~ k,~ H) = \{
-      (predicate,~ object) ~|~ s ∈ m(p,~ H(k).state) ∧ (s,~ predicate,~
-      object) ∈ H(k).state \}</span></p></li>
       <li><p><span class="math inline">Seq(A) = ⋃ \{ 0..(len-1) → A ~|~
-      len ∈ ℕ \}</span></p></li>
+      len ∈ ℕ \}</span> – the A-valued sequences of any length</p></li>
+      <li><p><span class="math inline">n&#39; = min(\{ k ∈ n..m ~|~
+      m(path,~ H(k).state) ≠ \{\} \} ∪ \{ m \})</span> – first state in
+      the interval with non-empty path</p></li>
+      <li><p><span class="math inline">m&#39; = min(\{ k ∈ n&#39;..m ~|~
+      m(path,~ H(k).state) = \{\} \} ∪ \{ m \})</span></p></li>
+      <li><p><span class="math inline">local(p,~ k,~ H) = \{ (s,~
+      predicate,~ object) ~|~ s ∈ m(p,~ H(k).state) ∧ (s,~ predicate,~
+      object) ∈ H(k).state \}</span> – all relations in state k where an
+      entity at p is the subject</p></li>
       </ul></li>
       </ul>
-      <p><span class="math inline">Seq(A)</span> includes the empty
-      sequence (<span class="math inline">len = 0</span>), because <span
-      class="math inline">0..(0-1)</span> is empty.</p>
-      <p>Note that if the path is empty throughout <span
-      class="math inline">n..m</span>, then <span
+      <p>Note that <span class="math inline">Seq(A)</span> includes the
+      empty sequence (<span class="math inline">len = 0</span>), because
+      <span class="math inline">0..(0-1)</span> is empty.</p>
+      <p>Note that if <span class="math inline">path</span> is empty
+      throughout <span class="math inline">n..m</span>, then <span
       class="math inline">n&#39; = m</span>, <span
       class="math inline">m&#39; = m</span> and the range becomes <span
-      class="math inline">0..-1</span>. Therefore, watch returns an
-      empty sequence as expected.</p>
-      <p>Also note that when path designates a set of entities, watching
-      stops when the set becomes empty. This can happen in two
-      cases:</p>
+      class="math inline">0..-1</span>. Therefore, <span
+      class="math inline">watch</span> returns an empty sequence as
+      expected.</p>
+      <p>Also note that when <span class="math inline">path</span>
+      designates a set of entities, watching stops when the set becomes
+      empty. This can happen in two cases:</p>
       <ol type="1">
       <li><p>when the set is deleted
       (e.g. <code>DELETE /bank-accounts</code>)</p></li>
@@ -1006,33 +990,37 @@ formal alternative.</h1>
       <code>DELETE /bank-accounts/2</code>)</p></li>
       </ol>
       <p>The model does not attempt to distinguish these two cases.</p>
-      <p>We define a new semantic function w that takes the history as
-      input, instead of a mere state as is the case for m:</p>
+      <p>We define a new semantic function <span
+      class="math inline">w</span> that takes the history as input,
+      instead of a mere state as is the case for <span
+      class="math inline">m</span>:</p>
       <ul>
       <li><span class="math inline">w: Command × History → Seq(Subset(E
-      × E))</span> <span class="math inline">w(\texttt{\texttt{WATCH
-      path \{ from: n},~ to: m \}},~ H) = watch(path,~ n,~ m,~
-      H)</span></li>
+      × E × E))</span> <span class="math inline">w(\texttt{WATCH path \{
+      from: n,~ to: m \}},~ H) =
+      watch(\texttt{path},~\texttt{n},~\texttt{m},~ H)</span></li>
       </ul>
       <h3 id="variants">Variants</h3>
-      <p>From the complete form, we define several variants.</p>
+      <p>From the complete form, we define several variants of
+      <code>WATCH</code>:</p>
       <ul>
-      <li><span class="math inline">w(\texttt{\texttt{WATCH path \{ to:
-      m \}}},~ H) = w(\texttt{\texttt{WATCH path \{ from: 0},~ to: m
-      \}},~ H)</span></li>
+      <li><span class="math inline">w(\texttt{WATCH path \{ to: m \}},~
+      H) = w(\texttt{WATCH path \{ from: 0,~ to: m \}},~ H)</span></li>
       </ul>
       <p>It is also possible to watch from a specific point. We assume
       the entity at path is eventually created and eventually
       deleted:</p>
       <ul>
-      <li><span class="math inline">w(\texttt{\texttt{WATCH path \{
-      from: n \}}},~ H) = (k ∈ 0..(m&#39;-n&#39;-1) ↦ local(path,~
-      n&#39;+k,~ H))</span> where
+      <li><span class="math inline">w(\texttt{WATCH path \{ from: n
+      \}},~ H) = (k ∈ 0..(m&#39;-n&#39;-1) ↦ local(\texttt{path},~
+      n&#39;+k,~ H))</span> where:
       <ul>
-      <li><p><span class="math inline">n&#39; = min(\{ k ∈ ℕ ~|~ k ≥ n ∧
-      m(\texttt{path},~ H(k).state) ≠ \{\} \})</span></p></li>
+      <li><p><span class="math inline">n&#39; = min(\{ k ∈ ℕ ~|~ k ≥
+      \texttt{n} ∧ m(\texttt{path}, H(k).state) ≠ \{\} \})</span> –
+      first state after n where some entities exist at path</p></li>
       <li><p><span class="math inline">m&#39; = min(\{ k ∈ ℕ ~|~ k ≥
-      n&#39; ∧ m(\texttt{path},~ H(k).state) = \{\} \})</span></p></li>
+      n&#39; ∧ m(\texttt{path}, H(k).state) = \{\} \})</span> – first
+      state after n’ where there is no entity at path</p></li>
       </ul></li>
       </ul>
       <p>When <span class="math inline">n</span> corresponds to now,
@@ -1043,8 +1031,8 @@ formal alternative.</h1>
       dates. This requires enriching the definition of <span
       class="math inline">H</span> to add timestamps. Timestamps do not
       come from the model, they come from the outside world. The only
-      assumptions on them are that they are totally ordered and they can
-      be subtracted yielding a real or natural number. Since the model
+      assumptions on them are that they are totally ordered and can be
+      subtracted yielding a real or natural number. Since the model
       cannot derive them inductively from previous states, we define a
       timestamping function:</p>
       <ul>
@@ -1055,9 +1043,10 @@ formal alternative.</h1>
       is provided by the environment. There is a single precondition on
       <span class="math inline">τ</span>, namely that it should be
       non-decreasing: <span class="math inline">τ(n) ≤ τ(n+1)</span> for
-      all n since time does not go backwards.</p>
-      <p>Then <span class="math inline">H</span> and index are redefined
-      as follows:</p>
+      all <span class="math inline">n</span> since time does not go
+      backwards.</p>
+      <p>Then <span class="math inline">H</span> is redefined as
+      follows:</p>
       <ul>
       <li><p><span class="math inline">H: ℕ → State × Command ×
       Timestamp</span></p></li>
@@ -1065,37 +1054,43 @@ formal alternative.</h1>
       τ(0))</span></p></li>
       <li><p><span class="math inline">H(n+1) = (m(command_{n},~
       H(n).state),~ command_{n},~ τ(n+1))</span></p></li>
-      <li><p><span class="math inline">index: Timestamp → Subset(ℕ) with
-      index(t) = \{ k ~|~ τ(k) = t&#39; \}</span> where</p>
+      </ul>
+      <p>We also define a function that gives all command indices at a
+      given timestamp:</p>
       <ul>
-      <li><p><span class="math inline">t&#39; = min \{ τ(k) ~|~ abs(t -
-      τ(k)) = d \}</span> – if no command bears exactly timestamp <span
-      class="math inline">t</span>, we snap to the nearest one</p></li>
-      <li><p><span class="math inline">d = min \{ abs(t - τ(k)) ~|~ k ∈
-      ℕ \}</span></p></li>
+      <li><p><span class="math inline">index: Timestamp →
+      Subset(ℕ)</span></p>
+      <p><span class="math inline">index(t) = \{ k ~|~ τ(k) = t&#39;
+      \}</span> where:</p>
+      <ul>
+      <li><p><span class="math inline">t&#39; = min(\{ τ(k) ~|~ abs(t -
+      τ(k)) = d \})</span> – if no command bears exactly timestamp t, we
+      snap to the nearest one</p></li>
+      <li><p><span class="math inline">d = min(\{ abs(t - τ(k)) ~|~ k ∈
+      ℕ \})</span></p></li>
       </ul></li>
       </ul>
-      <p>Note that d exists since the set of distances is non-empty and
-      bounded below by 0.</p>
+      <p>Note that <span class="math inline">d</span> exists since the
+      set of distances is non-empty and bounded below by 0.</p>
       <p>Note: Contrary to <span class="math inline">M_{2}</span>, <span
       class="math inline">H</span> depends not only on the command
       sequence but also on the external function <span
       class="math inline">τ</span>.</p>
-      <p>The semantics of the timestamped <code>WATCH</code> is then
-      simply:</p>
+      <p>The semantics of the timestamped <code>WATCH</code> becomes
+      then simply:</p>
       <ul>
-      <li><span class="math inline">w(\texttt{\texttt{WATCH path \{
-      from: t0},~ to: t1 \}},~ H) = watch(path,~ min(index(t0)),~
-      max(index(t1)),~ H)</span></li>
+      <li><span class="math inline">w(\texttt{WATCH path \{ from: t0,~
+      to: t1 \}},~ H) = watch(\texttt{path},~ min(index(\texttt{t0})),~
+      min(index(\texttt{t1})),~ H)</span></li>
       </ul>
       <p>We can also define a version where the range is left
       implicit:</p>
       <ul>
-      <li><span class="math inline">w(\texttt{\texttt{WATCH path},~ H) =
-      w(\texttt{WATCH path \{ from: now \}}},~ H)</span> where
+      <li><span class="math inline">w(\texttt{WATCH path},~ H) =
+      w(\texttt{WATCH path \{ from: now \}},~ H)</span> where:
       <ul>
-      <li><span class="math inline">now ∈ Timestamp</span> and is
-      provided by the environment (it is external to the model)</li>
+      <li><span class="math inline">\texttt{now} ∈ Timestamp</span> and
+      is provided by the environment (it is external to the model)</li>
       </ul></li>
       </ul>
       <h2 id="model-m₄-read">Model <span
@@ -1104,23 +1099,32 @@ formal alternative.</h1>
       adds no new expressive power, only notation:</p>
       <ul>
       <li><span class="math inline">w(\texttt{READ path},~ H) =
-      w(\texttt{\texttt{WATCH path \{ from: now},~ to: now \}},~
-      H)</span> where
+      w(\texttt{WATCH path \{ from: now,~ to: now \}},~ H)</span> where:
       <ul>
-      <li><span class="math inline">now ∈ Timestamp</span> and is
-      provided by the environment</li>
+      <li><span class="math inline">\texttt{now} ∈ Timestamp</span> and
+      is provided by the environment</li>
       </ul></li>
       </ul>
       <p>This definition therefore depends on the timestamped version of
       <code>WATCH</code> defined in <span
       class="math inline">M_{3}</span>.</p>
       <h1 id="toy-implementation">Toy implementation</h1>
-      <p>We now present a toy implementation of the final model (<span
-      class="math inline">M_{4}</span>).</p>
-      <p>We create a server listening to requests on a TCP port,
-      connected to a separate database, notifying watchers on changes.
-      The server handles one persistent connection per client. Each line
-      received is parsed as a request.</p>
+      <p>We now present a toy implementation of the final model <span
+      class="math inline">M_{4}</span>. After the modeling work has been
+      done, we must still make explicit implementation choices. Once
+      these are made, the model and the implementation document together
+      define a precise scope for code generation: we used an LLM to
+      generate most of the code, and the precision of the input material
+      gave us a high degree of confidence in the result. Without the
+      prior modeling work, the same LLM would have been left to make its
+      own design decisions — with much less predictable outcomes. This
+      does not mean that a thorough human code review becomes
+      optional.</p>
+      <p>Technically, the implementation consists in creating a server
+      listening to requests on a TCP port, connected to a separate
+      database, notifying watchers on changes. The server handles one
+      persistent connection per client. Each line received is parsed as
+      a request.</p>
       <p>The server is written in Python 3.14 with asyncio. It records
       data (<code>CREATE</code>, <code>ALTER</code>,
       <code>DELETE</code>) in a database known by its URL passed by env
@@ -1131,7 +1135,7 @@ formal alternative.</h1>
       <ul>
       <li><p><code>Users {name, age}</code></p></li>
       <li><p><code>BankAccounts {id, owner, balance}</code></p></li>
-      <li><p><code>Events { id, timestamp, command, path, body }</code></p></li>
+      <li><p><code>Events {id, timestamp, command, path, body}</code></p></li>
       </ul>
       <p><code>Users.name</code> is the primary key, mapping directly to
       <code>/users/&lt;Name&gt;</code>. <code>BankAccounts.id</code> is
@@ -1143,10 +1147,11 @@ formal alternative.</h1>
       <p><code>Events</code> is an append-only table. Every
       <code>CREATE</code>, <code>ALTER</code>, <code>DELETE</code>
       writes to <code>Events</code> in the same transaction. This is
-      what backs timestamped <code>WATCH</code> bursts and defines “too
-      far in the past” for 416 (the error returned when the requested
-      timestamp predates retained history). History is unbounded (a
-      configurable retention window would be a possible extension).</p>
+      what backs timestamped <code>WATCH</code> bursts (all states in
+      the past are sent at once, see below) and defines the “too far in
+      the past” error returned when the requested timestamp predates
+      retained history. History is unbounded (a configurable retention
+      window would be a possible extension).</p>
       <h2 id="server-in-memory-state">Server in-memory state</h2>
       <p>The server maintains in its in-memory state who watches what,
       and sends answers to watchers.</p>
@@ -1176,9 +1181,156 @@ Word     := [a-zA-Z0-9_-]+</code></pre>
       <p>Answers are also sent in plain text following this grammar:</p>
       <pre><code>Answer     := StatusCode Body
 StatusCode := [1-9][0-9][0-9]</code></pre>
-      <p>Note: Status codes follow HTTP.</p>
+      <h2 id="answers">Answers</h2>
+      <h3 id="standard-answers">Standard answers</h3>
+      <p>Status codes follow HTTP.</p>
+      <ol type="1">
+      <li>If a request is malformed, the answer is:</li>
+      </ol>
+      <p><code>400 { command: &lt;Command&gt;, path: &lt;Path&gt; }</code>
+      where <code>&lt;Command&gt;</code> and <code>&lt;Path&gt;</code>
+      are from the malformed request.</p>
+      <ol start="2" type="1">
+      <li>If a request fails because an entity does not exist at the
+      given path, the answer is:</li>
+      </ol>
+      <p><code>404 { path: &lt;Path&gt; }</code></p>
+      <ol start="3" type="1">
+      <li>If the server encountered an internal problem, the answer
+      is:</li>
+      </ol>
+      <p><code>500 { path: &lt;Path&gt;, reason: &lt;Text&gt; }</code>
+      with</p>
+      <h3 id="create">Create</h3>
+      <ol type="1">
+      <li><p>If a <code>CREATE</code> succeeds, the answer is:</p>
+      <p><code>201 { path: &lt;Path&gt; }</code> where
+      <code>&lt;Path&gt;</code> is from the request.</p></li>
+      <li><p>If a <code>CREATE</code> fails because an entity already
+      exists at the given path, the answer is:</p>
+      <p><code>409 { path: &lt;Path&gt; }</code></p></li>
+      </ol>
+      <p>The server must handle the following create requests:</p>
+      <ol type="1">
+      <li><p><code>CREATE /users/&lt;Name&gt; { age: &lt;Number&gt; }</code>
+      with</p>
+      <pre><code>Name   := [a-zA-Z][a-zA-Z0-9_-]+
+Number := 0 | [1-9][0-9]*</code></pre></li>
+      <li><p><code>CREATE /bank-accounts/&lt;Number&gt; { owner: /users/&lt;Name&gt;, balance: &lt;Number&gt; }</code></p>
+      <p>If there is no entity at <code>/users/&lt;Name&gt;</code>, a
+      404 answer is sent with this path.</p></li>
+      </ol>
+      <h3 id="alter">Alter</h3>
+      <p>When an <code>ALTER</code> succeeds, the following answer is
+      sent:</p>
+      <p><code>200 { path: &lt;Path&gt; }</code></p>
+      <p>Any key present in a <code>CREATE</code> can be altered. For
+      instance:</p>
+      <ol type="1">
+      <li><p><code>ALTER /users/&lt;Name&gt; { age: &lt;Number&gt; }</code></p></li>
+      <li><p><code>ALTER /bank-accounts/&lt;Number&gt; { owner: /users/&lt;Name&gt; }</code></p></li>
+      <li><p><code>ALTER /bank-accounts/&lt;Number&gt; { balance: &lt;Number&gt; }</code></p></li>
+      <li><p><code>ALTER /bank-accounts/&lt;Number&gt; { owner: /users/&lt;Name&gt;, balance: &lt;Number&gt; }</code></p></li>
+      </ol>
+      <h3 id="delete">Delete</h3>
+      <p>When a <code>DELETE</code> succeeds, the following answer is
+      sent:</p>
+      <p><code>200 { path: &lt;Path&gt; }</code></p>
+      <p>Any entity can be deleted. The body must be empty. For
+      instance:</p>
+      <ol type="1">
+      <li><p><code>DELETE /users/&lt;Name&gt;</code></p></li>
+      <li><p><code>DELETE /bank-accounts/&lt;Number&gt;</code></p></li>
+      </ol>
+      <p>As indicated by the model, <code>DELETE</code> removes all
+      triples where the deleted entity appears as subject or object, a
+      cascading effect.</p>
+      <p>Sets of entities can also be deleted:</p>
+      <ol start="3" type="1">
+      <li><p><code>DELETE /users</code></p></li>
+      <li><p><code>DELETE /bank-accounts</code></p></li>
+      </ol>
+      <h3 id="watch">WATCH</h3>
+      <p>When a WATCH succeeds, the following answer is sent:</p>
+      <p><code>200 { path: &lt;Path&gt; }</code></p>
+      <ul>
+      <li>An entity can be watched from now on:</li>
+      </ul>
+      <ol type="1">
+      <li><p><code>WATCH /users/&lt;Name&gt;</code></p></li>
+      <li><p><code>WATCH /bank-accounts/&lt;Number&gt;</code></p></li>
+      </ol>
+      <p>The server sends at each alteration all of the entity
+      properties:</p>
+      <p><code>200 { command: WATCH, path: &lt;Path&gt;, &lt;key1&gt;: &lt;value1&gt;... }</code></p>
+      <p>Note: For efficiency purpose, we could send delta only. If we
+      would choose so, we would have to either update the model or note
+      here the deviation.</p>
+      <p>The watch stops when the entity is deleted. The server sends
+      then:</p>
+      <p><code>410 { command: WATCH, path: &lt;Path&gt; }</code></p>
+      <ul>
+      <li>A set of entities can also be watched. For instance:</li>
+      </ul>
+      <ol start="3" type="1">
+      <li><p><code>WATCH /users</code></p></li>
+      <li><p><code>WATCH /bank-accounts</code></p></li>
+      </ol>
+      <p>The answers are the same as before (the path is that of the
+      specific entity that changed):</p>
+      <p><code>200 { command: WATCH, path: &lt;Path&gt;, &lt;key1&gt;: &lt;value1&gt;... }</code></p>
+      <p>The watch stops when the set is explicitly deleted, or when it
+      becomes empty because all its entities have been deleted. Watching
+      a set is similar to watching each of its entities, plus watching
+      any entities that may be created in the set at a later point.</p>
+      <ul>
+      <li>The watch can be bounded by timestamps:</li>
+      </ul>
+      <ol start="5" type="1">
+      <li><code>WATCH /users/&lt;Name&gt; { from: &lt;Timestamp&gt;, to: &lt;Timestamp&gt; }</code></li>
+      </ol>
+      <p>If the <code>from</code> is too far is the past, the server
+      answers:</p>
+      <p><code>416 { path: &lt;Path&gt;, from: &lt;Timestamp&gt; }</code></p>
+      <p>If <code>from</code> is after <code>to</code>, the following
+      answer is returned:</p>
+      <p><code>422 { path: &lt;Path&gt;, from: &lt;Timestamp&gt;, to: &lt;Timestamp&gt; }</code></p>
+      <p>The changes in the past are sent as a burst.</p>
+      <p>The same applies to bank-accounts and set of entities.</p>
+      <p>Note: A possible extension not handled for now could be to stop
+      a watch with:</p>
+      <ol start="5" type="1">
+      <li><code>WATCH &lt;Path&gt; { stop: true }</code></li>
+      </ol>
+      <ul>
+      <li>Variants:</li>
+      </ul>
+      <ol start="6" type="1">
+      <li><p><code>WATCH /users/&lt;Name&gt; { from: &lt;Timestamp&gt; }</code></p></li>
+      <li><p><code>WATCH /users/&lt;Name&gt; { to: &lt;Timestamp&gt; }</code>
+      (implicitly “from now”, so <code>to</code> must be in the
+      future)</p></li>
+      </ol>
+      <h3 id="read">READ</h3>
+      <ol type="1">
+      <li><code>READ &lt;Path&gt;</code></li>
+      </ol>
+      <p><code>Path</code> is an entity or a set of entities.</p>
+      <p>Examples:</p>
+      <ul>
+      <li><code>READ /users/bob</code></li>
+      </ul>
+      <p>Answer:</p>
+      <p><code>200 { path: /users/bob, age: 23 }</code></p>
+      <ul>
+      <li><code>READ /users</code></li>
+      </ul>
+      <p>Answers:</p>
+      <pre><code>200 { path: /users/bob, age: 23 }
+200 { path: /users/bill, age: 42 }
+...</code></pre>
       <h2 id="code-organisation">Code organisation</h2>
-      <p>Here is a file tree:</p>
+      <p>The files are organized in the following way:</p>
       <pre class="filetree"><code>.
 ├── docker-compose.yml           # server + database
 ├── docker-compose.test.yml      # test database
@@ -1225,31 +1377,32 @@ StatusCode := [1-9][0-9][0-9]</code></pre>
       <code>notify_deleted</code>, or
       <code>terminate_prefix_watchers</code>, which write directly to
       matching client writers.</p>
-      <p>We also use <code>uv</code> to manage the project and set up a
+      <p>Note: We use <code>uv</code> to manage the project and set up a
       CI via GitHub Actions with three jobs (lint with
       <code>ruff</code>, typecheck with <code>mypy</code>, test with
       <code>pytest</code> against a real <code>Postgres</code>
       service).</p>
       <h2 id="tests">Tests</h2>
-      <p>Tests require Docker to be running.</p>
+      <p>Tests require Docker to be running and can be launched
+      with:</p>
       <pre><code>make test</code></pre>
       <p>This starts a dedicated test database container on port 5433,
       runs the full pytest suite against it, then tears the container
-      down. Tests cover the parser, all five commands, and WATCH
-      notifications including cascades.</p>
+      down. Tests cover the parser, all five commands, and
+      <code>WATCH</code> notifications including cascades.</p>
       <h2 id="running-the-server">Running the Server</h2>
-      <p>Start the server and its database:</p>
+      <p>The server and its database can be started with:</p>
       <pre><code>make up</code></pre>
-      <p>Stop them:</p>
+      <p>And stopped with:</p>
       <pre><code>make down</code></pre>
       <p>The server listens on port 8888. The <code>DATABASE_URL</code>
       and <code>PORT</code> environment variables can be overridden in
       <code>docker-compose.yml</code>.</p>
       <h2 id="sending-commands">Sending Commands</h2>
-      <p>Connect with <code>nc</code>:</p>
+      <p>Connection can be done with <code>nc</code>:</p>
       <pre><code>nc 0.0.0.0 8888</code></pre>
       <p>Here are some examples of commands and their answers:</p>
-      <h3 id="create">CREATE</h3>
+      <h3 id="create-1">CREATE</h3>
       <pre><code>CREATE /users/bob { age: 23 }
 201 { path: /users/bob }
 
@@ -1261,7 +1414,7 @@ CREATE /bank-accounts/1 { owner: /users/bob, balance: 100 }
 
 CREATE /bank-accounts/2 { owner: /users/nobody, balance: 0 }
 404 { path: /users/nobody }</code></pre>
-      <h3 id="alter">ALTER</h3>
+      <h3 id="alter-1">ALTER</h3>
       <pre><code>ALTER /users/bob { age: 30 }
 200 { path: /users/bob }
 
@@ -1270,14 +1423,14 @@ ALTER /bank-accounts/1 { balance: 200 }
 
 ALTER /bank-accounts/1 { owner: /users/bob, balance: 50 }
 200 { path: /bank-accounts/1 }</code></pre>
-      <h3 id="delete">DELETE</h3>
+      <h3 id="delete-1">DELETE</h3>
       <pre><code>DELETE /users/bob
 200 { path: /users/bob }
 
 DELETE /bank-accounts
 200 { path: /bank-accounts }</code></pre>
-      <p>Deleting a user cascades to their bank accounts.</p>
-      <h3 id="read">READ</h3>
+      <p>Deleting a user cascades to its bank accounts.</p>
+      <h3 id="read-1">READ</h3>
       <pre><code>READ /users/bob
 200 { path: /users/bob, age: 23 }
 
@@ -1287,17 +1440,17 @@ READ /users
 
 READ /bank-accounts/1
 200 { path: /bank-accounts/1, owner: /users/bob, balance: 100 }</code></pre>
-      <h3 id="watch">WATCH</h3>
-      <p>Open a first connection and register a watch:</p>
+      <h3 id="watch-1">WATCH</h3>
+      <p>We first open a connection and register a watch:</p>
       <pre><code>WATCH /users/bob
 200 { path: /users/bob }</code></pre>
-      <p>From a second connection, alter the entity:</p>
+      <p>From a second connection, we alter the entity:</p>
       <pre><code>ALTER /users/bob { age: 99 }</code></pre>
       <p>The first connection receives:</p>
       <pre><code>200 { command: WATCH, path: /users/bob, age: 99 }</code></pre>
       <p>When the entity is deleted, the first connection receives:</p>
       <pre><code>410 { command: WATCH, path: /users/bob }</code></pre>
-      <p>Subgroup watches are also supported:</p>
+      <p>Set watches are also supported:</p>
       <pre><code>WATCH /users
 200 { path: /users }</code></pre>
       <p>This covers all current and future entities under
@@ -1305,8 +1458,10 @@ READ /bank-accounts/1
       <p>Bounded watches replay past events as a burst then stream live
       updates:</p>
       <pre><code>WATCH /users/bob { from: 2024-01-01T00:00:00Z, to: 2024-01-01T00:01:00Z }</code></pre>
-      <h2 id="repo">Repo</h2>
-      <p>A repo with the implementation can be found here:</p>
+      <h2 id="repository">Repository</h2>
+      <p>A repository with the implementation can be found here: <a
+      href="https://github.com/jskri/entity-protocol"
+      class="uri">https://github.com/jskri/entity-protocol</a></p>
       <h1 id="conclusion">Conclusion</h1>
       <p>We started with a mundane question about Docker and ended up
       with a formal model.</p>
