@@ -26,7 +26,7 @@ end
 
 local function format_inline_math(s)
   s, _ = string.gsub(s, ",", [[,~]])
-  s, _ = string.gsub(s, "bank account", [[bank~account]])
+  s, _ = string.gsub(s, "bank account ", [[bank~account~]])
   s, _ = string.gsub(s, "{", [[\{]])
   s, _ = string.gsub(s, "}", [[\}]])
   s, _ = string.gsub(s, "|", [[~|~]])
