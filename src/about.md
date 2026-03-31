@@ -22,6 +22,10 @@ this field.
 - I also find the work of [Conal Elliott](http://conal.net/) inspiring, with its
   emphasis on simplicity and composability.
 
+# Repositories
+
+Github: [github.com/jskri](https://github.com/jskri)
+
 # Contact
 
 You can reach me at [dvnh87@protonmail.com](mailto:dvnh87@protonmail.com).
