@@ -13,9 +13,6 @@ SCRIPT_EQUATION := assets/scripts/equation_to_tex.lua
 all: $(POSTS) dist/index.html dist/about.html $(ASSETS)
 
 dist/posts/%.html: src/posts/%.md $(TEMPLATE_POST) $(METADATA_SITE) $(SCRIPT_FIGURE) $(SCRIPT_EQUATION)
-	# --filter pandoc-katex
-	# --css /assets/katex/katex.min.css
-	# -M classoption=fleqn
 	mkdir -p dist/posts
 	pandoc $< \
 		--toc --toc-depth=3 --standalone --katex --template=$(TEMPLATE_POST) \
@@ -44,32 +41,3 @@ $(ASSETS): assets/
 
 clean:
 	rm -rf dist/
-
-###############################################################################
-# entity-protocol.html: entity-protocol.md template_post.html styles_post.css figure_to_img.lua equation_to_tex.lua metadata.yaml
-# 	# --filter pandoc-katex
-# 	pandoc --toc --standalone --katex --template=template_post.html \
-#     --metadata-file metadata.yaml \
-# 		--lua-filter=figure_to_img.lua \
-# 		--lua-filter=equation_to_tex.lua \
-# 		--css "assets/katex/katex.min.css" \
-# 		-o $@ \
-# 		$<
-# 
-# index.html: template_index.html metadata.yaml styles_index.css
-# 	pandoc --template template_index.html \
-#   	--metadata-file metadata.yaml \
-#     -o $@ \
-#     /dev/null
-# 
-# about.html: about.md template_about.html metadata.yaml styles_about.css
-# 	pandoc --toc --standalone --template=template_about.html \
-#   	--metadata-file metadata.yaml \
-#     -o $@ \
-# 		$<
-# 
-# serve:
-# 	python3 -m http.server 8000
-# 
-# .PHONY: serve
-
