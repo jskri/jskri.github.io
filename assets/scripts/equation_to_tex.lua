@@ -1,16 +1,22 @@
 -- Format equations.
 --
 -- Input example:
--- ∀ t ∈ Task :
---   ∧ mandatory(t) ∩ optional(t) = {}
---   ∧ mandatory(t) ∩ punctual(t) = {}
+--
+-- ```equation
+-- create : State × E × Subset(E × E) → State
+-- create(state, entity, relations) =
+--   state ∪ { (entity, id, entity) }
+--         ∪ { (entity, predicate, object) ∈ E × E × E | (predicate, object) ∈ relations }
+-- ```
 --
 -- Output example:
--- \begin{equation}\begin{aligned}
--- & ∀\ t ∈ Task :\\
--- & \quad ∧ mandatory(t)\ ∩\ optional(t) = \{\} \\
--- & \quad ∧ mandatory(t)\ ∩\ punctual(t) = \{\}
--- \end{aligned}\end{equation}
+-- 
+-- \begin{equation*}\begin{aligned}
+-- &create : State × E × Subset(E × E) → State\\
+-- &create(state,~ entity,~ relations) =\\
+-- &  state ∪ \{ (entity,~ id,~ entity) \}\\
+-- &        ∪ \{ (entity,~ predicate,~ object) ∈ E × E × E ~|~ (predicate,~ object) ∈ relations \}
+-- \end{aligned}\end{equation*}
 
 if PANDOC_VERSION and PANDOC_VERSION.must_be_at_least then
   PANDOC_VERSION:must_be_at_least("2.11")
@@ -19,7 +25,6 @@ else
 end
 
 local function format_inline_math(s)
-  -- s, _ = string.gsub(s, " ", [[~]])
   s, _ = string.gsub(s, ",", [[,~]])
   s, _ = string.gsub(s, "bank account", [[bank~account]])
   s, _ = string.gsub(s, "{", [[\{]])
@@ -63,7 +68,6 @@ local function format_display_math(s)
     first = false
   end
   res = [[\begin{equation*}\begin{aligned}]] .. "\n" .. res .. "\n" .. [[\end{aligned}\end{equation*}]]
-  -- res = [[$$]] .. "\n" .. res .. "\n" .. [[$$]]
   return res
 end
 
@@ -79,15 +83,12 @@ local function process_code_block(block)
 end
 
 function process_math(el)
-  res = ""
   if el.mathtype == "InlineMath" then
     res = format_inline_math(el.text)
-  -- elseif el.mathtype == "DisplayMath" then
-  --   res = format_display_math(el.text)
-  -- else
-  --   error("Unknown math element type: " .. el.mathtype)
+    return pandoc.Math(el.mathtype, res)
+  else
+    return el
   end
-  return pandoc.Math(el.mathtype, res)
 end
 
 function process_para(el)
