@@ -71,7 +71,7 @@ of abstractions in math, there was good reason to ask the question...
 So I looked for examples of good “modern” abstractions. People mentioned Git and
 the HTTP REST model in particular, describing them as clean, minimal, and
 composable. As for Git, I thought the object model was fine, but when it comes
-to repository composition, I was not so sure... Submodules seemed a bit limited,
+to repository composition, I was not so sure. Submodules seemed a bit limited,
 like an afterthought. If the concept of a repository had been modeled from the
 start using an algebraic structure, the concept of a morphism would surely have
 been defined, and composition taken into account from the beginning. And we
@@ -159,20 +159,20 @@ Before going any further, it might be helpful to give an example.
 
 ## Example
 
-0. Initially, there are no entities.
+0. Initially, there are no entities:
 
     <!-- The comments in this section describe image contents. -->
     
     <!-- H(0) = {} -->
     ![no entity](/assets/img/h0.svg)
 
-1. We create the entity “Bob”.
+1. We create the entity “Bob”:
 
     <!-- H(1) = {(Bob, id, Bob)} -->
     ![entity Bob](/assets/img/h1.svg)
 
 2. We create the entity “bank account 1,” which is linked to “Bob” by the
-   “owner” relationship (Bob is the owner of bank account 1).
+   “owner” relationship (Bob is the owner of bank account 1):
 
     <!-- H(2) = {
             (Bob, id, Bob),
@@ -181,7 +181,7 @@ Before going any further, it might be helpful to give an example.
         } -->
     ![bank account 1 owned by Bob](/assets/img/h2.svg)
 
-3. We create an entity “bank account 2”, also owned by “Bob”.
+3. We create an entity “bank account 2”, also owned by “Bob”:
 
     <!-- H(3) = {
             (Bob, id, Bob),
@@ -196,7 +196,7 @@ Before going any further, it might be helpful to give an example.
     of bank accounts.
 
 4. We delete “bank account 2”, which also deletes the ownership relationship
-   with Bob.
+   with Bob:
 
     <!-- H(4) = {
             (Bob, id, Bob),
@@ -207,12 +207,12 @@ Before going any further, it might be helpful to give an example.
     ![bank account 1 owned by Bob](/assets/img/h2.svg)
 
 5. We delete “Bob”, which also deletes the ownership relationship with
-   “bank account 1”.
+   “bank account 1”:
 
     <!-- H(5) = {
             (bank account 1, id, bank account 1)
         } -->
-    ![entity Bob](/assets/img/h1.svg)
+    ![entity Bob](/assets/img/h5.svg)
 
 Additionally, if we want to add information, such as Bob's age or the balance of
 bank account 1, we can always add properties:
@@ -325,18 +325,14 @@ Let $M₀$ be the model composed of:
 
 - $E$, the set of all possible entities. $E$ contains notably all numbers.
 
-- $State$, the set of all possible states, where a state is a set of entities and
-  relations. $State = Subset(E × E × E)$
+- $State$, the set of all possible states, where a state is a set of entities
+  and relations. $State = Subset(E × E × E)$
 
-  Entities and relations are modeled in the same way, as triples. This is
-  because in reality only relations are modeled, entities being considered a
-  special case of relations. Indeed, a triple in $E × E × E$ has the form
-  (subject, predicate, object) where subject and object can be represented by
-  dots, and predicate as an arrow from subject to object. An entity, for
-  instance Bob, is then modeled as a triple (Bob, id, Bob).
+  Entities and relations are modeled in the same way. An entity Bob is modeled
+  as a triple $(Bob, id, Bob)$, as shown above.
 
-- $create$, a function that adds to the state an entity with the relations it is
-  the subject:
+- $create$, a function that adds to the state an entity with the relations of
+  which it is the subject:
 
   ```equation
   create : State × E × Subset(E × E) → State
@@ -354,6 +350,8 @@ Let $M₀$ be the model composed of:
     state ∖ { (subject, predicate, object) ∈ E × E × E | subject ∈ entities ∨ object ∈ entities }
   ```
 
+  Note that $delete$ can be used to remove several entities at once.
+
 
 ## Implementation of $M₀$
 
@@ -365,27 +363,27 @@ takes one or more parameters and may have a body. For example:
 
 - `DELETE path`
 
-"path" designates a priori a single entity (e.g. `/bank-accounts/1`) or a set of
-entities (e.g. `/bank-accounts`). To unify we will consider that a path always
-designates a set of entities, the single-entity case being considered as a set
-containing this single entity. We will say that some entities exist at a given
-path.
+In the case of `DELETE`, `path` designates a single entity (e.g.
+`/bank-accounts/1`) or a set of entities (e.g. `/bank-accounts`). To unify, we
+will consider that a path always designates a set of entities, the single-entity
+case being considered as a set containing this single entity. We will say that
+some entities exist at a given path.
 
-In the case of `CREATE`, the path must designate an empty set, i.e. there must not
-be any entity at this path. The body of the command is enclosed in curly
-brackets. In the body, each key represents a predicate and each value the object
-of the predicate.
+In the case of `CREATE`, the path must designate an empty set, i.e. there must
+not be any entity at this path. The body, enclosed in curly brackets, contains
+key / value pairs. Each key represents a predicate and each value the object of
+the predicate. The subject is the new entity to be created.
 
 We define the semantics of the protocol by the function $m$, which takes a
 syntactic element to be interpreted and the state in which to perform this
 interpretation:
 
 - $m(CREATE path { key1: value1, ... }, state) =$
-  $~~~~create(state, e, { (m(key1, state), m(value1, state)), ... })$ where:
+  $~~create(state, e, { (m(key1, state), m(value1, state)), ... })$ where:
 
     + $m(path, state) = {}$ -- no entity at path
 
-    + $(e, id, e) ∉ state$ -- e is an entity not in state
+    + $(e, id, e) ∉ state$ -- e is not an entity in state
 
 - $m(DELETE path, state) = delete(state, m(path, state))$
 
@@ -394,26 +392,26 @@ interpretation:
 Here is an example of a sequence of commands. The state is initially empty (no
 entity and no relation).
 
-- `CREATE /bob`
+- `CREATE /Bob {}`
 
-Resulting state: contains only the entity `/bob`. Note that we name here the
+Resulting state: contains only the entity `/Bob`. Note that we name here the
 entity following its path. This is merely for convenience, to avoid having to
 invent a new name. Beware that this is just a naming convention and that paths
 and entities are different notions.
 
-- `CREATE /bank-accounts/1 { owner: /bob }`
+- `CREATE /bank-accounts/1 { owner: /Bob }`
 
-Resulting state: contains also an arrow from `/bank-accounts/1` to `/bob`.
+Resulting state: contains also an arrow from `/bank-accounts/1` to `/Bob`.
 
-- `CREATE /bank-accounts/2 { owner: /bob }`
+- `CREATE /bank-accounts/2 { owner: /Bob }`
 
-Resulting state: contains also an arrow from `/bank-accounts/2` to `/bob`.
+Resulting state: contains also an arrow from `/bank-accounts/2` to `/Bob`.
 
 - `DELETE /bank-accounts/2`
 
-Resulting state: contains only an arrow from `/bank-accounts/1` to `/bob`.
+Resulting state: contains only an arrow from `/bank-accounts/1` to `/Bob`.
 
-- `DELETE /bob`
+- `DELETE /Bob`
 
 Resulting state: contains only `/bank-accounts/1`.
 
@@ -750,7 +748,7 @@ a real `Postgres` service).
 
 Tests require Docker to be running.
 
-```bash
+```
 make test
 ```
 
@@ -762,13 +760,13 @@ all five commands, and WATCH notifications including cascades.
 
 Start the server and its database:
 
-```bash
+```
 make up
 ```
 
 Stop them:
 
-```bash
+```
 make down
 ```
 
@@ -779,7 +777,7 @@ variables can be overridden in `docker-compose.yml`.
 
 Connect with `nc`:
 
-```bash
+```
 nc 0.0.0.0 8888
 ```
 
