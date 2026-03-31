@@ -17,14 +17,14 @@
 }
 
 :root {
-  /*
-  --main-font: ${if(mainfont)} ${mainfont} ${else} "system-ui" ${endif};
-  --font-size: ${if(fontsize)} ${fontsize} ${else} 12px ${endif};
-  --header-height: ${if(header-height)} ${header-height} ${else} 3rem ${endif};
-
-  fontcolor, background-color, maxwidth, margin-left, margin-right, margin-top, margin-bottom, linkcolor
-  */
   --max-width: ${if(maxwidth)} ${maxwidth} ${else} 36em ${endif};
+  --font-color: ${if(fontcolor)} ${fontcolor} ${else} #1a1a1a ${endif};
+  --background-color: ${if(backgroundcolor)} ${backgroundcolor} ${else} #fdfdfd ${endif};
+  --padding-left: ${if(margin-left)} ${margin-left} ${else} 50px ${endif};
+  --padding-right: ${if(margin-right)} ${margin-right} ${else} 50px ${endif};
+  --padding-top: ${if(margin-top)} ${margin-top} ${else} 50px ${endif};
+  --padding-bottom: ${if(margin-bottom)} ${margin-bottom} ${else} 50px ${endif};
+  --link-color: ${if(linkcolor)} ${linkcolor} ${else} #1a1a1a ${endif};
 }
 
 /* ---- Reset ---- */
@@ -48,8 +48,8 @@ ${endif}
 ${if(linestretch)}
   line-height: ${linestretch};
 ${endif}
-  color: ${if(fontcolor)} ${fontcolor} ${else} #1a1a1a ${endif};
-  background-color: ${if(backgroundcolor)} ${backgroundcolor} ${else} #fdfdfd ${endif};
+  color: var(--font-color);
+  background-color: var(--background-color);
 }
 
 body {
@@ -58,10 +58,10 @@ body {
   min-height: 100vh;
   margin: 0 auto;
   max-width: var(--max-width);
-  padding-left: ${if(margin-left)} ${margin-left} ${else} 50px ${endif};
-  padding-right: ${if(margin-right)} ${margin-right} ${else} 50px ${endif};
-  padding-top: ${if(margin-top)} ${margin-top} ${else} 50px ${endif};
-  padding-bottom: ${if(margin-bottom)} ${margin-bottom} ${else} 50px ${endif};
+  padding-left: var(--padding-left);
+  padding-right: var(--padding-right);
+  padding-top: var(--padding-top);
+  padding-bottom: var(--padding-bottom);
   hyphens: auto;
   overflow-wrap: break-word;
   text-rendering: optimizeLegibility;
@@ -102,51 +102,10 @@ header nav a {
 }
 
 main {
-  /*
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  */
   margin-top: 3rem;       /* clear the fixed header */
   max-width: 1200px;
   width: 100%;
   margin-inline: auto;    /* center on wide screens */
-}
-
-/* ---- Table of contents ---- */
-aside {
-  padding: 2rem 1rem 2rem 2rem;
-}
-
-#toc {
-  position: sticky;
-  top: 4rem;              /* header height + small gap */
-  font-size: .75rem;
-  font-weight: 500;
-  line-height: 1.7;
-  z-index: 1;
-}
-#toc li {
-  list-style: none;
-}
-#toc ul {
-  padding-left: 1.3em;
-}
-#toc > ul {
-  padding-left: 0;
-}
-#toc a:not(:hover) {
-  text-decoration: none;
-}
-#toc a:hover {
-  text-decoration: none;
-  color: #2698ba;
-  transition: all 0.2s ease-in-out;
-}
-
-/* ---- Article ---- */
-article {
-  padding: 2rem 2rem 2rem 1rem;
-  min-width: 0;           /* prevents grid blowout with long content */
 }
 
 p {
@@ -168,21 +127,14 @@ main.home {
 
 .posts {
   margin-top: 5rem;
-  /*max-width: 66%;*/
 }
-
-/*
-.posts ul {
-  max-width: 60ch;
-}
-*/
 
 a {
-  color: $if(linkcolor)$$linkcolor$$else$#1a1a1a$endif$;
+  color: var(--link-color);
 }
 
 a:visited {
-  color: $if(linkcolor)$$linkcolor$$else$#1a1a1a$endif$;
+  color: var(--link-color);
 }
 
 h1, h2, h3, h4, h5, h6 {
