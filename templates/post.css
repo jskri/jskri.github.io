@@ -17,14 +17,15 @@
 }
 
 :root {
-  /*
-  --main-font: ${if(mainfont)} ${mainfont} ${else} "system-ui" ${endif};
-  --font-size: ${if(fontsize)} ${fontsize} ${else} 12px ${endif};
-  --header-height: ${if(header-height)} ${header-height} ${else} 3rem ${endif};
-
-  fontcolor, background-color, maxwidth, margin-left, margin-right, margin-top, margin-bottom, linkcolor
-  */
   --max-width: ${if(maxwidth)} ${maxwidth} ${else} 36em ${endif};
+  --font-color: ${if(fontcolor)} ${fontcolor} ${else} #1a1a1a ${endif};
+  --background-color: ${if(backgroundcolor)} ${backgroundcolor} ${else} #fdfdfd ${endif};
+  --padding-left: ${if(margin-left)} ${margin-left} ${else} 50px ${endif};
+  --padding-right: ${if(margin-right)} ${margin-right} ${else} 50px ${endif};
+  --padding-top: ${if(margin-top)} ${margin-top} ${else} 50px ${endif};
+  --padding-bottom: ${if(margin-bottom)} ${margin-bottom} ${else} 50px ${endif};
+  --link-color: ${if(linkcolor)} ${linkcolor} ${else} #1a1a1a ${endif};
+  --mono-font: ${if(monofont)} ${monofont} ${else} Menlo, Monaco, Consolas, 'Lucida Console', monospace ${endif};
 }
 
 /* ---- Reset ---- */
@@ -48,8 +49,8 @@ ${endif}
 ${if(linestretch)}
   line-height: ${linestretch};
 ${endif}
-  color: ${if(fontcolor)} ${fontcolor} ${else} #1a1a1a ${endif};
-  background-color: ${if(backgroundcolor)} ${backgroundcolor} ${else} #fdfdfd ${endif};
+  color: var(--font-color);
+  background-color: var(--background-color);
 }
 
 body {
@@ -58,10 +59,10 @@ body {
   min-height: 100vh;
   margin: 0 auto;
   max-width: var(--max-width);
-  padding-left: ${if(margin-left)} ${margin-left} ${else} 50px ${endif};
-  padding-right: ${if(margin-right)} ${margin-right} ${else} 50px ${endif};
-  padding-top: ${if(margin-top)} ${margin-top} ${else} 50px ${endif};
-  padding-bottom: ${if(margin-bottom)} ${margin-bottom} ${else} 50px ${endif};
+  padding-left: var(--padding-left);
+  padding-right: var(--padding-right);
+  padding-top: var(--padding-top);
+  padding-bottom: var(--padding-bottom);
   hyphens: auto;
   overflow-wrap: break-word;
   text-rendering: optimizeLegibility;
@@ -152,11 +153,11 @@ p {
 }
 
 a {
-  color: $if(linkcolor)$$linkcolor$$else$#1a1a1a$endif$;
+  color: var(--link-color);
 }
 
 a:visited {
-  color: $if(linkcolor)$$linkcolor$$else$#1a1a1a$endif$;
+  color: var(--link-color);
 }
 
 #article-header h1 {
@@ -207,7 +208,7 @@ header {
 }
 
 code {
-  font-family: ${if(monofont)} ${monofont} ${else} Menlo, Monaco, Consolas, 'Lucida Console', monospace ${endif};
+  font-family: var(--mono-font);
 ${if(monocolor)}
   color: ${monocolor};
 ${endif}
@@ -225,7 +226,7 @@ ${endif}
 pre {
   margin: 1em 0;
 $if(monobackgroundcolor)$
-  background-color: $monobackgroundcolor$;
+  background-color: ${monobackgroundcolor};
   padding: 0.5em;
 $endif$
   overflow: auto;
@@ -247,7 +248,6 @@ pre code {
   color: #828282;
   font-size: .875rem;
   text-align: left;
-  /*margin-bottom: 0;*/
 }
 
 .abstract {
