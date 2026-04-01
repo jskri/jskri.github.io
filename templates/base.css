@@ -55,6 +55,7 @@
     padding: 0;
 }
 
+/* ---- Layout ---- */
 html {
 ${if(mainfont)}
   font-family: ${mainfont};
@@ -119,4 +120,21 @@ header nav div {
 header nav a {
   text-decoration: none;
   color: inherit;
+}
+
+p {
+  margin: 1em 0;
+}
+
+a {
+  color: var(--link-color);
+}
+
+a:visited {
+  color: var(--link-color);
+}
+
+header {
+  margin-bottom: 4em;
+  text-align: center;
 }

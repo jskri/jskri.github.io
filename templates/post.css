@@ -45,18 +45,6 @@ article {
   min-width: 0;           /* prevents grid blowout with long content */
 }
 
-p {
-  margin: 1em 0;
-}
-
-a {
-  color: var(--link-color);
-}
-
-a:visited {
-  color: var(--link-color);
-}
-
 #article-header h1 {
   margin-top: 0;
 }
@@ -97,11 +85,6 @@ ol, ul {
 
 li > ol, li > ul {
   margin-top: 0;
-}
-
-header {
-  margin-bottom: 4em;
-  text-align: center;
 }
 
 code {

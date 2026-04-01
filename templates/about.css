@@ -4,10 +4,6 @@ main {
   margin-inline: auto;    /* center on wide screens */
 }
 
-p {
-  margin: 1em 0;
-}
-
 .intro p {
   text-align: center;
 }
@@ -25,14 +21,6 @@ main {
   margin-top: 2rem;
 }
 
-a {
-  color: var(--link-color);
-}
-
-a:visited {
-  color: var(--link-color);
-}
-
 h1, h2, h3, h4, h5, h6 {
   text-align: center;
 ${if(fontweight)}
@@ -46,9 +34,4 @@ h1 {
 
 h2 {
   font-size: 2rem;
-}
-
-header {
-  margin-bottom: 4em;
-  text-align: center;
 }

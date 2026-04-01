@@ -26,42 +26,13 @@ main.home {
   margin-top: 5rem;
 }
 
-a {
-  color: var(--link-color);
-}
-
-a:visited {
-  color: var(--link-color);
-}
-
-h1, h2, h3, h4, h5, h6 {
-  margin-top: 1.4em;
+h1 {
+  margin-top: 0;
   text-align: center;
+  font-size: 4rem;
 ${if(fontweight)}
   font-weight: ${fontweight};
 ${endif}
-}
-
-h1 {
-  margin-top: 0;
-  font-size: 4rem;
-}
-
-h2 {
-  font-size: 2rem;
-}
-
-h3 {
-  font-size: 1.75rem;
-}
-
-h5, h6 {
-  font-size: 1em;
-  font-style: italic;
-}
-
-h6 {
-  font-weight: normal;
 }
 
 ol, ul {
@@ -72,69 +43,3 @@ ol, ul {
 li > ol, li > ul {
   margin-top: 0;
 }
-
-header {
-  margin-bottom: 4em;
-  text-align: center;
-}
-
-code {
-  font-family: ${if(monofont)} ${monofont} ${else} Menlo, Monaco, Consolas, 'Lucida Console', monospace ${endif};
-${if(monocolor)}
-  color: ${monocolor};
-${endif}
-${if(monobackgroundcolor)}
-  background-color: ${monobackgroundcolor};
-  padding: .2em .4em;
-${endif}
-  font-size: 85%;
-  margin: 0;
-  hyphens: manual;
-  border-radius: 3px;
-  word-wrap: break-word;
-}
-
-pre {
-  margin: 1em 0;
-$if(monobackgroundcolor)$
-  background-color: $monobackgroundcolor$;
-  padding: 0.5em;
-$endif$
-  overflow: auto;
-  border-radius: 5px;
-}
-
-pre code {
-  padding: 0;
-  overflow: visible;
-  overflow-wrap: normal;
-}
-
-.sourceCode {
- background-color: transparent;
- overflow: visible;
-}
-
-.date {
-  color: #828282;
-  font-size: .875rem;
-  text-align: left;
-  /*margin-bottom: 0;*/
-}
-
-.abstract {
-  text-align: left;
-}
-
-.abstract-title {
-  text-align: center;
-}
-
-.filetree {
-  line-height: 1;
-}
-
-${if(highlighting-css)}
-/* CSS for syntax highlighting */
-${highlighting-css}
-${endif}
