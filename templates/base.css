@@ -17,15 +17,15 @@
 }
 
 :root {
-  --font-color: ${if(fontcolor)} ${fontcolor} ${else} #141413 ${endif};
-  --background-color: ${if(backgroundcolor)} ${backgroundcolor} ${else} #faf9f5 ${endif};
-  --header-color: ${if(headercolor)} ${headercolor} ${else} var(--background-color) ${endif};
+  --fg: ${if(fontcolor)} ${fontcolor} ${else} #141413 ${endif};
+  --bg: ${if(backgroundcolor)} ${backgroundcolor} ${else} #faf9f5 ${endif};
+  --headerfg: ${if(headercolor)} ${headercolor} ${else} var(--bg) ${endif};
   --monofg: ${if(monofg)} ${monofg} ${else} #8a2424 ${endif};
   --monobg: ${if(monobg)} ${monobg} ${else} #f0efec ${endif};
   --borderbg: ${if(borderbg)} ${borderbg} ${else} #d1cfcd ${endif};
   --codefg: ${if(codefg)} ${codefg} ${else} #14181F ${endif};
   --tocfg: ${if(tocfg)} ${tocfg} ${else} #3D3D3A ${endif};
-  --link-color: ${if(linkcolor)} ${linkcolor} ${else} #1a1a1a ${endif};
+  --linkfg: ${if(linkcolor)} ${linkcolor} ${else} #1a1a1a ${endif};
   --max-width: ${if(maxwidth)} ${maxwidth} ${else} 36em ${endif};
   --padding-left: ${if(margin-left)} ${margin-left} ${else} 50px ${endif};
   --padding-right: ${if(margin-right)} ${margin-right} ${else} 50px ${endif};
@@ -37,14 +37,14 @@
 /* dark theme */
 @media (prefers-color-scheme: dark) {
   :root {
-    --font-color: ${if(fontcolor)} ${fontcolor} ${else} #faf9f5 ${endif};
-    --background-color: ${if(backgroundcolordark)} ${backgroundcolordark} ${else} #262624 ${endif};
+    --fg: ${if(fontcolor)} ${fontcolor} ${else} #faf9f5 ${endif};
+    --bg: ${if(backgroundcolordark)} ${backgroundcolordark} ${else} #262624 ${endif};
     --monofg: ${if(monofgdark)} ${monofgdark} ${else} #fe8181 ${endif};
     --monobg: ${if(monobgdark)} ${monobgdark} ${else} #2b2b29 ${endif};
     --borderbg: ${if(borderbgdark)} ${borderbgdark} ${else} #484844 ${endif};
     --codefg: ${if(codefgdark)} ${codefgdark} ${else} #eaecf0 ${endif};
     --tocfg: ${if(tocfgdark)} ${tocfgdark} ${else} #C2C0B6 ${endif};
-    --link-color: ${if(linkcolordark)} ${linkcolordark} ${else} #faf9f5 ${endif};
+    --linkfg: ${if(linkcolordark)} ${linkcolordark} ${else} #faf9f5 ${endif};
   }
 }
 
@@ -69,8 +69,8 @@ ${endif}
 ${if(linestretch)}
   line-height: ${linestretch};
 ${endif}
-  color: var(--font-color);
-  background-color: var(--background-color);
+  color: var(--fg);
+  background-color: var(--bg);
 }
 
 body {
@@ -95,7 +95,7 @@ header.topheader {
   left: 0;
   right: 0;
   height: 3rem;
-  background: var(--header-color);
+  background: var(--headerfg);
   opacity: .94;
   z-index: 100;
   border-bottom: 1px solid #e0e0e0;
@@ -127,11 +127,11 @@ p {
 }
 
 a {
-  color: var(--link-color);
+  color: var(--linkfg);
 }
 
 a:visited {
-  color: var(--link-color);
+  color: var(--linkfg);
 }
 
 header {
