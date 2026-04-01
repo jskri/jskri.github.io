@@ -8,7 +8,7 @@
   <style>
     /* roboto-300 - latin */
     @font-face {
-      font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+      font-display: swap;
       font-family: 'Roboto';
       font-style: normal;
       font-weight: 300;
@@ -17,7 +17,7 @@
 
     /* roboto-500 - latin */
     @font-face {
-      font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+      font-display: swap;
       font-family: 'Roboto';
       font-style: normal;
       font-weight: 500;
@@ -25,14 +25,35 @@
     }
 
     :root {
+      --fg:  #141413 ;
+      --bg:  #faf9f5 ;
+      --headerfg:  var(--bg) ;
+      --monofg:  #8a2424 ;
+      --monobg:  #f0efec ;
+      --borderbg:  #d1cfcd ;
+      --codefg:  #14181F ;
+      --tocfg:  #3D3D3A ;
+      --linkfg:  #1a1a1a ;
       --max-width:  1050px ;
-      --font-color:  #1a1a1a ;
-      --background-color:  #fdfdfd ;
       --padding-left:  50px ;
       --padding-right:  50px ;
       --padding-top:  50px ;
       --padding-bottom:  50px ;
-      --link-color:  #1a1a1a ;
+      --mono-font:  Menlo, Monaco, Consolas, 'Lucida Console', monospace ;
+    }
+
+    /* dark theme */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fg:  #faf9f5 ;
+        --bg:  #262624 ;
+        --monofg:  #fe8181 ;
+        --monobg:  #2b2b29 ;
+        --borderbg:  #484844 ;
+        --codefg:  #eaecf0 ;
+        --tocfg:  #C2C0B6 ;
+        --linkfg:  #faf9f5 ;
+      }
     }
 
     /* ---- Reset ---- */
@@ -47,9 +68,9 @@
       font-family: ‘Roboto’, sans-serif;
       font-size: 1rem;
       font-weight: 300;
-      line-height: 1.5;
-      color: var(--font-color);
-      background-color: var(--background-color);
+      line-height: 1.6;
+      color: var(--fg);
+      background-color: var(--bg);
     }
 
     body {
@@ -74,7 +95,7 @@
       left: 0;
       right: 0;
       height: 3rem;
-      background: white;
+      background: var(--headerfg);
       opacity: .94;
       z-index: 100;
       border-bottom: 1px solid #e0e0e0;
@@ -101,58 +122,56 @@
       color: inherit;
     }
 
-    main {
-      max-width: 1200px;
-      width: 100%;
-      margin-inline: auto;    /* center on wide screens */
-    }
-
     p {
       margin: 1em 0;
     }
 
-    .intro p {
-      text-align: center;
-    }
-
-    main {
-      display: grid;
-      grid-template-columns: 1fr 4fr 1fr;
-    }
-
-    .about {
-      grid-column: 2;
-    }
-
-    .about {
-      margin-top: 2rem;
-    }
-
     a {
-      color: var(--link-color);
+      color: var(--linkfg);
     }
 
     a:visited {
-      color: var(--link-color);
-    }
-
-    h1, h2, h3, h4, h5, h6 {
-      text-align: center;
-      font-weight: 300;
-    }
-
-    h1 {
-      font-size: 3rem;
-    }
-
-    h2 {
-      font-size: 2rem;
+      color: var(--linkfg);
     }
 
     header {
       margin-bottom: 4em;
       text-align: center;
-    }  </style>
+    }    main {
+       max-width: 1200px;
+       width: 100%;
+       margin-inline: auto;    /* center on wide screens */
+     }
+
+     .intro p {
+       text-align: center;
+     }
+
+     main {
+       display: grid;
+       grid-template-columns: 1fr 4fr 1fr;
+     }
+
+     .about {
+       grid-column: 2;
+     }
+
+     .about {
+       margin-top: 2rem;
+     }
+
+     h1, h2, h3, h4, h5, h6 {
+       text-align: center;
+       font-weight: 300;
+     }
+
+     h1 {
+       font-size: 3rem;
+     }
+
+     h2 {
+       font-size: 2rem;
+     }  </style>
 </head>
 <body>
 
