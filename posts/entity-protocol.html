@@ -137,7 +137,19 @@ alternative.</title>
     header {
       margin-bottom: 4em;
       text-align: center;
-    }    main {
+    }    .math-warning {
+       display: block;
+       background: #fff3cd;
+       border: 1px solid #ffc107;
+       border-left: 4px solid #ffc107;
+       color: #664d03;
+       padding: 0.75rem 1rem;
+       margin: 1rem 0;
+       border-radius: 0 4px 4px 0;
+       font-size: 0.9rem;
+     }
+
+     main {
        display: grid;
        grid-template-columns: 1fr 3fr;
        margin-top: 3rem;       /* clear the fixed header */
@@ -299,6 +311,17 @@ alternative.</title>
   </script>
   <link rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css" />
+  <script>
+    /* Hide math warning if inline scripts are allowed.
+       Known limitation: If the CDN math rendering script is blocked but inline
+       scripts are allowed (for instance by a browser extension such as
+       NoScript), the warning will be incorrectly hidden. Other solutions are
+       considered too complex though. */
+    document.addEventListener('DOMContentLoaded', function() {
+      var warning = document.querySelector('.math-warning');
+      if (warning) warning.style.display = 'none';
+    });
+  </script>
 </head>
 
 <body>
@@ -375,20 +398,24 @@ alternative.</title>
     </aside>
 
     <article>
-    <header id="article-header">
-          <h1 class="title">REST’s semantics are informal. Here is a
-formal alternative.</h1>
-                      <p class="date">Created on 2026-03-25</p>
-              <div class="abstract">
-        <div class="abstract-title">Abstract</div>
-        What makes a good abstraction? Unix suggests they are possible;
-        Docker suggests we have lost the habit. REST, often cited as a
-        modern example of clean design, turns out to be informal where
-        it matters most. This post develops a small alternative — a
-        formal model for distributed state — and walks it from
-        mathematical definition to working implementation.
+      <div class="math-warning">
+        This page needs Javascript for math rendering.
       </div>
-        </header>
+
+      <header id="article-header">
+              <h1 class="title">REST’s semantics are informal. Here is a
+formal alternative.</h1>
+                                <p class="date">Created on 2026-03-25</p>
+                    <div class="abstract">
+          <div class="abstract-title">Abstract</div>
+          What makes a good abstraction? Unix suggests they are
+          possible; Docker suggests we have lost the habit. REST, often
+          cited as a modern example of clean design, turns out to be
+          informal where it matters most. This post develops a small
+          alternative — a formal model for distributed state — and walks
+          it from mathematical definition to working implementation.
+        </div>
+            </header>
 
       <h1 id="questions-about-docker">Questions About Docker</h1>
       <p>As is often the case, it all started with a question that
