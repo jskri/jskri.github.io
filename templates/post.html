@@ -11,6 +11,17 @@
   <!--link rel="stylesheet" href="style.css"-->
 ${if(math)}
   ${math}
+  <script>
+    /* Hide math warning if inline scripts are allowed.
+       Known limitation: If the CDN math rendering script is blocked but inline
+       scripts are allowed (for instance by a browser extension such as
+       NoScript), the warning will be incorrectly hidden. Other solutions are
+       considered too complex though. */
+    document.addEventListener('DOMContentLoaded', function() {
+      var warning = document.querySelector('.math-warning');
+      if (warning) warning.style.display = 'none';
+    });
+  </script>
 ${endif}
 $for(css)$
   <link rel="stylesheet" href="${css}" />
@@ -36,26 +47,30 @@ ${endif}
     </aside>
 
     <article>
-    <header id="article-header">
-    ${if(title)}
-      <h1 class="title">${title}</h1>
-    ${endif}
-    ${if(subtitle)}
-      <p class="subtitle">${subtitle}</p>
-    ${endif}
-    ${for(author)}
-      <p class="author">${author}</p>
-    ${endfor}
-    ${if(date)}
-      <p class="date">Created on ${date}</p>
-    ${endif}
-    ${if(abstract)}
-      <div class="abstract">
-        <div class="abstract-title">${abstract-title}</div>
-        ${abstract}
+      <div class="math-warning">
+        This page needs Javascript for math rendering.
       </div>
-    ${endif}
-    </header>
+
+      <header id="article-header">
+      ${if(title)}
+        <h1 class="title">${title}</h1>
+      ${endif}
+      ${if(subtitle)}
+        <p class="subtitle">${subtitle}</p>
+      ${endif}
+      ${for(author)}
+        <p class="author">${author}</p>
+      ${endfor}
+      ${if(date)}
+        <p class="date">Created on ${date}</p>
+      ${endif}
+      ${if(abstract)}
+        <div class="abstract">
+          <div class="abstract-title">${abstract-title}</div>
+          ${abstract}
+        </div>
+      ${endif}
+      </header>
 
       ${body}
     </article>
