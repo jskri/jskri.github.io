@@ -212,7 +212,7 @@ Before going any further, it might be helpful to give an example.
     <!-- H(5) = {
             (bank account 1, id, bank account 1)
         } -->
-    ![entity Bob](/assets/img/h5.svg)
+    ![bank account 1](/assets/img/h5.svg)
 
 Additionally, if we want to add information, such as Bob's age or the balance of
 bank account 1, we can always add properties:
@@ -224,7 +224,7 @@ bank account 1, we can always add properties:
         (Bob, age, 23),
         (bank account 1, balance, 100)
     } -->
-![entity Bob with extra properties](/assets/img/extra_properties.svg)
+![bank account 1 owned by Bob, with extra properties (age 23 for Bob and balance 100 for bank account 1)](/assets/img/extra_properties.svg)
 
 
 # Beginning of Formalization
