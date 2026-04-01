@@ -4,6 +4,10 @@ ASSETS          := dist/assets
 TEMPLATE_INDEX  := templates/index.html
 TEMPLATE_ABOUT  := templates/about.html
 TEMPLATE_POST   := templates/post.html
+CSS_INDEX   		:= templates/index.css
+CSS_ABOUT   		:= templates/about.css
+CSS_POST    		:= templates/post.css
+# TEMPLATE_CSS    := $(wildcard templates/*.css)
 METADATA_SITE   := metadata/site.yaml
 SCRIPT_FIGURE   := assets/scripts/figure_to_img.lua
 SCRIPT_EQUATION := assets/scripts/equation_to_tex.lua
@@ -12,7 +16,7 @@ SCRIPT_EQUATION := assets/scripts/equation_to_tex.lua
 
 all: $(POSTS) dist/index.html dist/about.html $(ASSETS)
 
-dist/posts/%.html: src/posts/%.md $(TEMPLATE_POST) $(METADATA_SITE) $(SCRIPT_FIGURE) $(SCRIPT_EQUATION)
+dist/posts/%.html: src/posts/%.md $(TEMPLATE_POST) $(CSS_POST) $(METADATA_SITE) $(SCRIPT_FIGURE) $(SCRIPT_EQUATION)
 	mkdir -p dist/posts
 	pandoc $< \
 		--toc --toc-depth=2 --standalone --katex --template=$(TEMPLATE_POST) \
@@ -21,14 +25,14 @@ dist/posts/%.html: src/posts/%.md $(TEMPLATE_POST) $(METADATA_SITE) $(SCRIPT_FIG
 		--lua-filter=$(SCRIPT_EQUATION) \
 		-o $@
 
-dist/index.html: $(TEMPLATE_INDEX) $(METADATA_SITE)
+dist/index.html: $(TEMPLATE_INDEX) $(CSS_INDEX) $(METADATA_SITE)
 	mkdir -p dist
 	pandoc /dev/null \
 		--template $(TEMPLATE_INDEX) \
 		--metadata-file $(METADATA_SITE) \
 		-o $@
 
-dist/about.html: src/about.md $(TEMPLATE_ABOUT)
+dist/about.html: src/about.md $(TEMPLATE_ABOUT) $(CSS_ABOUT)
 	mkdir -p dist
 	pandoc $< \
 		--template $(TEMPLATE_ABOUT) \

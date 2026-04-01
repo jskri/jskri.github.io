@@ -1,6 +1,6 @@
 /* roboto-300 - latin */
 @font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-display: swap;
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 300;
@@ -9,7 +9,7 @@
 
 /* roboto-500 - latin */
 @font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-display: swap;
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 500;
@@ -17,15 +17,34 @@
 }
 
 :root {
+  --font-color: ${if(fontcolor)} ${fontcolor} ${else} #141413 ${endif};
+  --background-color: ${if(backgroundcolor)} ${backgroundcolor} ${else} #faf9f5 ${endif};
+  --header-color: ${if(headercolor)} ${headercolor} ${else} var(--background-color) ${endif};
+  --monofg: ${if(monofg)} ${monofg} ${else} #8a2424 ${endif};
+  --monobg: ${if(monobg)} ${monobg} ${else} #f0efec ${endif};
+  --borderbg: ${if(borderbg)} ${borderbg} ${else} #d1cfcd ${endif};
+  --codefg: ${if(codefg)} ${codefg} ${else} #14181F ${endif};
+  --tocfg: ${if(tocfg)} ${tocfg} ${else} #3D3D3A ${endif};
+  --link-color: ${if(linkcolor)} ${linkcolor} ${else} #1a1a1a ${endif};
   --max-width: ${if(maxwidth)} ${maxwidth} ${else} 36em ${endif};
-  --font-color: ${if(fontcolor)} ${fontcolor} ${else} #1a1a1a ${endif};
-  --background-color: ${if(backgroundcolor)} ${backgroundcolor} ${else} #fdfdfd ${endif};
   --padding-left: ${if(margin-left)} ${margin-left} ${else} 50px ${endif};
   --padding-right: ${if(margin-right)} ${margin-right} ${else} 50px ${endif};
   --padding-top: ${if(margin-top)} ${margin-top} ${else} 50px ${endif};
   --padding-bottom: ${if(margin-bottom)} ${margin-bottom} ${else} 50px ${endif};
-  --link-color: ${if(linkcolor)} ${linkcolor} ${else} #1a1a1a ${endif};
   --mono-font: ${if(monofont)} ${monofont} ${else} Menlo, Monaco, Consolas, 'Lucida Console', monospace ${endif};
+}
+
+/* dark theme */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --font-color: ${if(fontcolor)} ${fontcolor} ${else} #faf9f5 ${endif};
+    --background-color: ${if(backgroundcolordark)} ${backgroundcolordark} ${else} #262624 ${endif};
+    --monofg: ${if(monofgdark)} ${monofgdark} ${else} #fe8181 ${endif};
+    --monobg: ${if(monobgdark)} ${monobgdark} ${else} #2b2b29 ${endif};
+    --borderbg: ${if(borderbgdark)} ${borderbgdark} ${else} #484844 ${endif};
+    --codefg: ${if(codefgdark)} ${codefgdark} ${else} #eaecf0 ${endif};
+    --tocfg: ${if(tocfgdark)} ${tocfgdark} ${else} #C2C0B6 ${endif};
+  }
 }
 
 /* ---- Reset ---- */
@@ -75,7 +94,7 @@ header.topheader {
   left: 0;
   right: 0;
   height: 3rem;
-  background: white;
+  background: var(--header-color);
   opacity: .94;
   z-index: 100;
   border-bottom: 1px solid #e0e0e0;
@@ -135,6 +154,7 @@ aside {
 }
 #toc a:not(:hover) {
   text-decoration: none;
+  color: var(--tocfg);
 }
 #toc a:hover {
   text-decoration: none;
@@ -209,34 +229,36 @@ header {
 
 code {
   font-family: var(--mono-font);
-${if(monocolor)}
-  color: ${monocolor};
-${endif}
-${if(monobackgroundcolor)}
-  background-color: ${monobackgroundcolor};
-  padding: .2em .4em;
-${endif}
+  color: var(--monofg);
+  background-color: var(--monobg);
+  padding: 0.1em 0.3em;
   font-size: 85%;
   margin: 0;
   hyphens: manual;
-  border-radius: 3px;
   word-wrap: break-word;
+  border-radius: .4rem;
+  border-color: var(--borderbg);
+  border-width: .5px;
+  border-style: solid;
 }
 
 pre {
   margin: 1em 0;
-$if(monobackgroundcolor)$
-  background-color: ${monobackgroundcolor};
-  padding: 0.5em;
-$endif$
+  background-color: var(--monobg);
+  padding: .875rem;
   overflow: auto;
-  border-radius: 5px;
+  border-radius: .4rem;
+  border-color: var(--borderbg);
+  border-width: .5px;
+  border-style: solid;
 }
 
 pre code {
   padding: 0;
   overflow: visible;
   overflow-wrap: normal;
+  border-style: none;
+  color: var(--codefg);
 }
 
 .sourceCode {
@@ -261,8 +283,3 @@ pre code {
 .filetree {
   line-height: 1;
 }
-
-${if(highlighting-css)}
-/* CSS for syntax highlighting */
-${highlighting-css}
-${endif}

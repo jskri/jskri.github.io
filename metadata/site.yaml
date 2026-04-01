@@ -8,7 +8,5 @@ posts:
 mainfont: "'Roboto', sans-serif"
 fontsize: "1rem"
 fontweight: "300"
-linestretch: "1.5"
-monocolor: "#2698ba"
-monobackgroundcolor: "#c8c9ca"
+linestretch: "1.6"
 maxwidth: "1050px"
