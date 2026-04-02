@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  ${meta.html()}
+  <meta property="og:title" content="About — ${site-title}">
+  <meta property="og:description" content="${about-description}">
+  <meta property="og:type" content="website">
   <title>${site-title}</title>
   <!--link rel="stylesheet" href="/assets/katex/katex.min.css"-->
   <style>
@@ -11,15 +13,7 @@
   </style>
 </head>
 <body>
-
-  <header class="topheader">
-    <nav>
-      <a href="/">${site-title}</a>
-      <div>
-        <a href="/about.html">About</a>
-      </div>
-    </nav>
-  </header>
+  ${topheader.html()}
 
   <main>
     <section class="about">

@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  ${meta.html()}
+  <meta property="og:title" content="${title}">
+  <meta property="og:description" content="${description}">
+  <meta property="og:article:published_time" content="${date}">
+  <meta property="article:author" content="${author}">
+  <meta property="og:type" content="article">
+
   <title>${title}</title>
   <style>
     ${base.css()}
@@ -32,12 +37,7 @@ ${endif}
 </head>
 
 <body>
-  <header class="topheader">
-    <nav>
-      <a href="/">${site-title}</a>
-      <a href="/about.html">About</a>
-    </nav>
-  </header>
+  ${topheader.html()}
 
   <main>
     <aside>
@@ -58,9 +58,6 @@ ${endif}
       ${if(subtitle)}
         <p class="subtitle">${subtitle}</p>
       ${endif}
-      ${for(author)}
-        <p class="author">${author}</p>
-      ${endfor}
       ${if(date)}
         <p class="date">Created on ${date}</p>
       ${endif}
