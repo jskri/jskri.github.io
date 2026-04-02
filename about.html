@@ -82,19 +82,23 @@ Specifiable.">
     }
 
     body {
-      display: grid;
-      grid-template-rows: auto 1fr;
       min-height: 100vh;
       margin: 0 auto;
-      max-width: var(--max-width);
-      padding-left: var(--padding-left);
-      padding-right: var(--padding-right);
-      padding-top: var(--padding-top);
-      padding-bottom: var(--padding-bottom);
+      padding: 1rem;
       hyphens: auto;
       overflow-wrap: break-word;
       text-rendering: optimizeLegibility;
       font-kerning: normal;
+    }
+
+    @media (min-width: 769px) {
+      body {
+        max-width: var(--max-width);
+        padding-left: var(--padding-left);
+        padding-right: var(--padding-right);
+        padding-top: var(--padding-top);
+        padding-bottom: var(--padding-bottom);
+      }
     }
 
     header.topheader {
