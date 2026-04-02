@@ -263,44 +263,8 @@ numbering from the example, we obtain:
 • H(5) = { (bank account 1, id, bank account 1) }
 ```
 
-<!--
-\begin{equation}\begin{split}
-H(0) = \{ & \}
-\\ \\
-H(1) = \{ & (Bob, id, Bob) \}
-\\ \\
-H(2) = \{\ & (Bob,\ id,\ Bob), \\
-           & (bank\ account\ 1,\ id,\ bank\ account\ 1), \\
-           & (bank\ account\ 1,\ owner,\ Bob)\ \}
-\\ \\
-H(3) = \{\ & (Bob,\ id,\ Bob), \\
-           & (bank\ account\ 1,\ id,\ bank\ account\ 1), \\
-           & (bank\ account\ 1,\ owner,\ Bob), \\
-           & (bank\ account\ 2,\ id,\ bank\ account\ 2), \\
-           & (bank\ account\ 2,\ owner,\ Bob)\ \}
-\\ \\
-H(4) = \{ & (Bob,\ id,\ Bob), \\
-          & (bank\ account\ 1,\ id,\ bank\ account\ 1), \\
-          & (bank\ account\ 1,\ owner,\ Bob) \}
-\\ \\
-H(5) = \{\ & (bank\ account\ 1,\ id,\ bank\ account\ 1)\ \}
-\end{split}\end{equation}
--->
-
 For illustration, a state including Bob's age and the balance of bank account 1
 would look like:
-
-<!--
-\begin{equation}\begin{split}
-\{\ & (Bob,\ id,\ Bob), \\
-   & (\text{bank account 1},\ \text{id},\ \text{bank account 1}), \\
-   & (23,\ id,\ 23), \\
-   & (100,\ id,\ 100), \\
-   & (bank\ account\ 1,\ owner,\ Bob), \\
-   & (Bob,\ age,\ 23), \\
-   & (bank\ account\ 1,\ balance,\ 100)\ \}
-\end{split}\end{equation}
--->
 
 ```equation
 { (Bob, id, Bob),
@@ -338,7 +302,8 @@ Let $M₀$ be the model composed of:
   create : State × E × Subset(E × E) → State
   create(state, entity, relations) =
     state ∪ { (entity, id, entity) }
-          ∪ { (entity, predicate, object) ∈ E × E × E | (predicate, object) ∈ relations }
+          ∪ { (entity, predicate, object) ∈ E × E × E |
+               (predicate, object) ∈ relations }
   ```
 
 - $delete$, a function that removes from the state entities with any triple in
@@ -347,7 +312,8 @@ Let $M₀$ be the model composed of:
   ```equation
   delete : State × Subset(E) → State
   delete(state, entities) =
-    state ∖ { (subject, predicate, object) ∈ E × E × E | subject ∈ entities ∨ object ∈ entities }
+    state ∖ { (subject, predicate, object) ∈ E × E × E |
+               subject ∈ entities ∨ object ∈ entities }
   ```
 
   Note that $delete$ can be used to remove several entities at once.
@@ -431,7 +397,8 @@ entity, so a deletion followed by a creation may lose information. Concretely,
   ```equation
   alter : State × E × Subset(E × E) → State
   alter(state, entity, relations) =
-    (state ∖ { (entity, p, o) ∈ state | p ∈ predicates(relations) }) ∪ { (entity, p, o) | (p, o) ∈ relations }
+    (state ∖ { (entity, p, o) ∈ state | p ∈ predicates(relations) })
+      ∪ { (entity, p, o) | (p, o) ∈ relations }
   ```
 
   where:
