@@ -60,17 +60,10 @@ article {
 
 /* ---- Desktop ---- */
 @media (min-width: 769px) {
-  /*
   main {
     display: grid;
     grid-template-columns: 1fr 3fr;
     margin-inline: auto;
-  }
-  */
-
-  details {
-    display: block;
-    height: 100%;
   }
 
   aside {
