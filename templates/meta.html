@@ -3,9 +3,10 @@
 ${for(fonts)}
 <link rel="preload" href="${fonts.path}" as="font" type="font/${fonts.format}" crossorigin>
 ${endfor}
-<meta name="description" content="${description}">
 <meta name="robots" content="index, follow">
 <meta property="og:url" content="${site-url}${url}">
+<meta property="og:image" content="${site-url}${favicon-path}">
 <meta name="twitter:card" content="summary">
 <link rel="canonical" href="${site-url}${url}">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23e06c2a'>⊢</text></svg>">
+<link rel="icon" href="${favicon-path}">
+

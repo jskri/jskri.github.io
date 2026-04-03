@@ -12,6 +12,7 @@ CSS_POST    		   := templates/post.css
 METADATA_SITE      := metadata/site.yaml
 SCRIPT_FIGURE      := assets/scripts/figure_to_img.lua
 SCRIPT_EQUATION    := assets/scripts/equation_to_tex.lua
+PANDOC_OPTIONS     := --wrap=none --metadata-file $(METADATA_SITE)
 
 .PHONY: all clean
 
@@ -20,8 +21,8 @@ all: $(POSTS) dist/index.html dist/about.html dist/sitemap.xml dist/robots.txt $
 dist/posts/%.html: src/posts/%.md $(TEMPLATE_POST) $(CSS_POST) $(TEMPLATE_META) $(TEMPLATE_TOPHEADER) $(METADATA_SITE) $(SCRIPT_FIGURE) $(SCRIPT_EQUATION)
 	mkdir -p dist/posts
 	pandoc $< \
-		--toc --toc-depth=2 --standalone --katex=/assets/katex/ --template=$(TEMPLATE_POST) \
-		--metadata-file $(METADATA_SITE) \
+		$(PANDOC_OPTIONS) \
+		--toc --toc-depth=3 --standalone --katex=/assets/katex/ --template=$(TEMPLATE_POST) \
 		--metadata=url:"$(patsubst dist/%,/%,$@)" \
 		--lua-filter=$(SCRIPT_FIGURE) \
 		--lua-filter=$(SCRIPT_EQUATION) \
@@ -30,16 +31,16 @@ dist/posts/%.html: src/posts/%.md $(TEMPLATE_POST) $(CSS_POST) $(TEMPLATE_META) 
 dist/index.html: $(TEMPLATE_INDEX) $(CSS_INDEX) $(TEMPLATE_META) $(TEMPLATE_TOPHEADER) $(METADATA_SITE)
 	mkdir -p dist
 	pandoc /dev/null \
+		$(PANDOC_OPTIONS) \
 		--template $(TEMPLATE_INDEX) \
-		--metadata-file $(METADATA_SITE) \
-		--metadata=url:"$(patsubst dist/%,/%,$@)" \
+		--metadata=url:"/" \
 		-o $@
 
 dist/about.html: src/about.md $(TEMPLATE_ABOUT) $(CSS_ABOUT) $(TEMPLATE_META) $(TEMPLATE_TOPHEADER)
 	mkdir -p dist
 	pandoc $< \
+		$(PANDOC_OPTIONS) \
 		--template $(TEMPLATE_ABOUT) \
-		--metadata-file $(METADATA_SITE) \
 		--metadata=url:"$(patsubst dist/%,/%,$@)" \
 		-o $@
 

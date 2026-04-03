@@ -1,25 +1,27 @@
 main {
-  margin-top: 3rem;       /* clear the fixed header */
-  max-width: 1200px;
-  width: 100%;
-  margin-inline: auto;    /* center on wide screens */
+  margin-top: 4rem;       /* clear the fixed header */
 }
 
-p {
-  margin: 1em 0;
+@media (min-width: 769px) {
+  main {
+    margin-top: 2rem;
+    max-width: 1200px;
+    width: 100%;
+    margin-inline: auto;    /* center on wide screens */
+  }
+
+  main.home {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+  }
+
+  .intro, .posts {
+    grid-column: 2;
+  }
 }
 
 .intro p {
   text-align: center;
-}
-
-main.home {
-  display: grid;
-  grid-template-columns: 1fr 3fr 1fr;
-}
-
-.intro, .posts {
-  grid-column: 2;
 }
 
 .posts {

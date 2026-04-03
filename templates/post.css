@@ -10,7 +10,6 @@
   font-size: 0.9rem;
 }
 
-/* ---- Layout ---- */
 main {
   width: 100%;
   margin-top: 3rem;
@@ -76,11 +75,7 @@ article {
   }
 
   article {
-    padding: 2rem 2rem 2rem 1rem;
-  }
-
-  details summary {
-    display: none;
+    padding: 0 2rem 2rem 1rem;
   }
 }
 
@@ -98,15 +93,19 @@ ${endif}
 }
 
 h1 {
-  font-size: 2.5rem;
+  font-size: 3rem;
 }
 
 h2 {
-  font-size: 2rem;
+  font-size: 2.5rem;
 }
 
 h3 {
-  font-size: 1.75rem;
+  font-size: 2rem;
+}
+
+h4 {
+  font-size: 1.5rem;
 }
 
 h5, h6 {

@@ -7,7 +7,7 @@ keywords: entity model formal denotational semantics REST python
 categories: posts
 ---
 
-# Questions About Docker
+## Questions About Docker
 
 As is often the case, it all started with a question that seemed unrelated to
 the topic.
@@ -48,7 +48,7 @@ low-level and difficult to integrate (`namespaces` and `cgroups`). Docker’s
 contribution, therefore, laid more in usability and standardization than in
 purely new features.
 
-# It was better before
+## It was better before
 
 The last point in particular (difficulty of composition) struck me. Were the
 abstractions too low-level or technical? This made me think, by contrast, of
@@ -66,7 +66,7 @@ little too far toward the technical side? And besides, weren’t we simply not
 very good at producing good abstractions? Looking at the quality and longevity
 of abstractions in math, there was good reason to ask the question...
 
-# Examples of good abstractions?
+## Examples of good abstractions?
 
 So I looked for examples of good “modern” abstractions. People mentioned Git and
 the HTTP REST model in particular, describing them as clean, minimal, and
@@ -109,7 +109,7 @@ actions (for example, a transfer to a third-party account) or remove them. No
 prior, external contract between the server and the client—everything is
 dynamic; it’s great.
 
-# Disillusionment
+## Disillusionment
 
 Or is that not the case? Alright, the system can work with humans, who are
 capable of understanding actions even if they are new (undo, view history,
@@ -130,7 +130,7 @@ result left me a bit unsatisfied. So I decided to delve into these issues
 (entities, actions, contracts) and settle the problem once and for all (or try
 to).
 
-# Avanti
+## Avanti
 
 What exactly did we need? Why not start with a short list? We needed:
 
@@ -157,7 +157,7 @@ that in a category, objects and morphisms are of a different nature).
 
 Before going any further, it might be helpful to give an example.
 
-## Example
+### Example
 
 0. Initially, there are no entities:
 
@@ -227,7 +227,7 @@ bank account 1, we can always add properties:
 ![bank account 1 owned by Bob, with extra properties (age 23 for Bob and balance 100 for bank account 1)](/assets/img/extra_properties.svg)
 
 
-# Beginning of Formalization
+## Beginning of Formalization
 
 Let’s revisit the previous example. We have a sequence of states, each state
 consisting of entities and relationships. Transitions from one state to another
@@ -278,12 +278,12 @@ would look like:
 
 We now formalize this intuition.
 
-# Formalization
+## Formalization
 
 We will proceed in an incremental way, with several models named $M₀$, $M₁$..., each
 adding new features.
 
-## Model $M₀$
+### Model $M₀$
 
 Let $M₀$ be the model composed of:
 
@@ -319,7 +319,7 @@ Let $M₀$ be the model composed of:
   Note that $delete$ can be used to remove several entities at once.
 
 
-## Implementation of $M₀$
+### Implementation of $M₀$
 
 $M₀$ can be implemented as a client-server protocol. The client sends commands and
 the server updates its state. The commands are `CREATE` and `DELETE`. Each command
@@ -353,7 +353,7 @@ interpretation:
 
 - $m(DELETE path, state) = delete(state, m(path, state))$
 
-### Example
+#### Example
 
 Here is an example of a sequence of commands. The state is initially empty (no
 entity and no relation).
@@ -381,7 +381,7 @@ Resulting state: contains only an arrow from `/bank-accounts/1` to `/Bob`.
 
 Resulting state: contains only `/bank-accounts/1`.
 
-## Model $M₁$: Alteration
+### Model $M₁$: Alteration
 
 In $M₀$, if we want to alter an entity, we have to delete it and create a new one.
 If we consider that each state is observable, this can pose a problem because
@@ -424,7 +424,7 @@ $c₀$, $c₁$, ... The state then evolves inductively:
 - $stateₙ₊₁ = m(commandₙ, stateₙ)$
 
 
-## Model $M₂$: History
+### Model $M₂$: History
 
 We may be interested in the successive relations of the entity living at a given
 path. By an abuse of language, we will say equivalently that we watch an entity.
@@ -500,7 +500,7 @@ of a mere state as is the case for $m$:
 - $w: Command × History → Seq(Subset(E × E × E))$
   $w(WATCH path { from: n, to: m }, H) = watch(path, n, m, H)$
 
-### Variants
+#### Variants
 
 From the complete form, we define several variants of `WATCH`:
 
@@ -516,7 +516,7 @@ is eventually created and eventually deleted:
 
 When $n$ corresponds to now, this models subscription.
 
-## Model $M₃$: Real-world time
+### Model $M₃$: Real-world time
 
 In practice, we'd also like to use `WATCH` with dates. This requires enriching
 the definition of $H$ to add timestamps. Timestamps do not come from the model,
@@ -565,7 +565,7 @@ We can also define a version where the range is left implicit:
   - $now ∈ Timestamp$ and is provided by the environment (it is external to the
     model)
 
-## Model $M₄$: Read
+### Model $M₄$: Read
 
 A `READ` command can be added for convenience. It adds no new expressive power,
 only notation:
@@ -576,7 +576,7 @@ only notation:
 This definition therefore depends on the timestamped version of `WATCH` defined in
 $M₃$.
 
-# Toy implementation
+## Toy implementation
 
 We now present a toy implementation of the final model $M₄$. After the modeling
 work has been done, we must still make explicit implementation choices. Once
@@ -595,7 +595,7 @@ received is parsed as a request.
 The server is written in Python 3.14 with asyncio. It records data (`CREATE`,
 `ALTER`, `DELETE`) in a database known by its URL passed by env var.
 
-## Database
+### Database
 
 The data is stored in a PostgreSQL 16 database. The tables are:
 
@@ -617,7 +617,7 @@ the past" error returned when the requested timestamp predates retained history.
 History is unbounded (a configurable retention window would be a possible
 extension).
 
-## Server in-memory state
+### Server in-memory state
 
 The server maintains in its in-memory state who watches what, and sends answers
 to watchers.
@@ -629,7 +629,7 @@ not happen if the process crashes between commit and notify.
 On client disconnection, the watcher is silently dropped from the in-memory
 state. We do not bother logging the disconnection for observability.
 
-## Request and answer grammars
+### Request and answer grammars
 
 ```
 Request  := Command Path Body?
@@ -658,9 +658,9 @@ Answer     := StatusCode Body
 StatusCode := [1-9][0-9][0-9]
 ```
 
-## Answers
+### Answers
 
-### Standard answers
+#### Standard answers
 
 Status codes follow HTTP.
 
@@ -678,7 +678,7 @@ from the malformed request.
 
 `500 { path: <Path>, reason: <Text> }` with
 
-### Create
+#### Create
 
 1. If a `CREATE` succeeds, the answer is:
 
@@ -703,7 +703,7 @@ The server must handle the following create requests:
     If there is no entity at `/users/<Name>`, a 404 answer is sent with this
     path.
 
-### Alter
+#### Alter
 
 When an `ALTER` succeeds, the following answer is sent:
 
@@ -719,7 +719,7 @@ Any key present in a `CREATE` can be altered. For instance:
 
 4. `ALTER /bank-accounts/<Number> { owner: /users/<Name>, balance: <Number> }`
 
-### Delete
+#### Delete
 
 When a `DELETE` succeeds, the following answer is sent:
 
@@ -740,7 +740,7 @@ Sets of entities can also be deleted:
 
 4. `DELETE /bank-accounts`
 
-### WATCH
+#### WATCH
 
 When a WATCH succeeds, the following answer is sent:
 
@@ -806,7 +806,7 @@ Note: A possible extension not handled for now could be to stop a watch with:
 7. `WATCH /users/<Name> { to: <Timestamp> }` (implicitly "from now", so `to`
    must be in the future)
 
-### READ
+#### READ
 
 1. `READ <Path>`
 
@@ -831,7 +831,7 @@ Answers:
 ```
 
 
-## Code organisation
+### Code organisation
 
 The files are organized in the following way:
 
@@ -885,7 +885,7 @@ Note: We use `uv` to manage the project and set up a CI via GitHub Actions with
 three jobs (lint with `ruff`, typecheck with `mypy`, test with `pytest` against
 a real `Postgres` service).
 
-## Tests
+### Tests
 
 Tests require Docker to be running and can be launched with:
 
@@ -897,7 +897,7 @@ This starts a dedicated test database container on port 5433, runs the full
 pytest suite against it, then tears the container down. Tests cover the parser,
 all five commands, and `WATCH` notifications including cascades.
 
-## Running the Server
+### Running the Server
 
 The server and its database can be started with:
 
@@ -914,7 +914,7 @@ make down
 The server listens on port 8888. The `DATABASE_URL` and `PORT` environment
 variables can be overridden in `docker-compose.yml`.
 
-## Sending Commands
+### Sending Commands
 
 Connection can be done with `nc`:
 
@@ -924,7 +924,7 @@ nc 0.0.0.0 8888
 
 Here are some examples of commands and their answers:
 
-### CREATE
+#### CREATE
 
 ```
 CREATE /users/bob { age: 23 }
@@ -940,7 +940,7 @@ CREATE /bank-accounts/2 { owner: /users/nobody, balance: 0 }
 404 { path: /users/nobody }
 ```
 
-### ALTER
+#### ALTER
 
 ```
 ALTER /users/bob { age: 30 }
@@ -953,7 +953,7 @@ ALTER /bank-accounts/1 { owner: /users/bob, balance: 50 }
 200 { path: /bank-accounts/1 }
 ```
 
-### DELETE
+#### DELETE
 
 ```
 DELETE /users/bob
@@ -965,7 +965,7 @@ DELETE /bank-accounts
 
 Deleting a user cascades to its bank accounts.
 
-### READ
+#### READ
 
 ```
 READ /users/bob
@@ -979,7 +979,7 @@ READ /bank-accounts/1
 200 { path: /bank-accounts/1, owner: /users/bob, balance: 100 }
 ```
 
-### WATCH
+#### WATCH
 
 We first open a connection and register a watch:
 
@@ -1021,13 +1021,13 @@ Bounded watches replay past events as a burst then stream live updates:
 WATCH /users/bob { from: 2024-01-01T00:00:00Z, to: 2024-01-01T00:01:00Z }
 ```
 
-## Repository
+### Repository
 
 A repository with the implementation can be found here:
 <https://github.com/jskri/entity-protocol>
 
 
-# Conclusion
+## Conclusion
 
 We started with a mundane question about Docker and ended up with a formal
 model.

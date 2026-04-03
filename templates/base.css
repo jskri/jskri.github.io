@@ -9,34 +9,34 @@ ${for(fonts)}
 ${endfor}
 
 :root {
-  --fg: ${if(fontcolor)} ${fontcolor} ${else} #141413 ${endif};
-  --bg: ${if(backgroundcolor)} ${backgroundcolor} ${else} #faf9f5 ${endif};
-  --headerfg: ${if(headercolor)} ${headercolor} ${else} var(--bg) ${endif};
-  --monofg: ${if(monofg)} ${monofg} ${else} #8a2424 ${endif};
-  --monobg: ${if(monobg)} ${monobg} ${else} #f0efec ${endif};
-  --borderbg: ${if(borderbg)} ${borderbg} ${else} #d1cfcd ${endif};
-  --codefg: ${if(codefg)} ${codefg} ${else} #14181F ${endif};
-  --tocfg: ${if(tocfg)} ${tocfg} ${else} #3D3D3A ${endif};
-  --linkfg: ${if(linkcolor)} ${linkcolor} ${else} #1a1a1a ${endif};
-  --max-width: ${if(maxwidth)} ${maxwidth} ${else} 36em ${endif};
-  --padding-left: ${if(margin-left)} ${margin-left} ${else} 50px ${endif};
-  --padding-right: ${if(margin-right)} ${margin-right} ${else} 50px ${endif};
-  --padding-top: ${if(margin-top)} ${margin-top} ${else} 50px ${endif};
-  --padding-bottom: ${if(margin-bottom)} ${margin-bottom} ${else} 50px ${endif};
-  --mono-font: ${if(monofont)} ${monofont} ${else} Menlo, Monaco, Consolas, 'Lucida Console', monospace ${endif};
+  --fg: ${if(fontcolor)}${fontcolor}${else}#141413${endif};
+  --bg: ${if(backgroundcolor)}${backgroundcolor}${else}#faf9f5${endif};
+  --headerfg: ${if(headercolor)}${headercolor}${else}var(--bg)${endif};
+  --monofg: ${if(monofg)}${monofg}${else}#8a2424${endif};
+  --monobg: ${if(monobg)}${monobg}${else}#f0efec${endif};
+  --borderbg: ${if(borderbg)}${borderbg}${else}#d1cfcd${endif};
+  --codefg: ${if(codefg)}${codefg}${else}#14181F${endif};
+  --tocfg: ${if(tocfg)}${tocfg}${else}#3D3D3A${endif};
+  --linkfg: ${if(linkcolor)}${linkcolor}${else}#1a1a1a${endif};
+  --max-width: ${if(maxwidth)}${maxwidth}${else}36em${endif};
+  --padding-left: ${if(margin-left)}${margin-left}${else}50px${endif};
+  --padding-right: ${if(margin-right)}${margin-right}${else}50px${endif};
+  --padding-top: ${if(margin-top)}${margin-top}${else}50px${endif};
+  --padding-bottom: ${if(margin-bottom)}${margin-bottom}${else}50px${endif};
+  --mono-font: ${if(monofont)}${monofont}${else}Menlo, Monaco, Consolas, 'Lucida Console', monospace${endif};
 }
 
 /* dark theme */
 @media (prefers-color-scheme: dark) {
   :root {
-    --fg: ${if(fontcolor)} ${fontcolor} ${else} #faf9f5 ${endif};
-    --bg: ${if(backgroundcolordark)} ${backgroundcolordark} ${else} #262624 ${endif};
-    --monofg: ${if(monofgdark)} ${monofgdark} ${else} #fe8181 ${endif};
-    --monobg: ${if(monobgdark)} ${monobgdark} ${else} #2b2b29 ${endif};
-    --borderbg: ${if(borderbgdark)} ${borderbgdark} ${else} #484844 ${endif};
-    --codefg: ${if(codefgdark)} ${codefgdark} ${else} #eaecf0 ${endif};
-    --tocfg: ${if(tocfgdark)} ${tocfgdark} ${else} #C2C0B6 ${endif};
-    --linkfg: ${if(linkcolordark)} ${linkcolordark} ${else} #faf9f5 ${endif};
+    --fg: ${if(fontcolor)}${fontcolor}${else}#faf9f5${endif};
+    --bg: ${if(backgroundcolordark)}${backgroundcolordark}${else}#262624${endif};
+    --monofg: ${if(monofgdark)}${monofgdark}${else}#fe8181${endif};
+    --monobg: ${if(monobgdark)}${monobgdark}${else}#2b2b29${endif};
+    --borderbg: ${if(borderbgdark)}${borderbgdark}${else}#484844${endif};
+    --codefg: ${if(codefgdark)}${codefgdark}${else}#eaecf0${endif};
+    --tocfg: ${if(tocfgdark)}${tocfgdark}${else}#C2C0B6${endif};
+    --linkfg: ${if(linkcolordark)}${linkcolordark}${else}#faf9f5${endif};
   }
 }
 
@@ -134,3 +134,4 @@ header {
   margin-bottom: 4em;
   text-align: center;
 }
+

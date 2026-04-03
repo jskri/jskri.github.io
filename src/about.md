@@ -10,7 +10,7 @@ underlying formal structures and having a good grasp of what is technically
 feasible. Reconciling both ends of the spectrum is what I find fascinating about
 this field.
 
-# Sources of inspiration
+## Sources of inspiration
 
 - I like the correct-by-construction approach, as explained in the article
   [Faultless systems: yes we
@@ -22,10 +22,10 @@ this field.
 - I also find the work of [Conal Elliott](http://conal.net/) inspiring, with its
   emphasis on simplicity and composability.
 
-# Repositories
+## Repositories
 
 Github: [github.com/jskri](https://github.com/jskri)
 
-# Contact
+## Contact
 
 You can reach me at [dvnh87@protonmail.com](mailto:dvnh87@protonmail.com).
