@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="preload" href="/assets/fonts/roboto-v51-latin-300.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/roboto-v51-latin-500.woff2" as="font" type="font/woff2" crossorigin>
-  <meta name="description" content="On modeling, formal methods and
-  correct-by-construction software.">
   <meta name="robots" content="index, follow">
-  <meta property="og:url" content="https://jskri.github.io/index.html">
+  <meta property="og:url" content="https://jskri.github.io/">
+  <meta property="og:image" content="https://jskri.github.io/assets/img/favicon.svg">
   <meta name="twitter:card" content="summary">
-  <link rel="canonical" href="https://jskri.github.io/index.html">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23e06c2a'>⊢</text></svg>">  <meta property="og:title" content="Specifiable">
-  <meta property="og:description" content="On modeling, formal methods
-and correct-by-construction software.">
+  <link rel="canonical" href="https://jskri.github.io/">
+  <link rel="icon" href="/assets/img/favicon.svg">
+  <meta name="description" content="On modeling, formal methods and correct-by-construction software.">
+  <meta property="og:title" content="Specifiable">
+  <meta property="og:description" content="On modeling, formal methods and correct-by-construction software.">
   <meta property="og:type" content="website">
   <title>Specifiable</title>
   <style>
@@ -33,34 +33,34 @@ and correct-by-construction software.">
     }
 
     :root {
-      --fg:  #141413 ;
-      --bg:  #faf9f5 ;
-      --headerfg:  var(--bg) ;
-      --monofg:  #8a2424 ;
-      --monobg:  #f0efec ;
-      --borderbg:  #d1cfcd ;
-      --codefg:  #14181F ;
-      --tocfg:  #3D3D3A ;
-      --linkfg:  #1a1a1a ;
-      --max-width:  1050px ;
-      --padding-left:  50px ;
-      --padding-right:  50px ;
-      --padding-top:  50px ;
-      --padding-bottom:  50px ;
-      --mono-font:  Menlo, Monaco, Consolas, 'Lucida Console', monospace ;
+      --fg: #141413;
+      --bg: #faf9f5;
+      --headerfg: var(--bg);
+      --monofg: #8a2424;
+      --monobg: #f0efec;
+      --borderbg: #d1cfcd;
+      --codefg: #14181F;
+      --tocfg: #3D3D3A;
+      --linkfg: #1a1a1a;
+      --max-width: 1050px;
+      --padding-left: 50px;
+      --padding-right: 50px;
+      --padding-top: 50px;
+      --padding-bottom: 50px;
+      --mono-font: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
     }
 
     /* dark theme */
     @media (prefers-color-scheme: dark) {
       :root {
-        --fg:  #faf9f5 ;
-        --bg:  #262624 ;
-        --monofg:  #fe8181 ;
-        --monobg:  #2b2b29 ;
-        --borderbg:  #484844 ;
-        --codefg:  #eaecf0 ;
-        --tocfg:  #C2C0B6 ;
-        --linkfg:  #faf9f5 ;
+        --fg: #faf9f5;
+        --bg: #262624;
+        --monofg: #fe8181;
+        --monobg: #2b2b29;
+        --borderbg: #484844;
+        --codefg: #eaecf0;
+        --tocfg: #C2C0B6;
+        --linkfg: #faf9f5;
       }
     }
 
@@ -149,54 +149,57 @@ and correct-by-construction software.">
     header {
       margin-bottom: 4em;
       text-align: center;
-    }    main {
-       margin-top: 3rem;       /* clear the fixed header */
-       max-width: 1200px;
-       width: 100%;
-       margin-inline: auto;    /* center on wide screens */
-     }
+    }
+    main {
+      margin-top: 4rem;       /* clear the fixed header */
+    }
 
-     p {
-       margin: 1em 0;
-     }
+    @media (min-width: 769px) {
+      main {
+        margin-top: 2rem;
+        max-width: 1200px;
+        width: 100%;
+        margin-inline: auto;    /* center on wide screens */
+      }
 
-     .intro p {
-       text-align: center;
-     }
+      main.home {
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr;
+      }
 
-     main.home {
-       display: grid;
-       grid-template-columns: 1fr 3fr 1fr;
-     }
+      .intro, .posts {
+        grid-column: 2;
+      }
+    }
 
-     .intro, .posts {
-       grid-column: 2;
-     }
+    .intro p {
+      text-align: center;
+    }
 
-     .posts {
-       margin-top: 5rem;
-     }
+    .posts {
+      margin-top: 5rem;
+    }
 
-     h1 {
-       margin-top: 0;
-       text-align: center;
-       font-size: 4rem;
-       font-weight: 300;
-     }
+    h1 {
+      margin-top: 0;
+      text-align: center;
+      font-size: 4rem;
+      font-weight: 300;
+    }
 
-     ol, ul {
-       padding-left: 1.7em;
-       margin-top: 1em;
-     }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
 
-     li > ol, li > ul {
-       margin-top: 0;
-     }  </style>
+    li > ol, li > ul {
+      margin-top: 0;
+    }  </style>
 </head>
 <body>
   <header class="topheader">
     <nav>
-      <a href="/" aria-label="return to home">Specifiable</a>
+      <a href="/">Specifiable</a>
       <div>
         <a href="/about.html">About</a>
       </div>
@@ -206,19 +209,15 @@ and correct-by-construction software.">
 
     <section class="intro">
       <h1>Specifiable</h1>
-      <p>On modeling, formal methods and correct-by-construction
-software.</p>
+      <p>On modeling, formal methods and correct-by-construction software.</p>
     </section>
 
     <section class="posts">
       <ul>
                 <li>
           <time datetime="2026-03-25">2026-03-25</time>
-          <a href="/posts/entity-protocol.html">REST’s semantics are
-informal. Here is a formal alternative.</a>
-                    <p>Starting from REST, we develop a formal model for
-distributed state from mathematical definition to working
-implementation.</p>
+          <a href="/posts/entity-protocol.html">REST’s semantics are informal. Here is a formal alternative.</a>
+                    <p>Starting from REST, we develop a formal model for distributed state from mathematical definition to working implementation.</p>
                   </li>
               </ul>
     </section>

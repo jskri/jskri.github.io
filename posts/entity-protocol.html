@@ -5,22 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="preload" href="/assets/fonts/roboto-v51-latin-300.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/roboto-v51-latin-500.woff2" as="font" type="font/woff2" crossorigin>
-  <meta name="description" content="An entity protocol model and
-  implementation.">
   <meta name="robots" content="index, follow">
   <meta property="og:url" content="https://jskri.github.io/posts/entity-protocol.html">
+  <meta property="og:image" content="https://jskri.github.io/assets/img/favicon.svg">
   <meta name="twitter:card" content="summary">
   <link rel="canonical" href="https://jskri.github.io/posts/entity-protocol.html">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23e06c2a'>⊢</text></svg>">  <meta property="og:title" content="REST’s
-semantics are informal. Here is a formal alternative.">
-  <meta property="og:description" content="An entity protocol model and
-implementation.">
+  <link rel="icon" href="/assets/img/favicon.svg">
+  <meta name="description" content="An entity protocol model and implementation.">
+  <meta property="og:title" content="REST’s semantics are informal. Here is a formal alternative.">
+  <meta property="og:description" content="An entity protocol model and implementation.">
   <meta property="og:article:published_time" content="2026-03-25">
-  <meta property="article:author" content="github.com/jskri">
+  <meta property="article:author" content="https://github.com/jskri">
   <meta property="og:type" content="article">
 
-  <title>REST’s semantics are informal. Here is a formal
-alternative.</title>
+  <title>REST’s semantics are informal. Here is a formal alternative.</title>
   <style>
     @font-face {
       font-display: swap;
@@ -38,34 +36,34 @@ alternative.</title>
     }
 
     :root {
-      --fg:  #141413 ;
-      --bg:  #faf9f5 ;
-      --headerfg:  var(--bg) ;
-      --monofg:  #8a2424 ;
-      --monobg:  #f0efec ;
-      --borderbg:  #d1cfcd ;
-      --codefg:  #14181F ;
-      --tocfg:  #3D3D3A ;
-      --linkfg:  #1a1a1a ;
-      --max-width:  1050px ;
-      --padding-left:  50px ;
-      --padding-right:  50px ;
-      --padding-top:  50px ;
-      --padding-bottom:  50px ;
-      --mono-font:  Menlo, Monaco, Consolas, 'Lucida Console', monospace ;
+      --fg: #141413;
+      --bg: #faf9f5;
+      --headerfg: var(--bg);
+      --monofg: #8a2424;
+      --monobg: #f0efec;
+      --borderbg: #d1cfcd;
+      --codefg: #14181F;
+      --tocfg: #3D3D3A;
+      --linkfg: #1a1a1a;
+      --max-width: 1050px;
+      --padding-left: 50px;
+      --padding-right: 50px;
+      --padding-top: 50px;
+      --padding-bottom: 50px;
+      --mono-font: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
     }
 
     /* dark theme */
     @media (prefers-color-scheme: dark) {
       :root {
-        --fg:  #faf9f5 ;
-        --bg:  #262624 ;
-        --monofg:  #fe8181 ;
-        --monobg:  #2b2b29 ;
-        --borderbg:  #484844 ;
-        --codefg:  #eaecf0 ;
-        --tocfg:  #C2C0B6 ;
-        --linkfg:  #faf9f5 ;
+        --fg: #faf9f5;
+        --bg: #262624;
+        --monofg: #fe8181;
+        --monobg: #2b2b29;
+        --borderbg: #484844;
+        --codefg: #eaecf0;
+        --tocfg: #C2C0B6;
+        --linkfg: #faf9f5;
       }
     }
 
@@ -154,189 +152,189 @@ alternative.</title>
     header {
       margin-bottom: 4em;
       text-align: center;
-    }    .math-warning {
-       display: block;
-       background: #fff3cd;
-       border: 1px solid #ffc107;
-       border-left: 4px solid #ffc107;
-       color: #664d03;
-       padding: 0.75rem 1rem;
-       margin: 1rem 0;
-       border-radius: 0 4px 4px 0;
-       font-size: 0.9rem;
-     }
+    }
+    .math-warning {
+      display: block;
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-left: 4px solid #ffc107;
+      color: #664d03;
+      padding: 0.75rem 1rem;
+      margin: 1rem 0;
+      border-radius: 0 4px 4px 0;
+      font-size: 0.9rem;
+    }
 
-     /* ---- Layout ---- */
-     main {
-       width: 100%;
-       margin-top: 3rem;
-     }
+    main {
+      width: 100%;
+      margin-top: 3rem;
+    }
 
-     /* ---- Table of contents ---- */
-     aside {
-       padding: 1rem;
-     }
+    /* ---- Table of contents ---- */
+    aside {
+      padding: 1rem;
+    }
 
-     #toc {
-       position: static;
-       font-size: .75rem;
-       font-weight: 500;
-       line-height: 1.7;
-       z-index: 1;
-     }
+    #toc {
+      position: static;
+      font-size: .75rem;
+      font-weight: 500;
+      line-height: 1.7;
+      z-index: 1;
+    }
 
-     #toc li {
-       list-style: none;
-     }
+    #toc li {
+      list-style: none;
+    }
 
-     #toc ul {
-       padding-left: 1.3em;
-     }
+    #toc ul {
+      padding-left: 1.3em;
+    }
 
-     #toc > ul {
-       padding-left: 0;
-     }
+    #toc > ul {
+      padding-left: 0;
+    }
 
-     #toc a:not(:hover) {
-       text-decoration: none;
-       color: var(--tocfg);
-     }
+    #toc a:not(:hover) {
+      text-decoration: none;
+      color: var(--tocfg);
+    }
 
-     #toc a:hover {
-       text-decoration: none;
-       color: #2698ba;
-       transition: all 0.2s ease-in-out;
-     }
+    #toc a:hover {
+      text-decoration: none;
+      color: #2698ba;
+      transition: all 0.2s ease-in-out;
+    }
 
-     /* ---- Article ---- */
-     article {
-       padding: 1rem;
-       min-width: 0;
-     }
+    /* ---- Article ---- */
+    article {
+      padding: 1rem;
+      min-width: 0;
+    }
 
-     /* ---- Desktop ---- */
-     @media (min-width: 769px) {
-       main {
-         display: grid;
-         grid-template-columns: 1fr 3fr;
-         margin-inline: auto;
-       }
+    /* ---- Desktop ---- */
+    @media (min-width: 769px) {
+      main {
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+        margin-inline: auto;
+      }
 
-       aside {
-         padding: 2rem 1rem 2rem 2rem;
-       }
+      aside {
+        padding: 2rem 1rem 2rem 2rem;
+      }
 
-       #toc {
-         position: sticky;
-         top: 4rem;
-       }
+      #toc {
+        position: sticky;
+        top: 4rem;
+      }
 
-       article {
-         padding: 2rem 2rem 2rem 1rem;
-       }
+      article {
+        padding: 0 2rem 2rem 1rem;
+      }
+    }
 
-       details summary {
-         display: none;
-       }
-     }
+    /* ---- Article header ---- */
+    #article-header h1 {
+      margin-top: 0;
+    }
 
-     /* ---- Article header ---- */
-     #article-header h1 {
-       margin-top: 0;
-     }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+      text-align: left;
+      font-weight: 300;
+    }
 
-     h1, h2, h3, h4, h5, h6 {
-       margin-top: 1.4em;
-       text-align: left;
-       font-weight: 300;
-     }
+    h1 {
+      font-size: 3rem;
+    }
 
-     h1 {
-       font-size: 2.5rem;
-     }
+    h2 {
+      font-size: 2.5rem;
+    }
 
-     h2 {
-       font-size: 2rem;
-     }
+    h3 {
+      font-size: 2rem;
+    }
 
-     h3 {
-       font-size: 1.75rem;
-     }
+    h4 {
+      font-size: 1.5rem;
+    }
 
-     h5, h6 {
-       font-size: 1em;
-       font-style: italic;
-     }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
 
-     h6 {
-       font-weight: normal;
-     }
+    h6 {
+      font-weight: normal;
+    }
 
-     ol, ul {
-       padding-left: 1.7em;
-       margin-top: 1em;
-     }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
 
-     li > ol, li > ul {
-       margin-top: 0;
-     }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
 
-     code {
-       font-family: var(--mono-font);
-       color: var(--monofg);
-       background-color: var(--monobg);
-       padding: 0.1em 0.3em;
-       font-size: 85%;
-       margin: 0;
-       hyphens: manual;
-       word-wrap: break-word;
-       border-radius: .4rem;
-       border-color: var(--borderbg);
-       border-width: .5px;
-       border-style: solid;
-     }
+    code {
+      font-family: var(--mono-font);
+      color: var(--monofg);
+      background-color: var(--monobg);
+      padding: 0.1em 0.3em;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+      word-wrap: break-word;
+      border-radius: .4rem;
+      border-color: var(--borderbg);
+      border-width: .5px;
+      border-style: solid;
+    }
 
-     pre {
-       margin: 1em 0;
-       background-color: var(--monobg);
-       padding: .875rem;
-       overflow: auto;
-       border-radius: .4rem;
-       border-color: var(--borderbg);
-       border-width: .5px;
-       border-style: solid;
-     }
+    pre {
+      margin: 1em 0;
+      background-color: var(--monobg);
+      padding: .875rem;
+      overflow: auto;
+      border-radius: .4rem;
+      border-color: var(--borderbg);
+      border-width: .5px;
+      border-style: solid;
+    }
 
-     pre code {
-       padding: 0;
-       overflow: visible;
-       overflow-wrap: normal;
-       border-style: none;
-       color: var(--codefg);
-     }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+      border-style: none;
+      color: var(--codefg);
+    }
 
-     .sourceCode {
-       background-color: transparent;
-       overflow: visible;
-     }
+    .sourceCode {
+      background-color: transparent;
+      overflow: visible;
+    }
 
-     .date {
-       color: #828282;
-       font-size: .875rem;
-       text-align: left;
-     }
+    .date {
+      color: #828282;
+      font-size: .875rem;
+      text-align: left;
+    }
 
-     .abstract {
-       text-align: left;
-     }
+    .abstract {
+      text-align: left;
+    }
 
-     .abstract-title {
-       text-align: center;
-     }
+    .abstract-title {
+      text-align: center;
+    }
 
-     .filetree {
-       line-height: 1;
-     }  </style>
+    .filetree {
+      line-height: 1;
+    }  </style>
   <script defer="" src="/assets/katex/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
  var mathElements = document.getElementsByClassName("math");
@@ -369,7 +367,7 @@ alternative.</title>
 <body>
   <header class="topheader">
     <nav>
-      <a href="/" aria-label="return to home">Specifiable</a>
+      <a href="/">Specifiable</a>
       <div>
         <a href="/about.html">About</a>
       </div>
@@ -379,63 +377,37 @@ alternative.</title>
     <aside>
       <nav id="toc">
         <ul>
-        <li><a href="#questions-about-docker"
-        id="toc-questions-about-docker">Questions About Docker</a></li>
-        <li><a href="#it-was-better-before"
-        id="toc-it-was-better-before">It was better before</a></li>
-        <li><a href="#examples-of-good-abstractions"
-        id="toc-examples-of-good-abstractions">Examples of good
-        abstractions?</a></li>
-        <li><a href="#disillusionment"
-        id="toc-disillusionment">Disillusionment</a></li>
+        <li><a href="#questions-about-docker" id="toc-questions-about-docker">Questions About Docker</a></li>
+        <li><a href="#it-was-better-before" id="toc-it-was-better-before">It was better before</a></li>
+        <li><a href="#examples-of-good-abstractions" id="toc-examples-of-good-abstractions">Examples of good abstractions?</a></li>
+        <li><a href="#disillusionment" id="toc-disillusionment">Disillusionment</a></li>
         <li><a href="#avanti" id="toc-avanti">Avanti</a>
         <ul>
         <li><a href="#example" id="toc-example">Example</a></li>
         </ul></li>
-        <li><a href="#beginning-of-formalization"
-        id="toc-beginning-of-formalization">Beginning of
-        Formalization</a></li>
-        <li><a href="#formalization"
-        id="toc-formalization">Formalization</a>
+        <li><a href="#beginning-of-formalization" id="toc-beginning-of-formalization">Beginning of Formalization</a></li>
+        <li><a href="#formalization" id="toc-formalization">Formalization</a>
         <ul>
-        <li><a href="#model-m₀" id="toc-model-m₀">Model <span
-        class="math inline">M_{0}</span></a></li>
-        <li><a href="#implementation-of-m₀"
-        id="toc-implementation-of-m₀">Implementation of <span
-        class="math inline">M_{0}</span></a></li>
-        <li><a href="#model-m₁-alteration"
-        id="toc-model-m₁-alteration">Model <span
-        class="math inline">M_{1}</span>: Alteration</a></li>
-        <li><a href="#model-m₂-history" id="toc-model-m₂-history">Model
-        <span class="math inline">M_{2}</span>: History</a></li>
-        <li><a href="#model-m₃-real-world-time"
-        id="toc-model-m₃-real-world-time">Model <span
-        class="math inline">M_{3}</span>: Real-world time</a></li>
-        <li><a href="#model-m₄-read" id="toc-model-m₄-read">Model <span
-        class="math inline">M_{4}</span>: Read</a></li>
+        <li><a href="#model-m₀" id="toc-model-m₀">Model <span class="math inline">M_{0}</span></a></li>
+        <li><a href="#implementation-of-m₀" id="toc-implementation-of-m₀">Implementation of <span class="math inline">M_{0}</span></a></li>
+        <li><a href="#model-m₁-alteration" id="toc-model-m₁-alteration">Model <span class="math inline">M_{1}</span>: Alteration</a></li>
+        <li><a href="#model-m₂-history" id="toc-model-m₂-history">Model <span class="math inline">M_{2}</span>: History</a></li>
+        <li><a href="#model-m₃-real-world-time" id="toc-model-m₃-real-world-time">Model <span class="math inline">M_{3}</span>: Real-world time</a></li>
+        <li><a href="#model-m₄-read" id="toc-model-m₄-read">Model <span class="math inline">M_{4}</span>: Read</a></li>
         </ul></li>
-        <li><a href="#toy-implementation"
-        id="toc-toy-implementation">Toy implementation</a>
+        <li><a href="#toy-implementation" id="toc-toy-implementation">Toy implementation</a>
         <ul>
         <li><a href="#database" id="toc-database">Database</a></li>
-        <li><a href="#server-in-memory-state"
-        id="toc-server-in-memory-state">Server in-memory state</a></li>
-        <li><a href="#request-and-answer-grammars"
-        id="toc-request-and-answer-grammars">Request and answer
-        grammars</a></li>
+        <li><a href="#server-in-memory-state" id="toc-server-in-memory-state">Server in-memory state</a></li>
+        <li><a href="#request-and-answer-grammars" id="toc-request-and-answer-grammars">Request and answer grammars</a></li>
         <li><a href="#answers" id="toc-answers">Answers</a></li>
-        <li><a href="#code-organisation" id="toc-code-organisation">Code
-        organisation</a></li>
+        <li><a href="#code-organisation" id="toc-code-organisation">Code organisation</a></li>
         <li><a href="#tests" id="toc-tests">Tests</a></li>
-        <li><a href="#running-the-server"
-        id="toc-running-the-server">Running the Server</a></li>
-        <li><a href="#sending-commands"
-        id="toc-sending-commands">Sending Commands</a></li>
-        <li><a href="#repository"
-        id="toc-repository">Repository</a></li>
+        <li><a href="#running-the-server" id="toc-running-the-server">Running the Server</a></li>
+        <li><a href="#sending-commands" id="toc-sending-commands">Sending Commands</a></li>
+        <li><a href="#repository" id="toc-repository">Repository</a></li>
         </ul></li>
-        <li><a href="#conclusion"
-        id="toc-conclusion">Conclusion</a></li>
+        <li><a href="#conclusion" id="toc-conclusion">Conclusion</a></li>
         </ul>
       </nav>
     </aside>
@@ -446,104 +418,36 @@ alternative.</title>
       </div>
 
       <header id="article-header">
-              <h1 class="title">REST’s semantics are informal. Here is a
-formal alternative.</h1>
+              <h1 class="title">REST’s semantics are informal. Here is a formal alternative.</h1>
                           <p class="date">Created on 2026-03-25</p>
                     <div class="abstract">
           <div class="abstract-title">Abstract</div>
-          What makes a good abstraction? Unix suggests they are
-          possible; Docker suggests we have lost the habit. REST, often
-          cited as a modern example of clean design, turns out to be
-          informal where it matters most. This post develops a small
-          alternative — a formal model for distributed state — and walks
-          it from mathematical definition to working implementation.
+          What makes a good abstraction? Unix suggests they are possible; Docker suggests we have lost the habit. REST, often cited as a modern example of clean design, turns out to be informal where it matters most. This post develops a small alternative — a formal model for distributed state — and walks it from mathematical definition to working implementation.
         </div>
             </header>
 
-      <h1 id="questions-about-docker">Questions About Docker</h1>
-      <p>As is often the case, it all started with a question that
-      seemed unrelated to the topic.</p>
-      <p>I was using Docker and wondered why images weren’t
-      automatically saved as files—files that we could copy, compress,
-      pipe… just like any other file. At first glance, that seemed like
-      a more robust and straightforward approach. After doing a bit of
-      research, I found the following arguments justifying Docker’s
-      approach:</p>
+      <h2 id="questions-about-docker">Questions About Docker</h2>
+      <p>As is often the case, it all started with a question that seemed unrelated to the topic.</p>
+      <p>I was using Docker and wondered why images weren’t automatically saved as files—files that we could copy, compress, pipe… just like any other file. At first glance, that seemed like a more robust and straightforward approach. After doing a bit of research, I found the following arguments justifying Docker’s approach:</p>
       <ol type="1">
-      <li><p>Disk space optimization: images are composed of layers,
-      with each layer being shareable by an arbitrary number of
-      images</p></li>
-      <li><p>Storage abstraction: storage can be handled in various
-      ways, through Docker’s use of dedicated drivers</p></li>
-      <li><p>Layer composition: there isn’t really a single image file,
-      just layer files and metadata that Docker composes to create the
-      image</p></li>
+      <li><p>Disk space optimization: images are composed of layers, with each layer being shareable by an arbitrary number of images</p></li>
+      <li><p>Storage abstraction: storage can be handled in various ways, through Docker’s use of dedicated drivers</p></li>
+      <li><p>Layer composition: there isn’t really a single image file, just layer files and metadata that Docker composes to create the image</p></li>
       </ol>
-      <p>I thought to myself: OK, but wouldn’t it be more natural for
-      the OS to provide these features?</p>
+      <p>I thought to myself: OK, but wouldn’t it be more natural for the OS to provide these features?</p>
       <ol type="1">
-      <li><p>Disk space optimization: The OS could optimize file copies,
-      for example via copy-on-write.</p></li>
-      <li><p>Storage abstraction: the OS can manage various
-      filesystems</p></li>
-      <li><p>Layer composition: the OS typically provides, via the
-      filesystem, the concept of directories, which allows data to be
-      grouped and organized</p></li>
+      <li><p>Disk space optimization: The OS could optimize file copies, for example via copy-on-write.</p></li>
+      <li><p>Storage abstraction: the OS can manage various filesystems</p></li>
+      <li><p>Layer composition: the OS typically provides, via the filesystem, the concept of directories, which allows data to be grouped and organized</p></li>
       </ol>
-      <p>Upon further research, I realized that this was true, but that
-      in practice operating systems sometimes provided these features
-      only partially (<code>btrfs</code> and <code>zfs</code> support
-      copy-on-write, but <code>ext4</code>—which is the most widely
-      used—does not), in a non-standard way (no cross-distro package
-      format for a filesystem snapshot with metadata), only relatively
-      recently (<code>overlayfs</code> was merged into the Linux kernel
-      in 2014, the same year Docker gained traction), or in a way that
-      was too low-level and difficult to integrate
-      (<code>namespaces</code> and <code>cgroups</code>). Docker’s
-      contribution, therefore, laid more in usability and
-      standardization than in purely new features.</p>
-      <h1 id="it-was-better-before">It was better before</h1>
-      <p>The last point in particular (difficulty of composition) struck
-      me. Were the abstractions too low-level or technical? This made me
-      think, by contrast, of Unix. I had the impression that its
-      designers had produced good abstractions—composable and easily
-      understandable by humans: the file-based approach, pipes, etc.
-      This seemed all the more surprising to me given that these
-      “human-oriented” choices were made at a time when computers were
-      very resource-constrained and when it would have been, <em>a
-      priori</em>, more obvious to prioritize performance over
-      usability: binary everywhere, low-level abstractions, etc.</p>
-      <p>The designers of Unix gave me the impression that they
-      prioritized the human over technology. Hadn’t we lost sight of
-      that a bit since then and leaned a little too far toward the
-      technical side? And besides, weren’t we simply not very good at
-      producing good abstractions? Looking at the quality and longevity
-      of abstractions in math, there was good reason to ask the
-      question…</p>
-      <h1 id="examples-of-good-abstractions">Examples of good
-      abstractions?</h1>
-      <p>So I looked for examples of good “modern” abstractions. People
-      mentioned Git and the HTTP REST model in particular, describing
-      them as clean, minimal, and composable. As for Git, I thought the
-      object model was fine, but when it comes to repository
-      composition, I was not so sure. Submodules seemed a bit limited,
-      like an afterthought. If the concept of a repository had been
-      modeled from the start using an algebraic structure, the concept
-      of a morphism would surely have been defined, and composition
-      taken into account from the beginning. And we might have solid
-      ways today to compose repositories: product, sum, etc.</p>
-      <p>As for REST, I must admit that for me it mainly evoked entities
-      addressable via URIs and actions via HTTP verbs, but I didn’t know
-      much more than that. I was told: yes, but be careful, apps that
-      claim to be REST are often just RPC over HTTP and JSON, not true
-      REST. Ah, so what was true REST? Well, according to Fielding (the
-      author of the original thesis), it was crucially HATEOAS:
-      Hypermedia As The Engine of Application State. To put it simply,
-      after the server receives a request (an action on a URI), it
-      returns a list of URIs with possible actions. Here is an example
-      of a response:</p>
-      <div class="sourceCode" id="cb1"><pre
-      class="sourceCode json"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+      <p>Upon further research, I realized that this was true, but that in practice operating systems sometimes provided these features only partially (<code>btrfs</code> and <code>zfs</code> support copy-on-write, but <code>ext4</code>—which is the most widely used—does not), in a non-standard way (no cross-distro package format for a filesystem snapshot with metadata), only relatively recently (<code>overlayfs</code> was merged into the Linux kernel in 2014, the same year Docker gained traction), or in a way that was too low-level and difficult to integrate (<code>namespaces</code> and <code>cgroups</code>). Docker’s contribution, therefore, laid more in usability and standardization than in purely new features.</p>
+      <h2 id="it-was-better-before">It was better before</h2>
+      <p>The last point in particular (difficulty of composition) struck me. Were the abstractions too low-level or technical? This made me think, by contrast, of Unix. I had the impression that its designers had produced good abstractions—composable and easily understandable by humans: the file-based approach, pipes, etc. This seemed all the more surprising to me given that these “human-oriented” choices were made at a time when computers were very resource-constrained and when it would have been, <em>a priori</em>, more obvious to prioritize performance over usability: binary everywhere, low-level abstractions, etc.</p>
+      <p>The designers of Unix gave me the impression that they prioritized the human over technology. Hadn’t we lost sight of that a bit since then and leaned a little too far toward the technical side? And besides, weren’t we simply not very good at producing good abstractions? Looking at the quality and longevity of abstractions in math, there was good reason to ask the question…</p>
+      <h2 id="examples-of-good-abstractions">Examples of good abstractions?</h2>
+      <p>So I looked for examples of good “modern” abstractions. People mentioned Git and the HTTP REST model in particular, describing them as clean, minimal, and composable. As for Git, I thought the object model was fine, but when it comes to repository composition, I was not so sure. Submodules seemed a bit limited, like an afterthought. If the concept of a repository had been modeled from the start using an algebraic structure, the concept of a morphism would surely have been defined, and composition taken into account from the beginning. And we might have solid ways today to compose repositories: product, sum, etc.</p>
+      <p>As for REST, I must admit that for me it mainly evoked entities addressable via URIs and actions via HTTP verbs, but I didn’t know much more than that. I was told: yes, but be careful, apps that claim to be REST are often just RPC over HTTP and JSON, not true REST. Ah, so what was true REST? Well, according to Fielding (the author of the original thesis), it was crucially HATEOAS: Hypermedia As The Engine of Application State. To put it simply, after the server receives a request (an action on a URI), it returns a list of URIs with possible actions. Here is an example of a response:</p>
+      <div class="sourceCode" id="cb1"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;account_id&quot;</span><span class="fu">:</span> <span class="st">&quot;12345&quot;</span><span class="fu">,</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;balance&quot;</span><span class="fu">:</span> <span class="fl">100.0</span><span class="fu">,</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;_links&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
@@ -552,113 +456,60 @@ formal alternative.</h1>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;history&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">&quot;href&quot;</span><span class="fu">:</span> <span class="st">&quot;/accounts/12345/transactions&quot;</span><span class="fu">,</span> <span class="dt">&quot;method&quot;</span><span class="fu">:</span> <span class="st">&quot;GET&quot;</span> <span class="fu">}</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
-      <p>The client then knows what it can do: deposit money, withdraw
-      money, view the history. If, following the previous action, the
-      account balance had dropped to 0, the server would not have sent
-      the link to withdraw money. The server therefore manages state
-      transitions: it returns only the transitions that are valid for
-      the current state. The client, in theory, does not need to know
-      the interface in advance; it discovers it through the server’s
-      responses. Another benefit is that the server can modify the
-      interface freely: it can add new actions (for example, a transfer
-      to a third-party account) or remove them. No prior, external
-      contract between the server and the client—everything is dynamic;
-      it’s great.</p>
-      <h1 id="disillusionment">Disillusionment</h1>
-      <p>Or is that not the case? Alright, the system can work with
-      humans, who are capable of understanding actions even if they are
-      new (undo, view history, etc.), but what about machines? How could
-      a machine know what to do with a new action, such as “history”? We
-      can see two possible solutions here:</p>
+      <p>The client then knows what it can do: deposit money, withdraw money, view the history. If, following the previous action, the account balance had dropped to 0, the server would not have sent the link to withdraw money. The server therefore manages state transitions: it returns only the transitions that are valid for the current state. The client, in theory, does not need to know the interface in advance; it discovers it through the server’s responses. Another benefit is that the server can modify the interface freely: it can add new actions (for example, a transfer to a third-party account) or remove them. No prior, external contract between the server and the client—everything is dynamic; it’s great.</p>
+      <h2 id="disillusionment">Disillusionment</h2>
+      <p>Or is that not the case? Alright, the system can work with humans, who are capable of understanding actions even if they are new (undo, view history, etc.), but what about machines? How could a machine know what to do with a new action, such as “history”? We can see two possible solutions here:</p>
       <ol type="1">
-      <li><p>a prior agreement between the client and the server is
-      required, but that’s exactly what we were trying to avoid</p></li>
-      <li><p>a meta-system is needed to interpret the new
-      action</p></li>
+      <li><p>a prior agreement between the client and the server is required, but that’s exactly what we were trying to avoid</p></li>
+      <li><p>a meta-system is needed to interpret the new action</p></li>
       </ol>
-      <p>Solution 1 contradicts the initial goal, and solution 2
-      requires something like the Semantic Web—a massive infrastructure
-      that hasn’t lived up to its promises so far.</p>
-      <p>I had been sold on true REST as an example of good “modern”
-      abstraction, but the result left me a bit unsatisfied. So I
-      decided to delve into these issues (entities, actions, contracts)
-      and settle the problem once and for all (or try to).</p>
-      <h1 id="avanti">Avanti</h1>
-      <p>What exactly did we need? Why not start with a short list? We
-      needed:</p>
+      <p>Solution 1 contradicts the initial goal, and solution 2 requires something like the Semantic Web—a massive infrastructure that hasn’t lived up to its promises so far.</p>
+      <p>I had been sold on true REST as an example of good “modern” abstraction, but the result left me a bit unsatisfied. So I decided to delve into these issues (entities, actions, contracts) and settle the problem once and for all (or try to).</p>
+      <h2 id="avanti">Avanti</h2>
+      <p>What exactly did we need? Why not start with a short list? We needed:</p>
       <ul>
-      <li><p>Entities, of course. For instance, bank accounts, people,
-      etc.</p></li>
-      <li><p>Coordinates. Entities needed these to be manipulable. Or,
-      to put it more technically, they had to be addressable.</p></li>
-      <li><p>Relationships between entities: the owner of an account,
-      the age of a person, etc.</p></li>
-      <li><p>Changes in entities over time. Entities could appear,
-      change, disappear.</p></li>
+      <li><p>Entities, of course. For instance, bank accounts, people, etc.</p></li>
+      <li><p>Coordinates. Entities needed these to be manipulable. Or, to put it more technically, they had to be addressable.</p></li>
+      <li><p>Relationships between entities: the owner of an account, the age of a person, etc.</p></li>
+      <li><p>Changes in entities over time. Entities could appear, change, disappear.</p></li>
       </ul>
-      <p>From a practical point of view, what actions could be
-      standardized? First, the actions involving changes to entities:
-      create, alter, delete. Perhaps also tracing, that is, viewing an
-      entity’s history, its past states. But tracing seemed different,
-      more in the realm of properties, whereas the others were strictly
-      speaking actions. To simplify, I decided to extend the concept of
-      action to include tracing.</p>
-      <p>Another question: should entities and actions be represented in
-      the same way? At first glance, no—they were truly different things
-      (a loose intuition might be that in a category, objects and
-      morphisms are of a different nature).</p>
-      <p>Before going any further, it might be helpful to give an
-      example.</p>
-      <h2 id="example">Example</h2>
+      <p>From a practical point of view, what actions could be standardized? First, the actions involving changes to entities: create, alter, delete. Perhaps also tracing, that is, viewing an entity’s history, its past states. But tracing seemed different, more in the realm of properties, whereas the others were strictly speaking actions. To simplify, I decided to extend the concept of action to include tracing.</p>
+      <p>Another question: should entities and actions be represented in the same way? At first glance, no—they were truly different things (a loose intuition might be that in a category, objects and morphisms are of a different nature).</p>
+      <p>Before going any further, it might be helpful to give an example.</p>
+      <h3 id="example">Example</h3>
       <ol start="0" type="1">
       <li><p>Initially, there are no entities:</p>
       <p><!-- The comments in this section describe image contents. --></p>
-      <p><!-- H(0) = {} --> <img src="/assets/img/h0.svg"
-      alt="no entity" /></p></li>
+      <p><!-- H(0) = {} --> <img src="/assets/img/h0.svg" alt="no entity" /></p></li>
       <li><p>We create the entity “Bob”:</p>
-      <p><!-- H(1) = {(Bob, id, Bob)} --> <img src="/assets/img/h1.svg"
-      alt="entity Bob" /></p></li>
-      <li><p>We create the entity “bank account 1,” which is linked to
-      “Bob” by the “owner” relationship (Bob is the owner of bank
-      account 1):</p>
+      <p><!-- H(1) = {(Bob, id, Bob)} --> <img src="/assets/img/h1.svg" alt="entity Bob" /></p></li>
+      <li><p>We create the entity “bank account 1,” which is linked to “Bob” by the “owner” relationship (Bob is the owner of bank account 1):</p>
       <p><!-- H(2) = {
                (Bob, id, Bob),
                (bank account 1, id, bank account 1),
                (bank account 1, owner, Bob)
-           } --> <img src="/assets/img/h2.svg"
-      alt="bank account 1 owned by Bob" /></p></li>
-      <li><p>We create an entity “bank account 2”, also owned by
-      “Bob”:</p>
+           } --> <img src="/assets/img/h2.svg" alt="bank account 1 owned by Bob" /></p></li>
+      <li><p>We create an entity “bank account 2”, also owned by “Bob”:</p>
       <p><!-- H(3) = {
                (Bob, id, Bob),
                (bank account 1, id, bank account 1),
                (bank account 1, owner, Bob),
                (bank account 2, id, bank account 2),
                (bank account 2, owner, Bob)
-           } --> <img src="/assets/img/h3.svg"
-      alt="bank accounts 1 and 2 owned by Bob" /></p>
-      <p>Note: We may also want to account for the concept of a set, for
-      example, the set of bank accounts.</p></li>
-      <li><p>We delete “bank account 2”, which also deletes the
-      ownership relationship with Bob:</p>
+           } --> <img src="/assets/img/h3.svg" alt="bank accounts 1 and 2 owned by Bob" /></p>
+      <p>Note: We may also want to account for the concept of a set, for example, the set of bank accounts.</p></li>
+      <li><p>We delete “bank account 2”, which also deletes the ownership relationship with Bob:</p>
       <p><!-- H(4) = {
                (Bob, id, Bob),
                (bank account 1, id, bank account 1),
                (bank account 1, owner, Bob),
-           } -->
-      <!-- ![bank account 1 owned by Bob](/assets/img/h4.svg) --> <img
-      src="/assets/img/h2.svg"
-      alt="bank account 1 owned by Bob" /></p></li>
-      <li><p>We delete “Bob”, which also deletes the ownership
-      relationship with “bank account 1”:</p>
+           } --> <!-- ![bank account 1 owned by Bob](/assets/img/h4.svg) --> <img src="/assets/img/h2.svg" alt="bank account 1 owned by Bob" /></p></li>
+      <li><p>We delete “Bob”, which also deletes the ownership relationship with “bank account 1”:</p>
       <p><!-- H(5) = {
                (bank account 1, id, bank account 1)
-           } --> <img src="/assets/img/h5.svg"
-      alt="bank account 1" /></p></li>
+           } --> <img src="/assets/img/h5.svg" alt="bank account 1" /></p></li>
       </ol>
-      <p>Additionally, if we want to add information, such as Bob’s age
-      or the balance of bank account 1, we can always add
-      properties:</p>
+      <p>Additionally, if we want to add information, such as Bob’s age or the balance of bank account 1, we can always add properties:</p>
       <!-- {
               (Bob, id, Bob),
               (bank account 1, id, bank account 1),
@@ -666,54 +517,32 @@ formal alternative.</h1>
               (Bob, age, 23),
               (bank account 1, balance, 100)
           } -->
-      <img src="/assets/img/extra_properties.svg"
-      alt="bank account 1 owned by Bob, with extra properties (age 23 for Bob and balance 100 for bank account 1)" />
-      <h1 id="beginning-of-formalization">Beginning of
-      Formalization</h1>
-      <p>Let’s revisit the previous example. We have a sequence of
-      states, each state consisting of entities and relationships.
-      Transitions from one state to another correspond to the actions
-      create, alter, and delete. To describe the relationships, the
-      simplest approach is to use predicates in the form of triples
-      (subject, predicate, object). In a triple, the predicate
-      corresponds to an arrow, the subject to the entity at the source
-      of the arrow, and the object to the entity at the destination of
-      the arrow. An entity is represented by an identity relation of the
-      entity to itself in order to form a triple.</p>
-      <p>If we denote the sequence of states by <span
-      class="math inline">H</span>, for “History,” and follow the
-      numbering from the example, we obtain:</p>
+      <img src="/assets/img/extra_properties.svg" alt="bank account 1 owned by Bob, with extra properties (age 23 for Bob and balance 100 for bank account 1)" />
+      <h2 id="beginning-of-formalization">Beginning of Formalization</h2>
+      <p>Let’s revisit the previous example. We have a sequence of states, each state consisting of entities and relationships. Transitions from one state to another correspond to the actions create, alter, and delete. To describe the relationships, the simplest approach is to use predicates in the form of triples (subject, predicate, object). In a triple, the predicate corresponds to an arrow, the subject to the entity at the source of the arrow, and the object to the entity at the destination of the arrow. An entity is represented by an identity relation of the entity to itself in order to form a triple.</p>
+      <p>If we denote the sequence of states by <span class="math inline">H</span>, for “History,” and follow the numbering from the example, we obtain:</p>
       <span class="math display">\begin{equation*}\begin{aligned}
       &amp;• H(0) = \{\}\\
       &amp;\\
       &amp;• H(1) = \{ (Bob,~ id,~ Bob) \}\\
       &amp;\\
       &amp;• H(2) = \{ (Bob,~ id,~ Bob),~\\
-      &amp;\quad \quad \quad \quad \quad (bank~account~1,~ id,~
-      bank~account~1),~\\
-      &amp;\quad \quad \quad \quad \quad (bank~account~1,~ owner,~ Bob)
-      \}\\
+      &amp;\quad \quad \quad \quad \quad (bank~account~1,~ id,~ bank~account~1),~\\
+      &amp;\quad \quad \quad \quad \quad (bank~account~1,~ owner,~ Bob) \}\\
       &amp;\\
       &amp;• H(3) = \{ (Bob,~ id,~ Bob),~\\
-      &amp;\quad \quad \quad \quad \quad (bank~account~1,~ id,~
-      bank~account~1),~\\
-      &amp;\quad \quad \quad \quad \quad (bank~account~1,~ owner,~
-      Bob),~\\
-      &amp;\quad \quad \quad \quad \quad (bank~account~2,~ id,~
-      bank~account~2),~\\
-      &amp;\quad \quad \quad \quad \quad (bank~account~2,~ owner,~ Bob)
-      \}\\
+      &amp;\quad \quad \quad \quad \quad (bank~account~1,~ id,~ bank~account~1),~\\
+      &amp;\quad \quad \quad \quad \quad (bank~account~1,~ owner,~ Bob),~\\
+      &amp;\quad \quad \quad \quad \quad (bank~account~2,~ id,~ bank~account~2),~\\
+      &amp;\quad \quad \quad \quad \quad (bank~account~2,~ owner,~ Bob) \}\\
       &amp;\\
       &amp;• H(4) = \{ (Bob,~ id,~ Bob),~\\
-      &amp;\quad \quad \quad \quad \quad (bank~account~1,~ id,~
-      bank~account~1),~\\
-      &amp;\quad \quad \quad \quad \quad (bank~account~1,~ owner,~ Bob)
-      \}\\
+      &amp;\quad \quad \quad \quad \quad (bank~account~1,~ id,~ bank~account~1),~\\
+      &amp;\quad \quad \quad \quad \quad (bank~account~1,~ owner,~ Bob) \}\\
       &amp;\\
       &amp;• H(5) = \{ (bank~account~1,~ id,~ bank~account~1) \}
       \end{aligned}\end{equation*}</span>
-      <p>For illustration, a state including Bob’s age and the balance
-      of bank account 1 would look like:</p>
+      <p>For illustration, a state including Bob’s age and the balance of bank account 1 would look like:</p>
       <span class="math display">\begin{equation*}\begin{aligned}
       &amp;\{ (Bob,~ id,~ Bob),~\\
       &amp;\quad (bank~account~1\},~ id,~ bank~account~1),~\\
@@ -724,533 +553,283 @@ formal alternative.</h1>
       &amp;\quad (bank~account~1,~ balance,~ 100) \}
       \end{aligned}\end{equation*}</span>
       <p>We now formalize this intuition.</p>
-      <h1 id="formalization">Formalization</h1>
-      <p>We will proceed in an incremental way, with several models
-      named <span class="math inline">M_{0}</span>, <span
-      class="math inline">M_{1}</span>…, each adding new features.</p>
-      <h2 id="model-m₀">Model <span
-      class="math inline">M_{0}</span></h2>
-      <p>Let <span class="math inline">M_{0}</span> be the model
-      composed of:</p>
+      <h2 id="formalization">Formalization</h2>
+      <p>We will proceed in an incremental way, with several models named <span class="math inline">M_{0}</span>, <span class="math inline">M_{1}</span>…, each adding new features.</p>
+      <h3 id="model-m₀">Model <span class="math inline">M_{0}</span></h3>
+      <p>Let <span class="math inline">M_{0}</span> be the model composed of:</p>
       <ul>
-      <li><p><span class="math inline">E</span>, the set of all possible
-      entities. <span class="math inline">E</span> contains notably all
-      numbers.</p></li>
-      <li><p><span class="math inline">State</span>, the set of all
-      possible states, where a state is a set of entities and relations.
-      <span class="math inline">State = Subset(E × E × E)</span></p>
-      <p>Entities and relations are modeled in the same way. An entity
-      Bob is modeled as a triple <span class="math inline">(Bob,~ id,~
-      Bob)</span>, as shown above.</p></li>
-      <li><p><span class="math inline">create</span>, a function that
-      adds to the state an entity with the relations of which it is the
-      subject:</p>
+      <li><p><span class="math inline">E</span>, the set of all possible entities. <span class="math inline">E</span> contains notably all numbers.</p></li>
+      <li><p><span class="math inline">State</span>, the set of all possible states, where a state is a set of entities and relations. <span class="math inline">State = Subset(E × E × E)</span></p>
+      <p>Entities and relations are modeled in the same way. An entity Bob is modeled as a triple <span class="math inline">(Bob,~ id,~ Bob)</span>, as shown above.</p></li>
+      <li><p><span class="math inline">create</span>, a function that adds to the state an entity with the relations of which it is the subject:</p>
       <span class="math display">\begin{equation*}\begin{aligned}
       &amp;create : State × E × Subset(E × E) → State\\
       &amp;create(state,~ entity,~ relations) =\\
       &amp;\quad state ∪ \{ (entity,~ id,~ entity) \}\\
-      &amp;\quad \quad \quad \quad ∪ \{ (entity,~ predicate,~ object) ∈
-      E × E × E ~|~\\
-      &amp;\quad \quad \quad \quad \quad \quad \quad (predicate,~
-      object) ∈ relations \}
+      &amp;\quad \quad \quad \quad ∪ \{ (entity,~ predicate,~ object) ∈ E × E × E ~|~\\
+      &amp;\quad \quad \quad \quad \quad \quad \quad (predicate,~ object) ∈ relations \}
       \end{aligned}\end{equation*}</span></li>
-      <li><p><span class="math inline">delete</span>, a function that
-      removes from the state entities with any triple in which they
-      appear:</p>
+      <li><p><span class="math inline">delete</span>, a function that removes from the state entities with any triple in which they appear:</p>
       <span class="math display">\begin{equation*}\begin{aligned}
       &amp;delete : State × Subset(E) → State\\
       &amp;delete(state,~ entities) =\\
-      &amp;\quad state ∖ \{ (subject,~ predicate,~ object) ∈ E × E × E
-      ~|~\\
-      &amp;\quad \quad \quad \quad \quad \quad \quad subject ∈ entities
-      ∨ object ∈ entities \}
+      &amp;\quad state ∖ \{ (subject,~ predicate,~ object) ∈ E × E × E ~|~\\
+      &amp;\quad \quad \quad \quad \quad \quad \quad subject ∈ entities ∨ object ∈ entities \}
       \end{aligned}\end{equation*}</span>
-      <p>Note that <span class="math inline">delete</span> can be used
-      to remove several entities at once.</p></li>
+      <p>Note that <span class="math inline">delete</span> can be used to remove several entities at once.</p></li>
       </ul>
-      <h2 id="implementation-of-m₀">Implementation of <span
-      class="math inline">M_{0}</span></h2>
-      <p><span class="math inline">M_{0}</span> can be implemented as a
-      client-server protocol. The client sends commands and the server
-      updates its state. The commands are <code>CREATE</code> and
-      <code>DELETE</code>. Each command takes one or more parameters and
-      may have a body. For example:</p>
+      <h3 id="implementation-of-m₀">Implementation of <span class="math inline">M_{0}</span></h3>
+      <p><span class="math inline">M_{0}</span> can be implemented as a client-server protocol. The client sends commands and the server updates its state. The commands are <code>CREATE</code> and <code>DELETE</code>. Each command takes one or more parameters and may have a body. For example:</p>
       <ul>
       <li><p><code>CREATE path { key1: value1, key2: value2, ... }</code></p></li>
       <li><p><code>DELETE path</code></p></li>
       </ul>
-      <p>In the case of <code>DELETE</code>, <code>path</code>
-      designates a single entity (e.g. <code>/bank-accounts/1</code>) or
-      a set of entities (e.g. <code>/bank-accounts</code>). To unify, we
-      will consider that a path always designates a set of entities, the
-      single-entity case being considered as a set containing this
-      single entity. We will say that some entities exist at a given
-      path.</p>
-      <p>In the case of <code>CREATE</code>, the path must designate an
-      empty set, i.e. there must not be any entity at this path. The
-      body, enclosed in curly brackets, contains key / value pairs. Each
-      key represents a predicate and each value the object of the
-      predicate. The subject is the new entity to be created.</p>
-      <p>We define the semantics of the protocol by the function <span
-      class="math inline">m</span>, which takes a syntactic element to
-      be interpreted and the state in which to perform this
-      interpretation:</p>
+      <p>In the case of <code>DELETE</code>, <code>path</code> designates a single entity (e.g. <code>/bank-accounts/1</code>) or a set of entities (e.g. <code>/bank-accounts</code>). To unify, we will consider that a path always designates a set of entities, the single-entity case being considered as a set containing this single entity. We will say that some entities exist at a given path.</p>
+      <p>In the case of <code>CREATE</code>, the path must designate an empty set, i.e. there must not be any entity at this path. The body, enclosed in curly brackets, contains key / value pairs. Each key represents a predicate and each value the object of the predicate. The subject is the new entity to be created.</p>
+      <p>We define the semantics of the protocol by the function <span class="math inline">m</span>, which takes a syntactic element to be interpreted and the state in which to perform this interpretation:</p>
       <ul>
-      <li><p><span class="math inline">m(\texttt{CREATE path \{ key1:
-      value1,~ ... \}},~ state) =</span> <span
-      class="math inline">~~create(state,~ e,~ \{ (m(\texttt{key1},~
-      state),~ m(\texttt{value1},~ state)),~ ... \})</span> where:</p>
+      <li><p><span class="math inline">m(\texttt{CREATE path \{ key1: value1,~ ... \}},~ state) =</span> <span class="math inline">~~create(state,~ e,~ \{ (m(\texttt{key1},~ state),~ m(\texttt{value1},~ state)),~ ... \})</span> where:</p>
       <ul>
-      <li><p><span class="math inline">m(\texttt{path},~ state) =
-      \{\}</span> – no entity at path</p></li>
-      <li><p><span class="math inline">(e,~ id,~ e) ∉ state</span> – e
-      is not an entity in state</p></li>
+      <li><p><span class="math inline">m(\texttt{path},~ state) = \{\}</span> – no entity at path</p></li>
+      <li><p><span class="math inline">(e,~ id,~ e) ∉ state</span> – e is not an entity in state</p></li>
       </ul></li>
-      <li><p><span class="math inline">m(\texttt{DELETE path},~ state) =
-      delete(state,~ m(\texttt{path},~ state))</span></p></li>
+      <li><p><span class="math inline">m(\texttt{DELETE path},~ state) = delete(state,~ m(\texttt{path},~ state))</span></p></li>
       </ul>
-      <h3 id="example-1">Example</h3>
-      <p>Here is an example of a sequence of commands. The state is
-      initially empty (no entity and no relation).</p>
+      <h4 id="example-1">Example</h4>
+      <p>Here is an example of a sequence of commands. The state is initially empty (no entity and no relation).</p>
       <ul>
       <li><code>CREATE /Bob {}</code></li>
       </ul>
-      <p>Resulting state: contains only the entity <code>/Bob</code>.
-      Note that we name here the entity following its path. This is
-      merely for convenience, to avoid having to invent a new name.
-      Beware that this is just a naming convention and that paths and
-      entities are different notions.</p>
+      <p>Resulting state: contains only the entity <code>/Bob</code>. Note that we name here the entity following its path. This is merely for convenience, to avoid having to invent a new name. Beware that this is just a naming convention and that paths and entities are different notions.</p>
       <ul>
       <li><code>CREATE /bank-accounts/1 { owner: /Bob }</code></li>
       </ul>
-      <p>Resulting state: contains also an arrow from
-      <code>/bank-accounts/1</code> to <code>/Bob</code>.</p>
+      <p>Resulting state: contains also an arrow from <code>/bank-accounts/1</code> to <code>/Bob</code>.</p>
       <ul>
       <li><code>CREATE /bank-accounts/2 { owner: /Bob }</code></li>
       </ul>
-      <p>Resulting state: contains also an arrow from
-      <code>/bank-accounts/2</code> to <code>/Bob</code>.</p>
+      <p>Resulting state: contains also an arrow from <code>/bank-accounts/2</code> to <code>/Bob</code>.</p>
       <ul>
       <li><code>DELETE /bank-accounts/2</code></li>
       </ul>
-      <p>Resulting state: contains only an arrow from
-      <code>/bank-accounts/1</code> to <code>/Bob</code>.</p>
+      <p>Resulting state: contains only an arrow from <code>/bank-accounts/1</code> to <code>/Bob</code>.</p>
       <ul>
       <li><code>DELETE /Bob</code></li>
       </ul>
-      <p>Resulting state: contains only
-      <code>/bank-accounts/1</code>.</p>
-      <h2 id="model-m₁-alteration">Model <span
-      class="math inline">M_{1}</span>: Alteration</h2>
-      <p>In <span class="math inline">M_{0}</span>, if we want to alter
-      an entity, we have to delete it and create a new one. If we
-      consider that each state is observable, this can pose a problem
-      because the alteration is not atomic. Moreover, deletion removes
-      the triples whose object is the entity while creation only add
-      triples whose subject is the entity, so a deletion followed by a
-      creation may lose information. Concretely,
-      <code>DELETE /Bob</code> wipes
-      <code>(bank-accounts/1, owner, Bob)</code> but a subsequent
-      <code>CREATE /Bob {age: 23}</code> does not restore it. We
-      therefore provide:</p>
+      <p>Resulting state: contains only <code>/bank-accounts/1</code>.</p>
+      <h3 id="model-m₁-alteration">Model <span class="math inline">M_{1}</span>: Alteration</h3>
+      <p>In <span class="math inline">M_{0}</span>, if we want to alter an entity, we have to delete it and create a new one. If we consider that each state is observable, this can pose a problem because the alteration is not atomic. Moreover, deletion removes the triples whose object is the entity while creation only add triples whose subject is the entity, so a deletion followed by a creation may lose information. Concretely, <code>DELETE /Bob</code> wipes <code>(bank-accounts/1, owner, Bob)</code> but a subsequent <code>CREATE /Bob {age: 23}</code> does not restore it. We therefore provide:</p>
       <ul>
-      <li><p><span class="math inline">alter</span>, a function for
-      alteration defined not in terms of creation and deletion:</p>
+      <li><p><span class="math inline">alter</span>, a function for alteration defined not in terms of creation and deletion:</p>
       <span class="math display">\begin{equation*}\begin{aligned}
       &amp;alter : State × E × Subset(E × E) → State\\
       &amp;alter(state,~ entity,~ relations) =\\
-      &amp;\quad (state ∖ \{ (entity,~ p,~ o) ∈ state ~|~ p ∈
-      predicates(relations) \})\\
+      &amp;\quad (state ∖ \{ (entity,~ p,~ o) ∈ state ~|~ p ∈ predicates(relations) \})\\
       &amp;\quad \quad ∪ \{ (entity,~ p,~ o) ~|~ (p,~ o) ∈ relations \}
       \end{aligned}\end{equation*}</span>
       <p>where:</p>
       <ul>
-      <li><span class="math inline">predicates(relations) = \{ p ~|~
-      (p,~ \_) ∈ relations \}</span></li>
+      <li><span class="math inline">predicates(relations) = \{ p ~|~ (p,~ \_) ∈ relations \}</span></li>
       </ul></li>
-      <li><p><span class="math inline">m(\texttt{ALTER path \{ key1:
-      value1,~ ... \}},~ state) =</span> <span
-      class="math inline">alter(state,~ entity,~ \{ (m(\texttt{key1},~
-      state),~ m(\texttt{value1},~ state)),~ ... \})</span> where:</p>
+      <li><p><span class="math inline">m(\texttt{ALTER path \{ key1: value1,~ ... \}},~ state) =</span> <span class="math inline">alter(state,~ entity,~ \{ (m(\texttt{key1},~ state),~ m(\texttt{value1},~ state)),~ ... \})</span> where:</p>
       <ul>
-      <li><span class="math inline">m(\texttt{path},~ state) =
-      \{entity\}</span></li>
+      <li><span class="math inline">m(\texttt{path},~ state) = \{entity\}</span></li>
       </ul></li>
       </ul>
-      <p>Alteration suggests that entities can change, which is not true
-      in <span class="math inline">M_{1}</span> since entities are
-      values, i.e. they are immutable. However a path, which is a notion
-      that is external to <span class="math inline">M_{1}</span>,
-      provides an identity by allowing to relate the potentially
-      different entities that live at the same path in different states.
-      In this sense, a path plays the role of a variable.</p>
-      <p>However, <span class="math inline">M_{1}</span> has a notion of
-      execution. An execution is a sequence of commands <span
-      class="math inline">c_{0}</span>, <span
-      class="math inline">c_{1}</span>, … The state then evolves
-      inductively:</p>
+      <p>Alteration suggests that entities can change, which is not true in <span class="math inline">M_{1}</span> since entities are values, i.e. they are immutable. However a path, which is a notion that is external to <span class="math inline">M_{1}</span>, provides an identity by allowing to relate the potentially different entities that live at the same path in different states. In this sense, a path plays the role of a variable.</p>
+      <p>However, <span class="math inline">M_{1}</span> has a notion of execution. An execution is a sequence of commands <span class="math inline">c_{0}</span>, <span class="math inline">c_{1}</span>, … The state then evolves inductively:</p>
       <ul>
-      <li><p><span class="math inline">state_{0} = \{\}</span> – the
-      empty set</p></li>
-      <li><p><span class="math inline">state_{n+1} = m(command_{n},~
-      state_{n})</span></p></li>
+      <li><p><span class="math inline">state_{0} = \{\}</span> – the empty set</p></li>
+      <li><p><span class="math inline">state_{n+1} = m(command_{n},~ state_{n})</span></p></li>
       </ul>
-      <h2 id="model-m₂-history">Model <span
-      class="math inline">M_{2}</span>: History</h2>
-      <p>We may be interested in the successive relations of the entity
-      living at a given path. By an abuse of language, we will say
-      equivalently that we watch an entity. Watching an entity means
-      getting the relations of which it is the subject, from its
-      creation to its deletion.</p>
-      <p>To this end, we define the history <span
-      class="math inline">H</span> of an execution. <span
-      class="math inline">H</span> is a sequence of (state, command)
-      pairs, defined by:</p>
+      <h3 id="model-m₂-history">Model <span class="math inline">M_{2}</span>: History</h3>
+      <p>We may be interested in the successive relations of the entity living at a given path. By an abuse of language, we will say equivalently that we watch an entity. Watching an entity means getting the relations of which it is the subject, from its creation to its deletion.</p>
+      <p>To this end, we define the history <span class="math inline">H</span> of an execution. <span class="math inline">H</span> is a sequence of (state, command) pairs, defined by:</p>
       <ul>
       <li><p><span class="math inline">H: History</span> where:</p>
       <ul>
-      <li><span class="math inline">History = ℕ → State ×
-      Command</span></li>
-      <li><span class="math inline">Command = \{ \texttt{CREATE p
-      \{...\}},~ \texttt{ALTER p \{...\}},~ \texttt{DELETE p}
-      \}</span></li>
+      <li><span class="math inline">History = ℕ → State × Command</span></li>
+      <li><span class="math inline">Command = \{ \texttt{CREATE p \{...\}},~ \texttt{ALTER p \{...\}},~ \texttt{DELETE p} \}</span></li>
       </ul></li>
-      <li><p><span class="math inline">H(0) = (\{\},~ ⊥)</span> where
-      <span class="math inline">⊥</span> denotes the lack of command
-      leading to the initial state</p></li>
-      <li><p><span class="math inline">H(n+1) = (m(command_{n},~
-      H(n).state),~ command_{n})</span></p></li>
+      <li><p><span class="math inline">H(0) = (\{\},~ ⊥)</span> where <span class="math inline">⊥</span> denotes the lack of command leading to the initial state</p></li>
+      <li><p><span class="math inline">H(n+1) = (m(command_{n},~ H(n).state),~ command_{n})</span></p></li>
       </ul>
-      <p><span class="math inline">H</span> is not an independent object
-      — it is uniquely determined by the command sequence. <span
-      class="math inline">M_{2}</span> does not add new data, it adds a
-      new perspective on what <span class="math inline">M_{1}</span>
-      already produces.</p>
-      <p>Note that <span class="math inline">H</span> is the complete
-      history, including past and future.</p>
-      <p>We want to watch an entity until it is deleted. We introduce
-      the <code>WATCH</code> command which returns a sequence of
-      relations where the entity at <code>path</code> is the subject.
-      The command watches an entity over at most the interval from <span
-      class="math inline">state_{n}</span> to <span
-      class="math inline">stateₘ</span>, with <span
-      class="math inline">n ≤ m</span>. This is a maximal interval since
-      it is bounded by the lifetime of the entity at <code>path</code>,
-      i.e. from its creation to its destruction.</p>
+      <p><span class="math inline">H</span> is not an independent object — it is uniquely determined by the command sequence. <span class="math inline">M_{2}</span> does not add new data, it adds a new perspective on what <span class="math inline">M_{1}</span> already produces.</p>
+      <p>Note that <span class="math inline">H</span> is the complete history, including past and future.</p>
+      <p>We want to watch an entity until it is deleted. We introduce the <code>WATCH</code> command which returns a sequence of relations where the entity at <code>path</code> is the subject. The command watches an entity over at most the interval from <span class="math inline">state_{n}</span> to <span class="math inline">stateₘ</span>, with <span class="math inline">n ≤ m</span>. This is a maximal interval since it is bounded by the lifetime of the entity at <code>path</code>, i.e. from its creation to its destruction.</p>
       <ul>
       <li><code>WATCH path { from: n, to: m }</code></li>
       </ul>
       <p>This command covers at least two different use-cases:</p>
       <ol type="1">
-      <li><p>the history of an entity if <code>n</code> is in the past
-      and <code>m</code> is now</p></li>
-      <li><p>the subscription to future values if <code>n</code> is now
-      and <code>m</code> is in the future</p></li>
+      <li><p>the history of an entity if <code>n</code> is in the past and <code>m</code> is now</p></li>
+      <li><p>the subscription to future values if <code>n</code> is now and <code>m</code> is in the future</p></li>
       </ol>
-      <p>To define its semantics, we first define the <span
-      class="math inline">watch</span> function:</p>
+      <p>To define its semantics, we first define the <span class="math inline">watch</span> function:</p>
       <ul>
-      <li><p><span class="math inline">watch : Path × ℕ × ℕ × History →
-      Seq(Subset(E × E × E))</span> <span
-      class="math inline">watch(path,~ n,~ m,~ H) = (k ∈
-      0..(m&#39;-n&#39;-1) ↦ local(\texttt{path},~ n&#39;+k,~ H))</span>
-      where:</p>
+      <li><p><span class="math inline">watch : Path × ℕ × ℕ × History → Seq(Subset(E × E × E))</span> <span class="math inline">watch(path,~ n,~ m,~ H) = (k ∈ 0..(m&#39;-n&#39;-1) ↦ local(\texttt{path},~ n&#39;+k,~ H))</span> where:</p>
       <ul>
-      <li><p><span class="math inline">Seq(A) = ⋃ \{ 0..(len-1) → A ~|~
-      len ∈ ℕ \}</span> – the A-valued sequences of any length</p></li>
-      <li><p><span class="math inline">n&#39; = min(\{ k ∈ n..m ~|~
-      m(path,~ H(k).state) ≠ \{\} \} ∪ \{ m \})</span> – first state in
-      the interval with non-empty path</p></li>
-      <li><p><span class="math inline">m&#39; = min(\{ k ∈ n&#39;..m ~|~
-      m(path,~ H(k).state) = \{\} \} ∪ \{ m \})</span></p></li>
-      <li><p><span class="math inline">local(p,~ k,~ H) = \{ (s,~
-      predicate,~ object) ~|~ s ∈ m(p,~ H(k).state) ∧ (s,~ predicate,~
-      object) ∈ H(k).state \}</span> – all relations in state k where an
-      entity at p is the subject</p></li>
+      <li><p><span class="math inline">Seq(A) = ⋃ \{ 0..(len-1) → A ~|~ len ∈ ℕ \}</span> – the A-valued sequences of any length</p></li>
+      <li><p><span class="math inline">n&#39; = min(\{ k ∈ n..m ~|~ m(path,~ H(k).state) ≠ \{\} \} ∪ \{ m \})</span> – first state in the interval with non-empty path</p></li>
+      <li><p><span class="math inline">m&#39; = min(\{ k ∈ n&#39;..m ~|~ m(path,~ H(k).state) = \{\} \} ∪ \{ m \})</span></p></li>
+      <li><p><span class="math inline">local(p,~ k,~ H) = \{ (s,~ predicate,~ object) ~|~ s ∈ m(p,~ H(k).state) ∧ (s,~ predicate,~ object) ∈ H(k).state \}</span> – all relations in state k where an entity at p is the subject</p></li>
       </ul></li>
       </ul>
-      <p>Note that <span class="math inline">Seq(A)</span> includes the
-      empty sequence (<span class="math inline">len = 0</span>), because
-      <span class="math inline">0..(0-1)</span> is empty.</p>
-      <p>Note that if <span class="math inline">path</span> is empty
-      throughout <span class="math inline">n..m</span>, then <span
-      class="math inline">n&#39; = m</span>, <span
-      class="math inline">m&#39; = m</span> and the range becomes <span
-      class="math inline">0..-1</span>. Therefore, <span
-      class="math inline">watch</span> returns an empty sequence as
-      expected.</p>
-      <p>Also note that when <span class="math inline">path</span>
-      designates a set of entities, watching stops when the set becomes
-      empty. This can happen in two cases:</p>
+      <p>Note that <span class="math inline">Seq(A)</span> includes the empty sequence (<span class="math inline">len = 0</span>), because <span class="math inline">0..(0-1)</span> is empty.</p>
+      <p>Note that if <span class="math inline">path</span> is empty throughout <span class="math inline">n..m</span>, then <span class="math inline">n&#39; = m</span>, <span class="math inline">m&#39; = m</span> and the range becomes <span class="math inline">0..-1</span>. Therefore, <span class="math inline">watch</span> returns an empty sequence as expected.</p>
+      <p>Also note that when <span class="math inline">path</span> designates a set of entities, watching stops when the set becomes empty. This can happen in two cases:</p>
       <ol type="1">
-      <li><p>when the set is deleted
-      (e.g. <code>DELETE /bank-accounts</code>)</p></li>
-      <li><p>when all entities inside the set are deleted
-      (e.g. <code>DELETE /bank-accounts/1</code> ;
-      <code>DELETE /bank-accounts/2</code>)</p></li>
+      <li><p>when the set is deleted (e.g. <code>DELETE /bank-accounts</code>)</p></li>
+      <li><p>when all entities inside the set are deleted (e.g. <code>DELETE /bank-accounts/1</code> ; <code>DELETE /bank-accounts/2</code>)</p></li>
       </ol>
       <p>The model does not attempt to distinguish these two cases.</p>
-      <p>We define a new semantic function <span
-      class="math inline">w</span> that takes the history as input,
-      instead of a mere state as is the case for <span
-      class="math inline">m</span>:</p>
+      <p>We define a new semantic function <span class="math inline">w</span> that takes the history as input, instead of a mere state as is the case for <span class="math inline">m</span>:</p>
       <ul>
-      <li><span class="math inline">w: Command × History → Seq(Subset(E
-      × E × E))</span> <span class="math inline">w(\texttt{WATCH path \{
-      from: n,~ to: m \}},~ H) =
-      watch(\texttt{path},~\texttt{n},~\texttt{m},~ H)</span></li>
+      <li><span class="math inline">w: Command × History → Seq(Subset(E × E × E))</span> <span class="math inline">w(\texttt{WATCH path \{ from: n,~ to: m \}},~ H) = watch(\texttt{path},~\texttt{n},~\texttt{m},~ H)</span></li>
       </ul>
-      <h3 id="variants">Variants</h3>
-      <p>From the complete form, we define several variants of
-      <code>WATCH</code>:</p>
+      <h4 id="variants">Variants</h4>
+      <p>From the complete form, we define several variants of <code>WATCH</code>:</p>
       <ul>
-      <li><span class="math inline">w(\texttt{WATCH path \{ to: m \}},~
-      H) = w(\texttt{WATCH path \{ from: 0,~ to: m \}},~ H)</span></li>
+      <li><span class="math inline">w(\texttt{WATCH path \{ to: m \}},~ H) = w(\texttt{WATCH path \{ from: 0,~ to: m \}},~ H)</span></li>
       </ul>
-      <p>It is also possible to watch from a specific point. We assume
-      the entity at path is eventually created and eventually
-      deleted:</p>
+      <p>It is also possible to watch from a specific point. We assume the entity at path is eventually created and eventually deleted:</p>
       <ul>
-      <li><span class="math inline">w(\texttt{WATCH path \{ from: n
-      \}},~ H) = (k ∈ 0..(m&#39;-n&#39;-1) ↦ local(\texttt{path},~
-      n&#39;+k,~ H))</span> where:
+      <li><span class="math inline">w(\texttt{WATCH path \{ from: n \}},~ H) = (k ∈ 0..(m&#39;-n&#39;-1) ↦ local(\texttt{path},~ n&#39;+k,~ H))</span> where:
       <ul>
-      <li><p><span class="math inline">n&#39; = min(\{ k ∈ ℕ ~|~ k ≥
-      \texttt{n} ∧ m(\texttt{path}, H(k).state) ≠ \{\} \})</span> –
-      first state after n where some entities exist at path</p></li>
-      <li><p><span class="math inline">m&#39; = min(\{ k ∈ ℕ ~|~ k ≥
-      n&#39; ∧ m(\texttt{path}, H(k).state) = \{\} \})</span> – first
-      state after n’ where there is no entity at path</p></li>
+      <li><p><span class="math inline">n&#39; = min(\{ k ∈ ℕ ~|~ k ≥ \texttt{n} ∧ m(\texttt{path}, H(k).state) ≠ \{\} \})</span> – first state after n where some entities exist at path</p></li>
+      <li><p><span class="math inline">m&#39; = min(\{ k ∈ ℕ ~|~ k ≥ n&#39; ∧ m(\texttt{path}, H(k).state) = \{\} \})</span> – first state after n’ where there is no entity at path</p></li>
       </ul></li>
       </ul>
-      <p>When <span class="math inline">n</span> corresponds to now,
-      this models subscription.</p>
-      <h2 id="model-m₃-real-world-time">Model <span
-      class="math inline">M_{3}</span>: Real-world time</h2>
-      <p>In practice, we’d also like to use <code>WATCH</code> with
-      dates. This requires enriching the definition of <span
-      class="math inline">H</span> to add timestamps. Timestamps do not
-      come from the model, they come from the outside world. The only
-      assumptions on them are that they are totally ordered and can be
-      subtracted yielding a real or natural number. Since the model
-      cannot derive them inductively from previous states, we define a
-      timestamping function:</p>
+      <p>When <span class="math inline">n</span> corresponds to now, this models subscription.</p>
+      <h3 id="model-m₃-real-world-time">Model <span class="math inline">M_{3}</span>: Real-world time</h3>
+      <p>In practice, we’d also like to use <code>WATCH</code> with dates. This requires enriching the definition of <span class="math inline">H</span> to add timestamps. Timestamps do not come from the model, they come from the outside world. The only assumptions on them are that they are totally ordered and can be subtracted yielding a real or natural number. Since the model cannot derive them inductively from previous states, we define a timestamping function:</p>
       <ul>
       <li><span class="math inline">τ: ℕ → Timestamp</span></li>
       </ul>
-      <p><span class="math inline">τ(n)</span> is the timestamp assigned
-      to the n-th command. This function is external to the model — it
-      is provided by the environment. There is a single precondition on
-      <span class="math inline">τ</span>, namely that it should be
-      non-decreasing: <span class="math inline">τ(n) ≤ τ(n+1)</span> for
-      all <span class="math inline">n</span> since time does not go
-      backwards.</p>
-      <p>Then <span class="math inline">H</span> is redefined as
-      follows:</p>
+      <p><span class="math inline">τ(n)</span> is the timestamp assigned to the n-th command. This function is external to the model — it is provided by the environment. There is a single precondition on <span class="math inline">τ</span>, namely that it should be non-decreasing: <span class="math inline">τ(n) ≤ τ(n+1)</span> for all <span class="math inline">n</span> since time does not go backwards.</p>
+      <p>Then <span class="math inline">H</span> is redefined as follows:</p>
       <ul>
-      <li><p><span class="math inline">H: ℕ → State × Command ×
-      Timestamp</span></p></li>
-      <li><p><span class="math inline">H(0) = (\{\},~ ⊥,~
-      τ(0))</span></p></li>
-      <li><p><span class="math inline">H(n+1) = (m(command_{n},~
-      H(n).state),~ command_{n},~ τ(n+1))</span></p></li>
+      <li><p><span class="math inline">H: ℕ → State × Command × Timestamp</span></p></li>
+      <li><p><span class="math inline">H(0) = (\{\},~ ⊥,~ τ(0))</span></p></li>
+      <li><p><span class="math inline">H(n+1) = (m(command_{n},~ H(n).state),~ command_{n},~ τ(n+1))</span></p></li>
       </ul>
-      <p>We also define a function that gives all command indices at a
-      given timestamp:</p>
+      <p>We also define a function that gives all command indices at a given timestamp:</p>
       <ul>
-      <li><p><span class="math inline">index: Timestamp →
-      Subset(ℕ)</span></p>
-      <p><span class="math inline">index(t) = \{ k ~|~ τ(k) = t&#39;
-      \}</span> where:</p>
+      <li><p><span class="math inline">index: Timestamp → Subset(ℕ)</span></p>
+      <p><span class="math inline">index(t) = \{ k ~|~ τ(k) = t&#39; \}</span> where:</p>
       <ul>
-      <li><p><span class="math inline">t&#39; = min(\{ τ(k) ~|~ abs(t -
-      τ(k)) = d \})</span> – if no command bears exactly timestamp t, we
-      snap to the nearest one</p></li>
-      <li><p><span class="math inline">d = min(\{ abs(t - τ(k)) ~|~ k ∈
-      ℕ \})</span></p></li>
+      <li><p><span class="math inline">t&#39; = min(\{ τ(k) ~|~ abs(t - τ(k)) = d \})</span> – if no command bears exactly timestamp t, we snap to the nearest one</p></li>
+      <li><p><span class="math inline">d = min(\{ abs(t - τ(k)) ~|~ k ∈ ℕ \})</span></p></li>
       </ul></li>
       </ul>
-      <p>Note that <span class="math inline">d</span> exists since the
-      set of distances is non-empty and bounded below by 0.</p>
-      <p>Note: Contrary to <span class="math inline">M_{2}</span>, <span
-      class="math inline">H</span> depends not only on the command
-      sequence but also on the external function <span
-      class="math inline">τ</span>.</p>
-      <p>The semantics of the timestamped <code>WATCH</code> becomes
-      then simply:</p>
+      <p>Note that <span class="math inline">d</span> exists since the set of distances is non-empty and bounded below by 0.</p>
+      <p>Note: Contrary to <span class="math inline">M_{2}</span>, <span class="math inline">H</span> depends not only on the command sequence but also on the external function <span class="math inline">τ</span>.</p>
+      <p>The semantics of the timestamped <code>WATCH</code> becomes then simply:</p>
       <ul>
-      <li><span class="math inline">w(\texttt{WATCH path \{ from: t0,~
-      to: t1 \}},~ H) = watch(\texttt{path},~ min(index(\texttt{t0})),~
-      min(index(\texttt{t1})),~ H)</span></li>
+      <li><span class="math inline">w(\texttt{WATCH path \{ from: t0,~ to: t1 \}},~ H) = watch(\texttt{path},~ min(index(\texttt{t0})),~ min(index(\texttt{t1})),~ H)</span></li>
       </ul>
-      <p>We can also define a version where the range is left
-      implicit:</p>
+      <p>We can also define a version where the range is left implicit:</p>
       <ul>
-      <li><span class="math inline">w(\texttt{WATCH path},~ H) =
-      w(\texttt{WATCH path \{ from: now \}},~ H)</span> where:
+      <li><span class="math inline">w(\texttt{WATCH path},~ H) = w(\texttt{WATCH path \{ from: now \}},~ H)</span> where:
       <ul>
-      <li><span class="math inline">\texttt{now} ∈ Timestamp</span> and
-      is provided by the environment (it is external to the model)</li>
+      <li><span class="math inline">\texttt{now} ∈ Timestamp</span> and is provided by the environment (it is external to the model)</li>
       </ul></li>
       </ul>
-      <h2 id="model-m₄-read">Model <span
-      class="math inline">M_{4}</span>: Read</h2>
-      <p>A <code>READ</code> command can be added for convenience. It
-      adds no new expressive power, only notation:</p>
+      <h3 id="model-m₄-read">Model <span class="math inline">M_{4}</span>: Read</h3>
+      <p>A <code>READ</code> command can be added for convenience. It adds no new expressive power, only notation:</p>
       <ul>
-      <li><span class="math inline">w(\texttt{READ path},~ H) =
-      w(\texttt{WATCH path \{ from: now,~ to: now \}},~ H)</span> where:
+      <li><span class="math inline">w(\texttt{READ path},~ H) = w(\texttt{WATCH path \{ from: now,~ to: now \}},~ H)</span> where:
       <ul>
-      <li><span class="math inline">\texttt{now} ∈ Timestamp</span> and
-      is provided by the environment</li>
+      <li><span class="math inline">\texttt{now} ∈ Timestamp</span> and is provided by the environment</li>
       </ul></li>
       </ul>
-      <p>This definition therefore depends on the timestamped version of
-      <code>WATCH</code> defined in <span
-      class="math inline">M_{3}</span>.</p>
-      <h1 id="toy-implementation">Toy implementation</h1>
-      <p>We now present a toy implementation of the final model <span
-      class="math inline">M_{4}</span>. After the modeling work has been
-      done, we must still make explicit implementation choices. Once
-      these are made, the model and the implementation document together
-      define a precise scope for code generation: we used an LLM to
-      generate most of the code, and the precision of the input material
-      gave us a high degree of confidence in the result. Without the
-      prior modeling work, the same LLM would have been left to make its
-      own design decisions — with much less predictable outcomes. This
-      does not mean that a thorough human code review becomes
-      optional.</p>
-      <p>Technically, the implementation consists in creating a server
-      listening to requests on a TCP port, connected to a separate
-      database, notifying watchers on changes. The server handles one
-      persistent connection per client. Each line received is parsed as
-      a request.</p>
-      <p>The server is written in Python 3.14 with asyncio. It records
-      data (<code>CREATE</code>, <code>ALTER</code>,
-      <code>DELETE</code>) in a database known by its URL passed by env
-      var.</p>
-      <h2 id="database">Database</h2>
-      <p>The data is stored in a PostgreSQL 16 database. The tables
-      are:</p>
+      <p>This definition therefore depends on the timestamped version of <code>WATCH</code> defined in <span class="math inline">M_{3}</span>.</p>
+      <h2 id="toy-implementation">Toy implementation</h2>
+      <p>We now present a toy implementation of the final model <span class="math inline">M_{4}</span>. After the modeling work has been done, we must still make explicit implementation choices. Once these are made, the model and the implementation document together define a precise scope for code generation: we used an LLM to generate most of the code, and the precision of the input material gave us a high degree of confidence in the result. Without the prior modeling work, the same LLM would have been left to make its own design decisions — with much less predictable outcomes. This does not mean that a thorough human code review becomes optional.</p>
+      <p>Technically, the implementation consists in creating a server listening to requests on a TCP port, connected to a separate database, notifying watchers on changes. The server handles one persistent connection per client. Each line received is parsed as a request.</p>
+      <p>The server is written in Python 3.14 with asyncio. It records data (<code>CREATE</code>, <code>ALTER</code>, <code>DELETE</code>) in a database known by its URL passed by env var.</p>
+      <h3 id="database">Database</h3>
+      <p>The data is stored in a PostgreSQL 16 database. The tables are:</p>
       <ul>
       <li><p><code>Users {name, age}</code></p></li>
       <li><p><code>BankAccounts {id, owner, balance}</code></p></li>
       <li><p><code>Events {id, timestamp, command, path, body}</code></p></li>
       </ul>
-      <p><code>Users.name</code> is the primary key, mapping directly to
-      <code>/users/&lt;Name&gt;</code>. <code>BankAccounts.id</code> is
-      the primary key, mapping directly to
-      <code>/bank-accounts/&lt;id&gt;</code>.
-      <code>BankAccounts.owner</code> is a foreign key to
-      <code>Users</code> with <code>ON DELETE CASCADE</code>
-      constraint.</p>
-      <p><code>Events</code> is an append-only table. Every
-      <code>CREATE</code>, <code>ALTER</code>, <code>DELETE</code>
-      writes to <code>Events</code> in the same transaction. This is
-      what backs timestamped <code>WATCH</code> bursts (all states in
-      the past are sent at once, see below) and defines the “too far in
-      the past” error returned when the requested timestamp predates
-      retained history. History is unbounded (a configurable retention
-      window would be a possible extension).</p>
-      <h2 id="server-in-memory-state">Server in-memory state</h2>
-      <p>The server maintains in its in-memory state who watches what,
-      and sends answers to watchers.</p>
-      <p>Watchers are notified after commit, not inside the transaction.
-      This is to avoid notifying on a rolled-back write. We accept the
-      risk that a notification may not happen if the process crashes
-      between commit and notify.</p>
-      <p>On client disconnection, the watcher is silently dropped from
-      the in-memory state. We do not bother logging the disconnection
-      for observability.</p>
-      <h2 id="request-and-answer-grammars">Request and answer
-      grammars</h2>
+      <p><code>Users.name</code> is the primary key, mapping directly to <code>/users/&lt;Name&gt;</code>. <code>BankAccounts.id</code> is the primary key, mapping directly to <code>/bank-accounts/&lt;id&gt;</code>. <code>BankAccounts.owner</code> is a foreign key to <code>Users</code> with <code>ON DELETE CASCADE</code> constraint.</p>
+      <p><code>Events</code> is an append-only table. Every <code>CREATE</code>, <code>ALTER</code>, <code>DELETE</code> writes to <code>Events</code> in the same transaction. This is what backs timestamped <code>WATCH</code> bursts (all states in the past are sent at once, see below) and defines the “too far in the past” error returned when the requested timestamp predates retained history. History is unbounded (a configurable retention window would be a possible extension).</p>
+      <h3 id="server-in-memory-state">Server in-memory state</h3>
+      <p>The server maintains in its in-memory state who watches what, and sends answers to watchers.</p>
+      <p>Watchers are notified after commit, not inside the transaction. This is to avoid notifying on a rolled-back write. We accept the risk that a notification may not happen if the process crashes between commit and notify.</p>
+      <p>On client disconnection, the watcher is silently dropped from the in-memory state. We do not bother logging the disconnection for observability.</p>
+      <h3 id="request-and-answer-grammars">Request and answer grammars</h3>
       <pre><code>Request  := Command Path Body?
 Command  := &quot;CREATE&quot; | &quot;ALTER&quot; | &quot;DELETE&quot; | &quot;WATCH&quot; | &quot;READ&quot;
 Path     := (&quot;/&quot; Word)+
 Body     := &quot;{&quot; (KeyValue (&quot;,&quot; KeyValue)*)? &quot;}&quot;
 KeyValue := Word &quot;:&quot; (Word | Path)
 Word     := [a-zA-Z0-9_-]+</code></pre>
-      <p>Note: Blanks between tokens are omitted in the grammar but
-      allowed in practice.</p>
-      <p>Note: Values of <code>from</code> and <code>to</code> keys are
-      parsed as Timestamp (see below); all other values are Word or
-      Path.</p>
+      <p>Note: Blanks between tokens are omitted in the grammar but allowed in practice.</p>
+      <p>Note: Values of <code>from</code> and <code>to</code> keys are parsed as Timestamp (see below); all other values are Word or Path.</p>
       <pre><code>Timestamp := [a-zA-Z0-9_:+-]+</code></pre>
-      <p>Timestamps are ISO 8601 strings,
-      e.g. <code>2024-01-01T00:00:00Z</code>.</p>
+      <p>Timestamps are ISO 8601 strings, e.g. <code>2024-01-01T00:00:00Z</code>.</p>
       <p>Answers are also sent in plain text following this grammar:</p>
       <pre><code>Answer     := StatusCode Body
 StatusCode := [1-9][0-9][0-9]</code></pre>
-      <h2 id="answers">Answers</h2>
-      <h3 id="standard-answers">Standard answers</h3>
+      <h3 id="answers">Answers</h3>
+      <h4 id="standard-answers">Standard answers</h4>
       <p>Status codes follow HTTP.</p>
       <ol type="1">
       <li>If a request is malformed, the answer is:</li>
       </ol>
-      <p><code>400 { command: &lt;Command&gt;, path: &lt;Path&gt; }</code>
-      where <code>&lt;Command&gt;</code> and <code>&lt;Path&gt;</code>
-      are from the malformed request.</p>
+      <p><code>400 { command: &lt;Command&gt;, path: &lt;Path&gt; }</code> where <code>&lt;Command&gt;</code> and <code>&lt;Path&gt;</code> are from the malformed request.</p>
       <ol start="2" type="1">
-      <li>If a request fails because an entity does not exist at the
-      given path, the answer is:</li>
+      <li>If a request fails because an entity does not exist at the given path, the answer is:</li>
       </ol>
       <p><code>404 { path: &lt;Path&gt; }</code></p>
       <ol start="3" type="1">
-      <li>If the server encountered an internal problem, the answer
-      is:</li>
+      <li>If the server encountered an internal problem, the answer is:</li>
       </ol>
-      <p><code>500 { path: &lt;Path&gt;, reason: &lt;Text&gt; }</code>
-      with</p>
-      <h3 id="create">Create</h3>
+      <p><code>500 { path: &lt;Path&gt;, reason: &lt;Text&gt; }</code> with</p>
+      <h4 id="create">Create</h4>
       <ol type="1">
       <li><p>If a <code>CREATE</code> succeeds, the answer is:</p>
-      <p><code>201 { path: &lt;Path&gt; }</code> where
-      <code>&lt;Path&gt;</code> is from the request.</p></li>
-      <li><p>If a <code>CREATE</code> fails because an entity already
-      exists at the given path, the answer is:</p>
+      <p><code>201 { path: &lt;Path&gt; }</code> where <code>&lt;Path&gt;</code> is from the request.</p></li>
+      <li><p>If a <code>CREATE</code> fails because an entity already exists at the given path, the answer is:</p>
       <p><code>409 { path: &lt;Path&gt; }</code></p></li>
       </ol>
       <p>The server must handle the following create requests:</p>
       <ol type="1">
-      <li><p><code>CREATE /users/&lt;Name&gt; { age: &lt;Number&gt; }</code>
-      with</p>
+      <li><p><code>CREATE /users/&lt;Name&gt; { age: &lt;Number&gt; }</code> with</p>
       <pre><code>Name   := [a-zA-Z][a-zA-Z0-9_-]+
 Number := 0 | [1-9][0-9]*</code></pre></li>
       <li><p><code>CREATE /bank-accounts/&lt;Number&gt; { owner: /users/&lt;Name&gt;, balance: &lt;Number&gt; }</code></p>
-      <p>If there is no entity at <code>/users/&lt;Name&gt;</code>, a
-      404 answer is sent with this path.</p></li>
+      <p>If there is no entity at <code>/users/&lt;Name&gt;</code>, a 404 answer is sent with this path.</p></li>
       </ol>
-      <h3 id="alter">Alter</h3>
-      <p>When an <code>ALTER</code> succeeds, the following answer is
-      sent:</p>
+      <h4 id="alter">Alter</h4>
+      <p>When an <code>ALTER</code> succeeds, the following answer is sent:</p>
       <p><code>200 { path: &lt;Path&gt; }</code></p>
-      <p>Any key present in a <code>CREATE</code> can be altered. For
-      instance:</p>
+      <p>Any key present in a <code>CREATE</code> can be altered. For instance:</p>
       <ol type="1">
       <li><p><code>ALTER /users/&lt;Name&gt; { age: &lt;Number&gt; }</code></p></li>
       <li><p><code>ALTER /bank-accounts/&lt;Number&gt; { owner: /users/&lt;Name&gt; }</code></p></li>
       <li><p><code>ALTER /bank-accounts/&lt;Number&gt; { balance: &lt;Number&gt; }</code></p></li>
       <li><p><code>ALTER /bank-accounts/&lt;Number&gt; { owner: /users/&lt;Name&gt;, balance: &lt;Number&gt; }</code></p></li>
       </ol>
-      <h3 id="delete">Delete</h3>
-      <p>When a <code>DELETE</code> succeeds, the following answer is
-      sent:</p>
+      <h4 id="delete">Delete</h4>
+      <p>When a <code>DELETE</code> succeeds, the following answer is sent:</p>
       <p><code>200 { path: &lt;Path&gt; }</code></p>
-      <p>Any entity can be deleted. The body must be empty. For
-      instance:</p>
+      <p>Any entity can be deleted. The body must be empty. For instance:</p>
       <ol type="1">
       <li><p><code>DELETE /users/&lt;Name&gt;</code></p></li>
       <li><p><code>DELETE /bank-accounts/&lt;Number&gt;</code></p></li>
       </ol>
-      <p>As indicated by the model, <code>DELETE</code> removes all
-      triples where the deleted entity appears as subject or object, a
-      cascading effect.</p>
+      <p>As indicated by the model, <code>DELETE</code> removes all triples where the deleted entity appears as subject or object, a cascading effect.</p>
       <p>Sets of entities can also be deleted:</p>
       <ol start="3" type="1">
       <li><p><code>DELETE /users</code></p></li>
       <li><p><code>DELETE /bank-accounts</code></p></li>
       </ol>
-      <h3 id="watch">WATCH</h3>
+      <h4 id="watch">WATCH</h4>
       <p>When a WATCH succeeds, the following answer is sent:</p>
       <p><code>200 { path: &lt;Path&gt; }</code></p>
       <ul>
@@ -1260,14 +839,10 @@ Number := 0 | [1-9][0-9]*</code></pre></li>
       <li><p><code>WATCH /users/&lt;Name&gt;</code></p></li>
       <li><p><code>WATCH /bank-accounts/&lt;Number&gt;</code></p></li>
       </ol>
-      <p>The server sends at each alteration all of the entity
-      properties:</p>
+      <p>The server sends at each alteration all of the entity properties:</p>
       <p><code>200 { command: WATCH, path: &lt;Path&gt;, &lt;key1&gt;: &lt;value1&gt;... }</code></p>
-      <p>Note: For efficiency purpose, we could send delta only. If we
-      would choose so, we would have to either update the model or note
-      here the deviation.</p>
-      <p>The watch stops when the entity is deleted. The server sends
-      then:</p>
+      <p>Note: For efficiency purpose, we could send delta only. If we would choose so, we would have to either update the model or note here the deviation.</p>
+      <p>The watch stops when the entity is deleted. The server sends then:</p>
       <p><code>410 { command: WATCH, path: &lt;Path&gt; }</code></p>
       <ul>
       <li>A set of entities can also be watched. For instance:</li>
@@ -1276,29 +851,22 @@ Number := 0 | [1-9][0-9]*</code></pre></li>
       <li><p><code>WATCH /users</code></p></li>
       <li><p><code>WATCH /bank-accounts</code></p></li>
       </ol>
-      <p>The answers are the same as before (the path is that of the
-      specific entity that changed):</p>
+      <p>The answers are the same as before (the path is that of the specific entity that changed):</p>
       <p><code>200 { command: WATCH, path: &lt;Path&gt;, &lt;key1&gt;: &lt;value1&gt;... }</code></p>
-      <p>The watch stops when the set is explicitly deleted, or when it
-      becomes empty because all its entities have been deleted. Watching
-      a set is similar to watching each of its entities, plus watching
-      any entities that may be created in the set at a later point.</p>
+      <p>The watch stops when the set is explicitly deleted, or when it becomes empty because all its entities have been deleted. Watching a set is similar to watching each of its entities, plus watching any entities that may be created in the set at a later point.</p>
       <ul>
       <li>The watch can be bounded by timestamps:</li>
       </ul>
       <ol start="5" type="1">
       <li><code>WATCH /users/&lt;Name&gt; { from: &lt;Timestamp&gt;, to: &lt;Timestamp&gt; }</code></li>
       </ol>
-      <p>If the <code>from</code> is too far is the past, the server
-      answers:</p>
+      <p>If the <code>from</code> is too far is the past, the server answers:</p>
       <p><code>416 { path: &lt;Path&gt;, from: &lt;Timestamp&gt; }</code></p>
-      <p>If <code>from</code> is after <code>to</code>, the following
-      answer is returned:</p>
+      <p>If <code>from</code> is after <code>to</code>, the following answer is returned:</p>
       <p><code>422 { path: &lt;Path&gt;, from: &lt;Timestamp&gt;, to: &lt;Timestamp&gt; }</code></p>
       <p>The changes in the past are sent as a burst.</p>
       <p>The same applies to bank-accounts and set of entities.</p>
-      <p>Note: A possible extension not handled for now could be to stop
-      a watch with:</p>
+      <p>Note: A possible extension not handled for now could be to stop a watch with:</p>
       <ol start="5" type="1">
       <li><code>WATCH &lt;Path&gt; { stop: true }</code></li>
       </ol>
@@ -1307,11 +875,9 @@ Number := 0 | [1-9][0-9]*</code></pre></li>
       </ul>
       <ol start="6" type="1">
       <li><p><code>WATCH /users/&lt;Name&gt; { from: &lt;Timestamp&gt; }</code></p></li>
-      <li><p><code>WATCH /users/&lt;Name&gt; { to: &lt;Timestamp&gt; }</code>
-      (implicitly “from now”, so <code>to</code> must be in the
-      future)</p></li>
+      <li><p><code>WATCH /users/&lt;Name&gt; { to: &lt;Timestamp&gt; }</code> (implicitly “from now”, so <code>to</code> must be in the future)</p></li>
       </ol>
-      <h3 id="read">READ</h3>
+      <h4 id="read">READ</h4>
       <ol type="1">
       <li><code>READ &lt;Path&gt;</code></li>
       </ol>
@@ -1329,7 +895,7 @@ Number := 0 | [1-9][0-9]*</code></pre></li>
       <pre><code>200 { path: /users/bob, age: 23 }
 200 { path: /users/bill, age: 42 }
 ...</code></pre>
-      <h2 id="code-organisation">Code organisation</h2>
+      <h3 id="code-organisation">Code organisation</h3>
       <p>The files are organized in the following way:</p>
       <pre class="filetree"><code>.
 ├── docker-compose.yml           # server + database
@@ -1358,51 +924,26 @@ Number := 0 | [1-9][0-9]*</code></pre></li>
     ├── test_parser.py
     ├── test_read.py
     └── test_watch.py</code></pre>
-      <p><strong>Parser</strong> (<code>parser.py</code>): hand-written
-      recursive descent parser implementing the Request grammar.
-      Produces a <code>Request</code> dataclass (command, path,
-      body).</p>
-      <p><strong>Handlers</strong> (<code>handlers.py</code>): one async
-      function per command. Each handler opens a database session,
-      performs the operation inside a transaction, records the command
-      in the <code>Events</code> table (same transaction), commits, then
-      notifies watchers.</p>
-      <p><strong>Database</strong> (<code>db.py</code>): SQLAlchemy
-      async models over PostgreSQL 16.</p>
-      <p><strong>Watch state</strong> (<code>state.py</code>): in-memory
-      list of active watchers. Each watcher holds the watched path, a
-      reference to the client’s <code>StreamWriter</code>, and an
-      optional <code>to</code> timestamp bound. After every committed
-      mutation, the relevant handler calls <code>notify_change</code>,
-      <code>notify_deleted</code>, or
-      <code>terminate_prefix_watchers</code>, which write directly to
-      matching client writers.</p>
-      <p>Note: We use <code>uv</code> to manage the project and set up a
-      CI via GitHub Actions with three jobs (lint with
-      <code>ruff</code>, typecheck with <code>mypy</code>, test with
-      <code>pytest</code> against a real <code>Postgres</code>
-      service).</p>
-      <h2 id="tests">Tests</h2>
-      <p>Tests require Docker to be running and can be launched
-      with:</p>
+      <p><strong>Parser</strong> (<code>parser.py</code>): hand-written recursive descent parser implementing the Request grammar. Produces a <code>Request</code> dataclass (command, path, body).</p>
+      <p><strong>Handlers</strong> (<code>handlers.py</code>): one async function per command. Each handler opens a database session, performs the operation inside a transaction, records the command in the <code>Events</code> table (same transaction), commits, then notifies watchers.</p>
+      <p><strong>Database</strong> (<code>db.py</code>): SQLAlchemy async models over PostgreSQL 16.</p>
+      <p><strong>Watch state</strong> (<code>state.py</code>): in-memory list of active watchers. Each watcher holds the watched path, a reference to the client’s <code>StreamWriter</code>, and an optional <code>to</code> timestamp bound. After every committed mutation, the relevant handler calls <code>notify_change</code>, <code>notify_deleted</code>, or <code>terminate_prefix_watchers</code>, which write directly to matching client writers.</p>
+      <p>Note: We use <code>uv</code> to manage the project and set up a CI via GitHub Actions with three jobs (lint with <code>ruff</code>, typecheck with <code>mypy</code>, test with <code>pytest</code> against a real <code>Postgres</code> service).</p>
+      <h3 id="tests">Tests</h3>
+      <p>Tests require Docker to be running and can be launched with:</p>
       <pre><code>make test</code></pre>
-      <p>This starts a dedicated test database container on port 5433,
-      runs the full pytest suite against it, then tears the container
-      down. Tests cover the parser, all five commands, and
-      <code>WATCH</code> notifications including cascades.</p>
-      <h2 id="running-the-server">Running the Server</h2>
+      <p>This starts a dedicated test database container on port 5433, runs the full pytest suite against it, then tears the container down. Tests cover the parser, all five commands, and <code>WATCH</code> notifications including cascades.</p>
+      <h3 id="running-the-server">Running the Server</h3>
       <p>The server and its database can be started with:</p>
       <pre><code>make up</code></pre>
       <p>And stopped with:</p>
       <pre><code>make down</code></pre>
-      <p>The server listens on port 8888. The <code>DATABASE_URL</code>
-      and <code>PORT</code> environment variables can be overridden in
-      <code>docker-compose.yml</code>.</p>
-      <h2 id="sending-commands">Sending Commands</h2>
+      <p>The server listens on port 8888. The <code>DATABASE_URL</code> and <code>PORT</code> environment variables can be overridden in <code>docker-compose.yml</code>.</p>
+      <h3 id="sending-commands">Sending Commands</h3>
       <p>Connection can be done with <code>nc</code>:</p>
       <pre><code>nc 0.0.0.0 8888</code></pre>
       <p>Here are some examples of commands and their answers:</p>
-      <h3 id="create-1">CREATE</h3>
+      <h4 id="create-1">CREATE</h4>
       <pre><code>CREATE /users/bob { age: 23 }
 201 { path: /users/bob }
 
@@ -1414,7 +955,7 @@ CREATE /bank-accounts/1 { owner: /users/bob, balance: 100 }
 
 CREATE /bank-accounts/2 { owner: /users/nobody, balance: 0 }
 404 { path: /users/nobody }</code></pre>
-      <h3 id="alter-1">ALTER</h3>
+      <h4 id="alter-1">ALTER</h4>
       <pre><code>ALTER /users/bob { age: 30 }
 200 { path: /users/bob }
 
@@ -1423,14 +964,14 @@ ALTER /bank-accounts/1 { balance: 200 }
 
 ALTER /bank-accounts/1 { owner: /users/bob, balance: 50 }
 200 { path: /bank-accounts/1 }</code></pre>
-      <h3 id="delete-1">DELETE</h3>
+      <h4 id="delete-1">DELETE</h4>
       <pre><code>DELETE /users/bob
 200 { path: /users/bob }
 
 DELETE /bank-accounts
 200 { path: /bank-accounts }</code></pre>
       <p>Deleting a user cascades to its bank accounts.</p>
-      <h3 id="read-1">READ</h3>
+      <h4 id="read-1">READ</h4>
       <pre><code>READ /users/bob
 200 { path: /users/bob, age: 23 }
 
@@ -1440,7 +981,7 @@ READ /users
 
 READ /bank-accounts/1
 200 { path: /bank-accounts/1, owner: /users/bob, balance: 100 }</code></pre>
-      <h3 id="watch-1">WATCH</h3>
+      <h4 id="watch-1">WATCH</h4>
       <p>We first open a connection and register a watch:</p>
       <pre><code>WATCH /users/bob
 200 { path: /users/bob }</code></pre>
@@ -1453,73 +994,23 @@ READ /bank-accounts/1
       <p>Set watches are also supported:</p>
       <pre><code>WATCH /users
 200 { path: /users }</code></pre>
-      <p>This covers all current and future entities under
-      <code>/users</code>.</p>
-      <p>Bounded watches replay past events as a burst then stream live
-      updates:</p>
+      <p>This covers all current and future entities under <code>/users</code>.</p>
+      <p>Bounded watches replay past events as a burst then stream live updates:</p>
       <pre><code>WATCH /users/bob { from: 2024-01-01T00:00:00Z, to: 2024-01-01T00:01:00Z }</code></pre>
-      <h2 id="repository">Repository</h2>
-      <p>A repository with the implementation can be found here: <a
-      href="https://github.com/jskri/entity-protocol"
-      class="uri">https://github.com/jskri/entity-protocol</a></p>
-      <h1 id="conclusion">Conclusion</h1>
-      <p>We started with a mundane question about Docker and ended up
-      with a formal model.</p>
-      <p>Docker led us to question whether modern software engineering
-      produces good abstractions. Unix suggested that good abstractions
-      are possible and durable — but require deliberate effort. REST,
-      presented as a modern example of clean design, turned out to be
-      unsatisfying on closer inspection: its most important constraint
-      (HATEOAS) does not work for machine-to-machine communication
-      without an external semantic layer, and its verb semantics (the
-      difference between POST and PUT, the meaning of a URL containing
-      an action) are informal and inconsistently applied in
-      practice.</p>
-      <p>The model proposed here addresses these issues directly. It
-      makes three commitments:</p>
+      <h3 id="repository">Repository</h3>
+      <p>A repository with the implementation can be found here: <a href="https://github.com/jskri/entity-protocol" class="uri">https://github.com/jskri/entity-protocol</a></p>
+      <h2 id="conclusion">Conclusion</h2>
+      <p>We started with a mundane question about Docker and ended up with a formal model.</p>
+      <p>Docker led us to question whether modern software engineering produces good abstractions. Unix suggested that good abstractions are possible and durable — but require deliberate effort. REST, presented as a modern example of clean design, turned out to be unsatisfying on closer inspection: its most important constraint (HATEOAS) does not work for machine-to-machine communication without an external semantic layer, and its verb semantics (the difference between POST and PUT, the meaning of a URL containing an action) are informal and inconsistently applied in practice.</p>
+      <p>The model proposed here addresses these issues directly. It makes three commitments:</p>
       <ul>
-      <li><p>Strict separation of entities and actions. Entities are
-      addressed by paths. Actions are a small, fixed set of verbs. The
-      two are never mixed. This eliminates the ambiguity of REST URLs
-      containing action names.</p></li>
-      <li><p>Explicit acknowledgment that contracts are inevitable.
-      Rather than pretending that semantics can be discovered
-      dynamically (HATEOAS) or encoded in a meta-system (the Semantic
-      Web), the model is honest: domain semantics belong to an external
-      contract between client and server. The model provides a clean
-      foundation; meaning is built on top.</p></li>
-      <li><p>A formal semantics. The model is small enough to be stated
-      precisely using undergraduate mathematics. Every command has an
-      unambiguous meaning. This is not a luxury — it is what makes the
-      model teachable, implementable, and verifiable. A formal model is
-      not an academic add-on; it is the clearest possible answer to the
-      question “how should I think about this system?”</p></li>
+      <li><p>Strict separation of entities and actions. Entities are addressed by paths. Actions are a small, fixed set of verbs. The two are never mixed. This eliminates the ambiguity of REST URLs containing action names.</p></li>
+      <li><p>Explicit acknowledgment that contracts are inevitable. Rather than pretending that semantics can be discovered dynamically (HATEOAS) or encoded in a meta-system (the Semantic Web), the model is honest: domain semantics belong to an external contract between client and server. The model provides a clean foundation; meaning is built on top.</p></li>
+      <li><p>A formal semantics. The model is small enough to be stated precisely using undergraduate mathematics. Every command has an unambiguous meaning. This is not a luxury — it is what makes the model teachable, implementable, and verifiable. A formal model is not an academic add-on; it is the clearest possible answer to the question “how should I think about this system?”</p></li>
       </ul>
-      <p>The result is a layered set of models — <span
-      class="math inline">M_{0}</span> through <span
-      class="math inline">M_{4}</span> — each adding exactly one
-      concept: entities and relations, alteration, history, real-world
-      time, and read convenience. The core (<span
-      class="math inline">M_{0}</span> and <span
-      class="math inline">M_{1}</span>) is a handful of definitions. The
-      rest follows naturally.</p>
-      <p>The toy implementation validates this claim. The five commands
-      map directly to handler functions. The path grammar, the status
-      codes, the cascade semantics, and the watch notifications all
-      follow from the model with no awkward translation layer. The
-      places where the implementation makes explicit choices not
-      dictated by the model — a relational schema tailored to the
-      domain, notifications sent after commit with the accepted risk of
-      a missed notification on crash, delta notifications as a possible
-      optimisation — are localised engineering decisions that do not
-      affect the model’s validity.</p>
-      <p>Of course, the model stays silent on a lot of topics. It says
-      nothing about authorization, concurrency, or error handling — all
-      real concerns that belong to layers above it. Nor does it address
-      replication or consistency, which are problems of implementation
-      rather than semantics. But a good foundation does not need to
-      solve everything. It needs to solve its own problem cleanly, and
-      leave room for everything else to be built on top.</p>
+      <p>The result is a layered set of models — <span class="math inline">M_{0}</span> through <span class="math inline">M_{4}</span> — each adding exactly one concept: entities and relations, alteration, history, real-world time, and read convenience. The core (<span class="math inline">M_{0}</span> and <span class="math inline">M_{1}</span>) is a handful of definitions. The rest follows naturally.</p>
+      <p>The toy implementation validates this claim. The five commands map directly to handler functions. The path grammar, the status codes, the cascade semantics, and the watch notifications all follow from the model with no awkward translation layer. The places where the implementation makes explicit choices not dictated by the model — a relational schema tailored to the domain, notifications sent after commit with the accepted risk of a missed notification on crash, delta notifications as a possible optimisation — are localised engineering decisions that do not affect the model’s validity.</p>
+      <p>Of course, the model stays silent on a lot of topics. It says nothing about authorization, concurrency, or error handling — all real concerns that belong to layers above it. Nor does it address replication or consistency, which are problems of implementation rather than semantics. But a good foundation does not need to solve everything. It needs to solve its own problem cleanly, and leave room for everything else to be built on top.</p>
     </article>
   </main>
 </body>

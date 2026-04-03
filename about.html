@@ -5,17 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="preload" href="/assets/fonts/roboto-v51-latin-300.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/roboto-v51-latin-500.woff2" as="font" type="font/woff2" crossorigin>
-  <meta name="description" content="On modeling, formal methods and
-  correct-by-construction software.">
   <meta name="robots" content="index, follow">
   <meta property="og:url" content="https://jskri.github.io/about.html">
+  <meta property="og:image" content="https://jskri.github.io/assets/img/favicon.svg">
   <meta name="twitter:card" content="summary">
   <link rel="canonical" href="https://jskri.github.io/about.html">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23e06c2a'>⊢</text></svg>">  <meta property="og:title" content="About — Specifiable">
-  <meta property="og:description" content="About the author of
-Specifiable.">
+  <link rel="icon" href="/assets/img/favicon.svg">
+  <meta name="description" content="About the author of Specifiable.">
+  <meta property="og:title" content="About — Specifiable">
+  <meta property="og:description" content="About the author of Specifiable.">
   <meta property="og:type" content="website">
-  <title>Specifiable</title>
+  <title>About — Specifiable</title>
   <style>
     @font-face {
       font-display: swap;
@@ -33,34 +33,34 @@ Specifiable.">
     }
 
     :root {
-      --fg:  #141413 ;
-      --bg:  #faf9f5 ;
-      --headerfg:  var(--bg) ;
-      --monofg:  #8a2424 ;
-      --monobg:  #f0efec ;
-      --borderbg:  #d1cfcd ;
-      --codefg:  #14181F ;
-      --tocfg:  #3D3D3A ;
-      --linkfg:  #1a1a1a ;
-      --max-width:  1050px ;
-      --padding-left:  50px ;
-      --padding-right:  50px ;
-      --padding-top:  50px ;
-      --padding-bottom:  50px ;
-      --mono-font:  Menlo, Monaco, Consolas, 'Lucida Console', monospace ;
+      --fg: #141413;
+      --bg: #faf9f5;
+      --headerfg: var(--bg);
+      --monofg: #8a2424;
+      --monobg: #f0efec;
+      --borderbg: #d1cfcd;
+      --codefg: #14181F;
+      --tocfg: #3D3D3A;
+      --linkfg: #1a1a1a;
+      --max-width: 1050px;
+      --padding-left: 50px;
+      --padding-right: 50px;
+      --padding-top: 50px;
+      --padding-bottom: 50px;
+      --mono-font: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
     }
 
     /* dark theme */
     @media (prefers-color-scheme: dark) {
       :root {
-        --fg:  #faf9f5 ;
-        --bg:  #262624 ;
-        --monofg:  #fe8181 ;
-        --monobg:  #2b2b29 ;
-        --borderbg:  #484844 ;
-        --codefg:  #eaecf0 ;
-        --tocfg:  #C2C0B6 ;
-        --linkfg:  #faf9f5 ;
+        --fg: #faf9f5;
+        --bg: #262624;
+        --monofg: #fe8181;
+        --monobg: #2b2b29;
+        --borderbg: #484844;
+        --codefg: #eaecf0;
+        --tocfg: #C2C0B6;
+        --linkfg: #faf9f5;
       }
     }
 
@@ -149,46 +149,46 @@ Specifiable.">
     header {
       margin-bottom: 4em;
       text-align: center;
-    }    main {
-       max-width: 1200px;
-       width: 100%;
-       margin-inline: auto;    /* center on wide screens */
-     }
+    }
+    main {
+      margin-top: 4rem;
+    }
 
-     .intro p {
-       text-align: center;
-     }
+    @media (min-width: 769px) {
+      main {
+        margin-top: 2rem;
+        max-width: 1200px;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr;
+        margin-inline: auto;    /* center on wide screens */
+      }
+      .about {
+        grid-column: 2;
+      }
+    }
 
-     main {
-       display: grid;
-       grid-template-columns: 1fr 4fr 1fr;
-     }
+    .intro p {
+      text-align: center;
+    }
 
-     .about {
-       grid-column: 2;
-     }
+    h1, h2, h3, h4, h5, h6 {
+      text-align: center;
+      font-weight: 300;
+    }
 
-     .about {
-       margin-top: 2rem;
-     }
+    h1 {
+      font-size: 4rem;
+    }
 
-     h1, h2, h3, h4, h5, h6 {
-       text-align: center;
-       font-weight: 300;
-     }
-
-     h1 {
-       font-size: 3rem;
-     }
-
-     h2 {
-       font-size: 2rem;
-     }  </style>
+    h2 {
+      font-size: 3rem;
+    }  </style>
 </head>
 <body>
   <header class="topheader">
     <nav>
-      <a href="/" aria-label="return to home">Specifiable</a>
+      <a href="/">Specifiable</a>
       <div>
         <a href="/about.html">About</a>
       </div>
@@ -197,35 +197,16 @@ Specifiable.">
   <main>
     <section class="about">
       <h1 id="about">About</h1>
-      <p>I began my software journey by focusing on the low-level
-      aspects of development (video games, C++). Unsatisfied by the
-      complexity and unreliability of the software I made, I felt the
-      urge to study their underlying theoretical aspects (algebra, set
-      and category theory) and how to model them (TLA+). I came to the
-      conclusion you cannot solve a problem satisfactorily (i.e. with
-      simplicity, reliability, efficiency, composability…) without both
-      understanding its underlying formal structures and having a good
-      grasp of what is technically feasible. Reconciling both ends of
-      the spectrum is what I find fascinating about this field.</p>
-      <h1 id="sources-of-inspiration">Sources of inspiration</h1>
+      <p>I began my software journey by focusing on the low-level aspects of development (video games, C++). Unsatisfied by the complexity and unreliability of the software I made, I felt the urge to study their underlying theoretical aspects (algebra, set and category theory) and how to model them (TLA+). I came to the conclusion you cannot solve a problem satisfactorily (i.e. with simplicity, reliability, efficiency, composability…) without both understanding its underlying formal structures and having a good grasp of what is technically feasible. Reconciling both ends of the spectrum is what I find fascinating about this field.</p>
+      <h2 id="sources-of-inspiration">Sources of inspiration</h2>
       <ul>
-      <li><p>I like the correct-by-construction approach, as explained
-      in the article <a
-      href="https://wp.software.imdea.org/cbc/wp-content/uploads/sites/5/2020/01/faultless-systems.pdf">Faultless
-      systems: yes we can!</a>. This involves modeling the system
-      iteratively with increasing details, proving salient properties
-      and demonstrating that each model refines (“implements”) its
-      higher-level predecessor.</p></li>
-      <li><p>I also find the work of <a href="http://conal.net/">Conal
-      Elliott</a> inspiring, with its emphasis on simplicity and
-      composability.</p></li>
+      <li><p>I like the correct-by-construction approach, as explained in the article <a href="https://wp.software.imdea.org/cbc/wp-content/uploads/sites/5/2020/01/faultless-systems.pdf">Faultless systems: yes we can!</a>. This involves modeling the system iteratively with increasing details, proving salient properties and demonstrating that each model refines (“implements”) its higher-level predecessor.</p></li>
+      <li><p>I also find the work of <a href="http://conal.net/">Conal Elliott</a> inspiring, with its emphasis on simplicity and composability.</p></li>
       </ul>
-      <h1 id="repositories">Repositories</h1>
-      <p>Github: <a
-      href="https://github.com/jskri">github.com/jskri</a></p>
-      <h1 id="contact">Contact</h1>
-      <p>You can reach me at <a
-      href="mailto:dvnh87@protonmail.com">dvnh87@protonmail.com</a>.</p>
+      <h2 id="repositories">Repositories</h2>
+      <p>Github: <a href="https://github.com/jskri">github.com/jskri</a></p>
+      <h2 id="contact">Contact</h2>
+      <p>You can reach me at <a href="mailto:dvnh87@protonmail.com">dvnh87@protonmail.com</a>.</p>
     </section>
   </main>
 
