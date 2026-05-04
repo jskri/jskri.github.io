@@ -28,4 +28,4 @@ Github: [github.com/jskri](https://github.com/jskri)
 
 ## Contact
 
-You can reach me at [dvnh87@protonmail.com](mailto:dvnh87@protonmail.com).
+You can reach me at [jskri@proton.me](mailto:jskri@proton.me).
