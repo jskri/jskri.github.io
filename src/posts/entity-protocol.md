@@ -2,7 +2,7 @@
 title: REST's semantics are informal. Here is a formal alternative.
 date: 2026-03-25
 description: An entity protocol model and implementation.
-abstract: What makes a good abstraction? Unix suggests they are possible; Docker suggests we have lost the habit. REST, often cited as a modern example of clean design, turns out to be informal where it matters most. This post develops a small alternative — a formal model for distributed state — and walks it from mathematical definition to working implementation.
+abstract: What makes a good abstraction? Unix suggests they are possible; Docker suggests we have lost the habit. REST, often cited as a modern example of clean design, turns out to be informal where it matters most. This post develops a small alternative, a formal model for distributed state, and walks it from mathematical definition to working implementation.
 keywords: entity model formal denotational semantics REST python
 categories: posts
 ---
@@ -12,11 +12,10 @@ categories: posts
 As is often the case, it all started with a question that seemed unrelated to
 the topic.
 
-I was using Docker and wondered why images weren’t automatically saved as
-files—files that we could copy, compress, pipe… just like any other file. At
-first glance, that seemed like a more robust and straightforward approach. After
-doing a bit of research, I found the following arguments justifying Docker’s
-approach:
+I was using Docker and wondered why images weren’t automatically saved as files;
+files that we could copy, compress, pipe… just like any other file. At first
+glance, that seemed like a more robust and straightforward approach. After doing
+a bit of research, I found the following arguments justifying Docker’s approach:
 
 1. Disk space optimization: images are composed of layers, with each layer being
    shareable by an arbitrary number of images
@@ -40,20 +39,20 @@ these features?
 
 Upon further research, I realized that this was true, but that in practice
 operating systems sometimes provided these features only partially (`btrfs` and
-`zfs` support copy-on-write, but `ext4`—which is the most widely used—does not),
-in a non-standard way (no cross-distro package format for a filesystem snapshot
-with metadata), only relatively recently (`overlayfs` was merged into the Linux
-kernel in 2014, the same year Docker gained traction), or in a way that was too
-low-level and difficult to integrate (`namespaces` and `cgroups`). Docker’s
-contribution, therefore, laid more in usability and standardization than in
-purely new features.
+`zfs` support copy-on-write, but `ext4`, which is the most widely used, does
+not), in a non-standard way (no cross-distro package format for a filesystem
+snapshot with metadata), only relatively recently (`overlayfs` was merged into
+the Linux kernel in 2014, the same year Docker gained traction), or in a way
+that was too low-level and difficult to integrate (`namespaces` and `cgroups`).
+Docker’s contribution, therefore, laid more in usability and standardization
+than in purely new features.
 
 ## It was better before
 
 The last point in particular (difficulty of composition) struck me. Were the
 abstractions too low-level or technical? This made me think, by contrast, of
 Unix. I had the impression that its designers had produced good
-abstractions—composable and easily understandable by humans: the file-based
+abstractions, composable and easily understandable by humans: the file-based
 approach, pipes, etc. This seemed all the more surprising to me given that these
 “human-oriented” choices were made at a time when computers were very
 resource-constrained and when it would have been, *a priori*, more obvious to
@@ -106,7 +105,7 @@ valid for the current state. The client, in theory, does not need to know the
 interface in advance; it discovers it through the server’s responses. Another
 benefit is that the server can modify the interface freely: it can add new
 actions (for example, a transfer to a third-party account) or remove them. No
-prior, external contract between the server and the client—everything is
+prior, external contract between the server and the client, everything is
 dynamic; it’s great.
 
 ## Disillusionment
@@ -122,7 +121,7 @@ action, such as “history”? We can see two possible solutions here:
 2. a meta-system is needed to interpret the new action
 
 Solution 1 contradicts the initial goal, and solution 2 requires something like
-the Semantic Web—a massive infrastructure that hasn’t lived up to its promises
+the Semantic Web: a massive infrastructure that hasn’t lived up to its promises
 so far.
 
 I had been sold on true REST as an example of good “modern” abstraction, but the
@@ -152,7 +151,7 @@ strictly speaking actions. To simplify, I decided to extend the concept of
 action to include tracing.
 
 Another question: should entities and actions be represented in the same way? At
-first glance, no—they were truly different things (a loose intuition might be
+first glance, no: they were truly different things (a loose intuition might be
 that in a category, objects and morphisms are of a different nature).
 
 Before going any further, it might be helpful to give an example.
@@ -443,7 +442,7 @@ To this end, we define the history $H$ of an execution. $H$ is a sequence of
 
 - $H(n+1) = (m(commandₙ, H(n).state), commandₙ)$
 
-$H$ is not an independent object — it is uniquely determined by the command
+$H$ is not an independent object: it is uniquely determined by the command
 sequence. $M₂$ does not add new data, it adds a new perspective on what $M₁$
 already produces.
 
@@ -528,7 +527,7 @@ timestamping function:
 - $τ: ℕ → Timestamp$
 
 $τ(n)$ is the timestamp assigned to the n-th command. This function is external
-to the model — it is provided by the environment. There is a single precondition
+to the model; it is provided by the environment. There is a single precondition
 on $τ$, namely that it should be non-decreasing: $τ(n) ≤ τ(n+1)$ for all $n$
 since time does not go backwards.
 
@@ -584,7 +583,7 @@ these are made, the model and the implementation document together define a
 precise scope for code generation: we used an LLM to generate most of the code,
 and the precision of the input material gave us a high degree of confidence in
 the result. Without the prior modeling work, the same LLM would have been left
-to make its own design decisions — with much less predictable outcomes. This does
+to make its own design decisions, with much less predictable outcomes. This does
 not mean that a thorough human code review becomes optional.
 
 Technically, the implementation consists in creating a server listening to
@@ -1033,7 +1032,7 @@ We started with a mundane question about Docker and ended up with a formal
 model.
 
 Docker led us to question whether modern software engineering produces good
-abstractions. Unix suggested that good abstractions are possible and durable —
+abstractions. Unix suggested that good abstractions are possible and durable
 but require deliberate effort. REST, presented as a modern example of clean
 design, turned out to be unsatisfying on closer inspection: its most important
 constraint (HATEOAS) does not work for machine-to-machine communication without
@@ -1044,39 +1043,39 @@ inconsistently applied in practice.
 The model proposed here addresses these issues directly. It makes three
 commitments:
 
-- Strict separation of entities and actions. Entities are addressed by paths.
-  Actions are a small, fixed set of verbs. The two are never mixed. This
+- Strict separation of entities and actions. Entities are addressed by paths and
+  actions are a small, fixed set of verbs. The two are never mixed, which
   eliminates the ambiguity of REST URLs containing action names.
 
 - Explicit acknowledgment that contracts are inevitable. Rather than pretending
   that semantics can be discovered dynamically (HATEOAS) or encoded in a
   meta-system (the Semantic Web), the model is honest: domain semantics belong
   to an external contract between client and server. The model provides a clean
-  foundation; meaning is built on top.
+  foundation and meaning is built on top.
 
 - A formal semantics. The model is small enough to be stated precisely using
   undergraduate mathematics. Every command has an unambiguous meaning. This is
-  not a luxury — it is what makes the model teachable, implementable, and
+  not a luxury: it is what makes the model teachable, implementable, and
   verifiable. A formal model is not an academic add-on; it is the clearest
   possible answer to the question "how should I think about this system?"
 
-The result is a layered set of models — $M₀$ through $M₄$ — each adding exactly one
-concept: entities and relations, alteration, history, real-world time, and read
-convenience. The core ($M₀$ and $M₁$) is a handful of definitions. The rest follows
-naturally.
+The result is a layered set of models, $M₀$ through $M₄$, each adding exactly
+one concept: entities and relations, alteration, history, real-world time, and
+read convenience. The core ($M₀$ and $M₁$) is a handful of definitions. The rest
+follows naturally.
 
 The toy implementation validates this claim. The five commands map directly to
 handler functions. The path grammar, the status codes, the cascade semantics,
 and the watch notifications all follow from the model with no awkward
 translation layer. The places where the implementation makes explicit choices
-not dictated by the model — a relational schema tailored to the domain,
+not dictated by the model (a relational schema tailored to the domain,
 notifications sent after commit with the accepted risk of a missed notification
-on crash, delta notifications as a possible optimisation — are localised
+on crash, delta notifications as a possible optimisation) are localised
 engineering decisions that do not affect the model's validity.
 
-Of course, the model stays silent on a lot of topics. It says nothing about
-authorization, concurrency, or error handling — all real concerns that belong to
-layers above it. Nor does it address replication or consistency, which are
-problems of implementation rather than semantics. But a good foundation does not
-need to solve everything. It needs to solve its own problem cleanly, and leave
-room for everything else to be built on top.
+Of course, the model stays silent on a lot of topics. It says nothing for
+instance about authorization and concurrency, which are all real concerns that
+belong to layers above it. Nor does it address replication or consistency, which
+are problems of implementation rather than semantics. But a good foundation does
+not need to solve everything. It needs to solve its own problem cleanly, and
+leave room for everything else to be built on top.
