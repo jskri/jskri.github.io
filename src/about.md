@@ -1,25 +1,25 @@
 # About
 
-I began my software journey by focusing on the low-level aspects of development
-(video games, C++). Unsatisfied by the complexity and unreliability of the
-software I made, I felt the urge to study their underlying theoretical aspects
-(algebra, set and category theory) and how to model them (TLA+). I came to the
-conclusion you cannot solve a problem satisfactorily (i.e. with simplicity,
-reliability, efficiency, composability...) without both understanding its
-underlying formal structures and having a good grasp of what is technically
-feasible. Reconciling both ends of the spectrum is what I find fascinating about
-this field.
+I came to software through low-level development, with more than 10 years of C++
+(video games and related systems). Unsatisfied by the complexity and
+unreliability of the software I wrote, I felt the urge to explore the
+theoretical foundations behind it: algebra, set theory, category theory, and
+formal modeling tools (TLA+, Coq/Rocq). I came to the conclusion that no problem
+can be solved satisfactorily, in terms of simplicity, reliability, efficiency
+and composability, without both understanding its underlying formal structures
+and having a good grasp of what is technically feasible. Reconciling theory and
+practice is what I find fascinating about this field.
 
 ## Sources of inspiration
 
 - I like the correct-by-construction approach, as explained in the article
   [Faultless systems: yes we
   can!](https://wp.software.imdea.org/cbc/wp-content/uploads/sites/5/2020/01/faultless-systems.pdf).
-  This involves modeling the system iteratively with increasing details, proving
-  salient properties and demonstrating that each model refines ("implements")
-  its higher-level predecessor.
+  This involves modelling the system iteratively with increasing detail, proving
+  key properties and proving that each model refines ("implements") the
+  higher-level model.
 
-- I also find the work of [Conal Elliott](http://conal.net/) inspiring, with its
+- I also find the work of [Conal Elliott](http://conal.net/) inspiring, for its
   emphasis on simplicity and composability.
 
 ## Repositories
